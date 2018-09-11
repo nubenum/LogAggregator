@@ -2,7 +2,7 @@
 <feature
       id="de.nubenum.app.plugin.logaggregator.feature"
       label="LogAggregator"
-      version="1.1.1.qualifier">
+      version="1.1.2.qualifier">
 
    <license url="">
       MIT License

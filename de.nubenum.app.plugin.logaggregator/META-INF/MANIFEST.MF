@@ -6,7 +6,7 @@ Export-Package: de.nubenum.app.plugin.logaggregator.config,
  de.nubenum.app.plugin.logaggregator.core.layers,
  de.nubenum.app.plugin.logaggregator.core.model
 Bundle-Name: LogAggregator
-Bundle-Version: 1.1.1.qualifier
+Bundle-Version: 1.1.2.qualifier
 Bundle-ManifestVersion: 2
 Bundle-Activator: de.nubenum.app.plugin.logaggregator.Activator
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
