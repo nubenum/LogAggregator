@@ -1,7 +1,11 @@
 # LogAggregator
 
 LogAggregator is an Eclipse Plugin that allows you to view a lot of separate log files in one unified, chronological view.
+![Screenshot](screenshot.png "Screenshot")
 
+## Install
+Install and update this plugin directly from the p2 repository:
+https://stc.nubenum.de/cdn/p2/
 ## Setup
 
 After having installed the plugin, you can open it via Window > Show View > Other... > LogAggregator or via Quick Access. In order to view log files, you need to create a configuration file indicating the log files you want to view. A LogAggregator config file might look like the following. You must save this file with the ".logagg" extension preferably somewhere in your workspace. You can then click on the file once in Package Explorer while LogAggregator is opened to view the configured log files.
@@ -48,8 +52,6 @@ The above config could be suitable for the following directory structure:
 Log files being matched using startsWith, there is one caveat: Different types of log files starting with the same name, in this case access_extended.log together with access.log, might be pulled in as one rotated log. The order of the files and thus the entire aggregation can be messed up by that. Look out for respective warnings in the Eclipse error log. Here, a dot (.) was appended for the access log in the config file to avoid this.
 
 ## Usage
-![Screenshot](screenshot.png "Screenshot")
-
 ### List & Detail View
 There are four columns in the list view:
 
