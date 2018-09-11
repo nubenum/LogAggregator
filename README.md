@@ -7,6 +7,8 @@ LogAggregator is an Eclipse Plugin that allows you to view a lot of separate log
 ## Install
 Install and update this plugin directly from the p2 repository:
 https://stc.nubenum.de/cdn/p2/
+
+(You might need to untick the checkbox "Group items by category" in Eclipse's Install New Software Dialog.)
 ## Setup
 
 After having installed the plugin, you can open it via Window > Show View > Other... > LogAggregator or via Quick Access. In order to view log files, you need to create a configuration file indicating the log files you want to view. A LogAggregator config file might look like the following. You must save this file with the ".logagg" extension preferably somewhere in your workspace. You can then click on the file once in Package Explorer while LogAggregator is opened to view the configured log files.
