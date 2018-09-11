@@ -1,6 +1,7 @@
 # LogAggregator
 
 LogAggregator is an Eclipse Plugin that allows you to view a lot of separate log files in one unified, chronological view.
+
 ![Screenshot](screenshot.png "Screenshot")
 
 ## Install
@@ -77,3 +78,7 @@ You can match by:
 * __Message.__ The message search string can be a Java-esque regex and will match entries containing the pattern. If you want to match the entire message, use `^$`. If you want to match case insensitively, use the embedded flag `(?i)` (see documentation about Java regexes to learn more).
 
 Message pattern matches will be highlighted in the list and in the detail view. Tip: You can adapt the search pattern and click again on an entry to update the detail view without reapplying the filter or jumping.
+
+---
+
+This project was conceived at IT-Designers GmbH (www.it-designers.de)
