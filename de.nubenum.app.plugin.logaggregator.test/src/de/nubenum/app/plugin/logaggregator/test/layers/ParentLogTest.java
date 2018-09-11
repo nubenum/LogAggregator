@@ -18,7 +18,6 @@ import de.nubenum.app.plugin.logaggregator.core.model.LinedEntry;
 
 public class ParentLogTest {
 	private static class TestChildLog implements IChildLog {
-		public IEntry lastShown;
 		public IEntry[] entries;
 		public TestChildLog(IEntry[] entries) {
 			this.entries = entries;

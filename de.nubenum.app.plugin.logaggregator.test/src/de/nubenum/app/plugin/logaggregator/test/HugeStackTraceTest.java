@@ -117,15 +117,12 @@ public class HugeStackTraceTest {
 
 		b.stop();
 		b.print(true);
+		br.close();
 		assertEquals(83734, i);
 	}
 
 	@Test
 	public void testCountAllLayers() throws Exception {
-		// bash script to generate reference file:
-		// grep -ohE "^\[[0-9/]+/18 [0-9A-Z: ]+\]" $(echo $(ls SystemOut_*.log) SystemOut.log) > hugeReference.txt
-		// the first entry gets LogTime.MIN and is not included in the reference file
-
 		BufferedReader br = new BufferedReader(new FileReader("testdata/hugeReference.journal.log"));
 		Bench b = new Bench("unit");
 		IEntry e = Entry.FIRST;
@@ -143,6 +140,7 @@ public class HugeStackTraceTest {
 		}
 		b.stop();
 		b.print(true);
+		br.close();
 		assertEquals(83734, i);
 	}
 

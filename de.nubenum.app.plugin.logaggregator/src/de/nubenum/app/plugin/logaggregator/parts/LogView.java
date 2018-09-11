@@ -217,7 +217,7 @@ public class LogView {
 					working(false);
 				} else if (event.getType() == Event.START) {
 					working(true);
-				} else if (event.getEntry() != null) {
+				} else if (event.getType() == Event.ENTRY) {
 					GuiEntry guiEntry = (GuiEntry) event.getEntry();
 					detail.setText(guiEntry.getMessageComplete());
 					detail.setStyleRanges(guiEntry.getMessageCompleteStyleRanges(getMatcher()));

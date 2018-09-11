@@ -115,17 +115,17 @@ public class LogContentProvider implements ILazyContentProvider {
 	private synchronized void doUpdateElement(int index, ReferenceOffset viewportTop, ReferenceOffset viewportBottom) {
 		try {
 			int offset = getLastUpdatedIndexDiff(index);
-			IEntry next = log.getAt(getLastUpdatedEntry(index), offset);
-			if (next == null) {
-				doUpdateGuiElement(index, LOAD_ENTRY);
+			IEntry entry = log.getAt(getLastUpdatedEntry(index), offset);
+			if (entry == null) {
+				doUpdateGuiElement(LOAD_ENTRY, index);
 				viewer.onUpdate(new UpdateEvent(Event.STOP));
 				return;
-			} else if (Entry.isFirstOrLast(next)) {
-				System.out.println("GUIEND:"+index +"|"+next);
+			} else if (Entry.isFirstOrLast(entry)) {
+				System.out.println("GUIEND:"+index +"|"+entry);
 				Direction atBounds = atViewportBounds(viewportTop, viewportBottom);
-				if (atBounds == Direction.NONE || atBounds == Direction.get(next)) {
+				if (atBounds == Direction.NONE || atBounds == Direction.get(entry)) {
 					guiRun(() -> {
-						int itemToShow = getBoundIndex(Direction.get(next));
+						int itemToShow = getBoundIndex(Direction.get(entry));
 						resetPosition();
 						viewer.setTopItem(itemToShow);
 					});
@@ -135,10 +135,10 @@ public class LogContentProvider implements ILazyContentProvider {
 			if (Thread.interrupted())
 				return;
 
-			doUpdateGuiElement(index, next);
-			lastUpdated = new ReferenceOffset(next, index);
+			doUpdateGuiElement(entry, index);
+			updateLastReferences(entry, index);
 
-			if (isNotEndReachedAtViewportBounds(next, index, viewportTop, viewportBottom)) {
+			if (isNotEndReachedAtViewportBounds(entry, index, viewportTop, viewportBottom)) {
 				//viewportTop would be better for seamless scroll down, but less stable
 				guiRun(() -> switchPage(lastUpdated.getEntry(), lastUpdated.getOffset()));
 				return;
@@ -149,11 +149,19 @@ public class LogContentProvider implements ILazyContentProvider {
 		}
 	}
 
-	private synchronized void doUpdateGuiElement(int index, IEntry next) {
+	private synchronized void doUpdateGuiElement(IEntry entry, int index) {
 		guiRun(() -> {
-			System.out.println(index+"|"+next.getLogTime());
-			viewer.replace(new GuiEntry(next), index);
+			System.out.println(index+"|"+entry.getLogTime());
+			viewer.replace(new GuiEntry(entry), index);
 		});
+	}
+
+	private synchronized void updateLastReferences(IEntry entry, int index) {
+		lastUpdated = new ReferenceOffset(entry, index);
+		/*if (lastSelected != null && lastSelected.getEntry() == null && lastSelected.getOffset() == index) {
+			lastSelected = lastUpdated;
+			viewer.onUpdate(new UpdateEvent(new GuiEntry(entry)));
+		}*/
 	}
 
 	private boolean isInRoughViewportRange(int index, ReferenceOffset viewportTop, ReferenceOffset viewportBottom) {
@@ -213,7 +221,7 @@ public class LogContentProvider implements ILazyContentProvider {
 	public void jumpToMatch(Direction dir) {
 		queue.addToQueue(() -> {
 			ReferenceOffset ref = lastSelected;
-			if (ref == null)
+			if (ref == null || ref.getEntry() == null)
 				ref = lastUpdated;
 			if (ref == null)
 				return;

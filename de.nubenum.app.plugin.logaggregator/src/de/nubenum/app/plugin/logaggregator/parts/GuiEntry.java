@@ -118,10 +118,14 @@ public class GuiEntry implements IEntry {
 
 	@Override
 	public String getMessageComplete() {
+		if (entry == null)
+			return "";
 		return entry.getMessageComplete();
 	}
 
 	public StyleRange[] getMessageCompleteStyleRanges(IEntryMatcher matcher) {
+		if (entry == null)
+			return new StyleRange[] {};
 		List<StyleRange> ranges = entryMessageMatchesToStyleRanges(entry.getLinks(), getLinkStyle(), true);
 		ranges.addAll(entryMessageMatchesToStyleRanges(entry.getMatches(matcher, true), getMatchStyle(), false));
 

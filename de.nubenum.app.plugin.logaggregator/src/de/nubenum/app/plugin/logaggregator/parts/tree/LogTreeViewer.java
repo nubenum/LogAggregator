@@ -59,6 +59,8 @@ public class LogTreeViewer implements IUpdateInitiator, IUpdateListener {
 			if (entry != null) {
 				provider.setSelected(new ReferenceOffset(entry.getEntry(), table.getTable().getSelectionIndex()));
 				listeners.forEach(l -> l.onUpdate(new UpdateEvent(entry)));
+			} else {
+				listeners.forEach(l -> l.onUpdate(new UpdateEvent(new GuiEntry(null))));
 			}
 		});
 
