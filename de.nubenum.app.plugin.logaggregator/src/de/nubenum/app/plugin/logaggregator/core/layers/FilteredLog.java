@@ -8,6 +8,10 @@ import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.IEntryMatcher;
 import de.nubenum.app.plugin.logaggregator.core.model.ReferenceOffset;
 
+/**
+ * The default implementation of IFilteredLog.
+ *
+ */
 public class FilteredLog implements IFilteredLog {
 	public static int LOOKAROUND_BOUNDS = 10000;
 	private IEntryLog file = null;

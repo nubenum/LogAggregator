@@ -6,6 +6,10 @@ import de.nubenum.app.plugin.logaggregator.core.model.CondensedEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
 
+/**
+ *  GroupedLog that could in the future group similar entries across hosts. This currently does nothing (but caching).
+ *
+ */
 public class AggregatedGroupedLog extends AbstractGroupedLog {
 
 	public AggregatedGroupedLog(IEntryLog file) {

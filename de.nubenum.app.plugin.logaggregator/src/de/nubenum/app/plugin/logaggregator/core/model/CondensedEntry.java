@@ -7,6 +7,10 @@ import de.nubenum.app.plugin.logaggregator.config.ILogHost;
 import de.nubenum.app.plugin.logaggregator.config.ILogSource;
 import de.nubenum.app.plugin.logaggregator.core.IFileRange;
 
+/**
+ * A GroupedEntry created in the AggregatedGroupedLog layer (currently not used).
+ *
+ */
 public class CondensedEntry extends GroupedEntry {
 
 	public CondensedEntry(List<IEntry> children) {

@@ -51,7 +51,8 @@ public class AsyncEntryRetriever {
 	}
 
 	/**
-	 * Run the Callables that were added before with all available threads and collect the returned IEntries.
+	 * Run the Callables that were added before with all available threads and
+	 * collect the returned {@link IEntry}s .
 	 *
 	 * @return The collected IEntries from the Callables upon completion of all
 	 *         Callables.
@@ -79,9 +80,12 @@ public class AsyncEntryRetriever {
 	}
 
 	/**
-	 * Run the added Callables in the same thread. This is for testing purposes only.
+	 * Run the added Callables in the same thread. This is for testing purposes
+	 * only.
+	 *
 	 * @return The collected IEntries.
-	 * @throws IOException If a Callable throws an IOException. All other exceptions will be
+	 * @throws IOException
+	 *             If a Callable throws an IOException. All other exceptions will be
 	 *             caught, logged and otherwise ignored.
 	 */
 	public List<IEntry> getSynchroneously() throws IOException {

@@ -2,6 +2,10 @@ package de.nubenum.app.plugin.logaggregator.core.model;
 
 import java.util.regex.Pattern;
 
+/**
+ * The default implementation of the IEntryMatcher.
+ *
+ */
 public class EntryMatcher implements IEntryMatcher {
 	private Level minLevel = Level.ALL;
 	private Pattern pattern;

@@ -13,6 +13,12 @@ import java.util.List;
 
 import de.nubenum.app.plugin.logaggregator.core.UpdateEvent.Event;
 
+/**
+ * Watches a number of paths a notifies listeners to updates to these files with
+ * an UpdateEvent of type Event.REFRESH (new file created) or Event.APPEND (file
+ * modified)
+ *
+ */
 public class PathWatcher implements IUpdateInitiator {
 	private List<IUpdateListener> listeners = new ArrayList<>();
 	private WatchService watcher;
@@ -20,13 +26,17 @@ public class PathWatcher implements IUpdateInitiator {
 	public PathWatcher() {
 	}
 
+	/**
+	 * Add a new path to be watched. Watching will be started immediately.
+	 *
+	 * @param path
+	 *            The path.
+	 */
 	public void addPath(Path path) {
 		if (watcher == null)
 			newWatcher();
 		try {
-			path.register(watcher,
-					StandardWatchEventKinds.ENTRY_CREATE,
-					StandardWatchEventKinds.ENTRY_MODIFY);
+			path.register(watcher, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY);
 		} catch (IOException x) {
 			return;
 		}

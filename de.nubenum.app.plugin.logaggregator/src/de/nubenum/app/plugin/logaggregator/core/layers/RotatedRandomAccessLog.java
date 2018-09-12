@@ -11,6 +11,10 @@ import de.nubenum.app.plugin.logaggregator.core.IFileRange;
 import de.nubenum.app.plugin.logaggregator.core.RandomByteBuffer;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 
+/**
+ * An implementation for a file that is made up of multiple file parts that can be accessed continuously.
+ *
+ */
 public class RotatedRandomAccessLog implements IRandomAccessLog {
 	private List<IRandomAccessLog> fileParts;
 	private RandomByteBuffer[] cache = new RandomByteBuffer[2];

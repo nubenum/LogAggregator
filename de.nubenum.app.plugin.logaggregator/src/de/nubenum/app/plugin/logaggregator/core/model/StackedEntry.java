@@ -8,6 +8,10 @@ import de.nubenum.app.plugin.logaggregator.config.ILogHost;
 import de.nubenum.app.plugin.logaggregator.config.ILogSource;
 import de.nubenum.app.plugin.logaggregator.core.IFileRange;
 
+/**
+ * A GroupedEntry created in the HostSourceGroupLog layer.
+ *
+ */
 public class StackedEntry extends GroupedEntry {
 	private String messageComplete = null;
 

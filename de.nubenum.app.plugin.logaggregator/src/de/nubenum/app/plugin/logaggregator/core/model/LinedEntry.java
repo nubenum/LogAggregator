@@ -13,6 +13,9 @@ import de.nubenum.app.plugin.logaggregator.core.FileRange;
 import de.nubenum.app.plugin.logaggregator.core.IFileRange;
 import de.nubenum.app.plugin.logaggregator.core.SystemLog;
 
+/**
+ * An entry that represents one line in a log.
+ */
 public class LinedEntry extends Entry {
 	private static Pattern pattern;
 	private IFileRange range = null;

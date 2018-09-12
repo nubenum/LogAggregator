@@ -59,7 +59,7 @@ public class FileRange implements IFileRange {
 	}
 
 	@Override
-	public IFilePosition getStart(Direction dir) {
+	public IFilePosition getNext(Direction dir) {
 		if (dir == Direction.UP) {
 			return top.offset(-1);
 		}

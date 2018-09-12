@@ -22,6 +22,15 @@ import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.LinedEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.LogTime;
 
+/**
+ * An entry-based log backed by a byte-based log that will provide single lines
+ * as entries from the byte stream. From the given reference in the given
+ * direction it will read from the backing byte-based log until a complete line
+ * was read. It will instantiate a new LinedEntry object and try to fix missing
+ * timestamps. It will notify listeners periodically about the number of lines
+ * read.
+ *
+ */
 public class LinedLog implements IEntryLog, IUpdateInitiator {
 	private static final byte LINE_SEPARATOR = '\n';
 	private int avgLineSize = 100;
@@ -31,6 +40,16 @@ public class LinedLog implements IEntryLog, IUpdateInitiator {
 	private ILogSource source;
 	private List<IUpdateListener> listeners = new ArrayList<>();
 
+	/**
+	 * Init.
+	 *
+	 * @param file
+	 *            The byte-based file this log will work on.
+	 * @param host
+	 *            The identifying host of this file.
+	 * @param source
+	 *            The identifying source of this file.
+	 */
 	public LinedLog(IRandomAccessLog file, ILogHost host, ILogSource source) {
 		this.file = file;
 		this.host = host;
@@ -56,7 +75,7 @@ public class LinedLog implements IEntryLog, IUpdateInitiator {
 				else
 					return Entry.getFirstOrLast(e.getDir());
 			}
-			start = buffer.getRange().getStart(dir);
+			start = buffer.getRange().getNext(dir);
 			line = getCompleteEntry(buffer, dir, endDirection(reference, offset, endReached));
 		} while (line == null && endReached == null);
 
@@ -89,12 +108,14 @@ public class LinedLog implements IEntryLog, IUpdateInitiator {
 	}
 
 	private IFilePosition getStartPosition(IEntry reference, int offset) throws IOException {
-		if (reference == Entry.FIRST) return FilePosition.FIRST;
-		if (reference == Entry.LAST) return FilePosition.LAST;
+		if (reference == Entry.FIRST)
+			return FilePosition.FIRST;
+		if (reference == Entry.LAST)
+			return FilePosition.LAST;
 
-		IFilePosition start = reference.getRange().getStart(Direction.get(offset));
+		IFilePosition start = reference.getRange().getNext(Direction.get(offset));
 		if (Math.abs(offset) > 1) {
-			start = start.offset(offset*avgLineSize);
+			start = start.offset(offset * avgLineSize);
 		}
 		return start;
 	}
@@ -107,7 +128,7 @@ public class LinedLog implements IEntryLog, IUpdateInitiator {
 			lineRange = findLineUp(bytes.getBytes(), bytes.getOffset(), endReached);
 
 		if (lineRange != null) {
-			int length = lineRange[1]-lineRange[0];
+			int length = lineRange[1] - lineRange[0];
 			IFileRange range = new FileRange(bytes.getRange().getTop().offset(lineRange[0]), length);
 			String line = new String(bytes.getBytes(), lineRange[0], length, StandardCharsets.UTF_8);
 			return new LinedEntry(line, range, host, source);
@@ -118,19 +139,22 @@ public class LinedLog implements IEntryLog, IUpdateInitiator {
 	private LinedEntry fixMessedUpTimestamps(IEntry reference, Direction dir, LinedEntry entry) {
 		if (entry.getRange().getTop().isTopmost() && entry.getLogTime() == null) {
 			entry.setLogTime(LogTime.MIN);
-			System.out.println("Header Timestamp spoofed: "+entry);
+			System.out.println("Header Timestamp spoofed: " + entry);
 		}
 		return entry;
 	}
 
 	private int[] findLineDown(byte[] bytes, int offset, Direction endReached) {
 		Integer top = null;
-		if (endReached == Direction.UP) top = 0;
+		if (endReached == Direction.UP)
+			top = 0;
 
-		for(int i=offset;i<bytes.length;i++) {
+		for (int i = offset; i < bytes.length; i++) {
 			if (bytes[i] == LINE_SEPARATOR) {
-				if (top == null) top = i+1;
-				else return new int[] {top, i};
+				if (top == null)
+					top = i + 1;
+				else
+					return new int[] { top, i };
 			}
 		}
 		return null;
@@ -139,13 +163,16 @@ public class LinedLog implements IEntryLog, IUpdateInitiator {
 	private int[] findLineUp(byte[] bytes, int offset, Direction endReached) {
 		Integer bottom = null;
 
-		for(int i=offset;i>=0;i--) {
+		for (int i = offset; i >= 0; i--) {
 			if (bytes[i] == LINE_SEPARATOR) {
-				if (bottom == null) bottom = i;
-				else return new int[] {i+1, bottom};
+				if (bottom == null)
+					bottom = i;
+				else
+					return new int[] { i + 1, bottom };
 			}
 		}
-		if (endReached == Direction.UP && bottom != null) return new int[] {0, bottom};
+		if (endReached == Direction.UP && bottom != null)
+			return new int[] { 0, bottom };
 		return null;
 	}
 

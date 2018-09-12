@@ -1,8 +1,32 @@
 package de.nubenum.app.plugin.logaggregator.config;
 
+/**
+ * A host is a directory that in turn may contain multiple sources. Usually,
+ * roughly the same sources are contained in each host directory.
+ *
+ */
 public interface ILogHost {
+	/**
+	 * Get the name, i.e. the directory path of this host.
+	 * @return The directory name.
+	 */
 	String getName();
+
+	/**
+	 * Set the directory name.
+	 * @param name The directory name.
+	 */
 	void setName(String name);
+
+	/**
+	 * Get the alias for the long directory name.
+	 * @return The alias.
+	 */
 	String getShortName();
-	void setShortName(String shortName);	
+
+	/**
+	 * Set the alias for the long directory name.
+	 * @param shortName The alias.
+	 */
+	void setShortName(String shortName);
 }

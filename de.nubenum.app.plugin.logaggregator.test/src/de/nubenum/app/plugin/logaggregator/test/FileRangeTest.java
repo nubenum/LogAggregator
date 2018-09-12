@@ -30,14 +30,14 @@ public class FileRangeTest {
 		IFileRange range1 = new FileRange(pos1, 10);
 		assertEquals(new FilePosition(0,10), range1.getTop());
 		assertEquals(new FilePosition(0,20), range1.getBottom());
-		assertEquals(new FilePosition(0,20), range1.getStart(Direction.DOWN));
-		assertEquals(new FilePosition(0,9), range1.getStart(Direction.UP));
+		assertEquals(new FilePosition(0,20), range1.getNext(Direction.DOWN));
+		assertEquals(new FilePosition(0,9), range1.getNext(Direction.UP));
 
 		range1 = new FileRange(pos1, 5, Direction.UP);
 		assertEquals(new FilePosition(0,6), range1.getTop());
 		assertEquals(new FilePosition(0,11), range1.getBottom());
-		assertEquals(new FilePosition(0,11), range1.getStart(Direction.DOWN));
-		assertEquals(new FilePosition(0,5), range1.getStart(Direction.UP));
+		assertEquals(new FilePosition(0,11), range1.getNext(Direction.DOWN));
+		assertEquals(new FilePosition(0,5), range1.getNext(Direction.UP));
 		assertTrue(range1.inRange(new FilePosition(0,10)));
 		assertFalse(range1.inRange(new FilePosition(0,11)));
 		assertTrue(range1.inRange(new FilePosition(0,6)));

@@ -10,6 +10,13 @@ import de.nubenum.app.plugin.logaggregator.core.model.LinedEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.LogTime;
 import de.nubenum.app.plugin.logaggregator.core.model.StackedEntry;
 
+/**
+ * Implementation of GroupedLog that groups stack traces, i.e. multiple log
+ * lines without timestamp. This will also try to fix wrong timestamps, i.e.
+ * timestamps that are in wrong order within this single log or grouped entries
+ * without any timestamp.
+ *
+ */
 public class HostSourceGroupedLog extends AbstractGroupedLog {
 
 	public HostSourceGroupedLog(IEntryLog file) {
@@ -22,18 +29,19 @@ public class HostSourceGroupedLog extends AbstractGroupedLog {
 		if (Entry.isFirstOrLast(entry))
 			return entry;
 		entry = fixMessedUpTimestamps(reference, stackedOffset, entry);
-		assert (entry.getLogTime() != null) : "StackEntry without LogTime: " + entry.getRange().getTop().getByteOffset() + " | " + entry.toString();
+		assert (entry.getLogTime() != null) : "StackEntry without LogTime: " + entry.getRange().getTop().getByteOffset()
+		+ " | " + entry.toString();
 		return entry;
 	}
 
 	private IEntry fixMessedUpTimestamps(IEntry reference, int offset, IEntry entry) {
 		if (entry.getLogTime() != null) {
 			if (reference.getLogTime() != null) {
-				Direction actual =  Direction.get(entry.getLogTime().compareTo(reference.getLogTime()));
+				Direction actual = Direction.get(entry.getLogTime().compareTo(reference.getLogTime()));
 				if (actual != Direction.NONE && actual != Direction.get(offset)) {
 					LinedEntry first = (LinedEntry) degroupedReference(entry, Direction.UP);
 					first.setLogTime(reference.getLogTime());
-					System.out.println("Timestamp spoofed: "+entry);
+					System.out.println("Timestamp spoofed: " + entry);
 				}
 			}
 		}
@@ -41,7 +49,7 @@ public class HostSourceGroupedLog extends AbstractGroupedLog {
 			LinedEntry first = (LinedEntry) degroupedReference(entry, Direction.UP);
 			first.setLogTime(LogTime.NONE);
 			first.setLogTime(reference.getLogTime());
-			System.out.println("Grouped timestamp spoofed: "+entry);
+			System.out.println("Grouped timestamp spoofed: " + entry);
 		}
 		return entry;
 	}
@@ -53,7 +61,7 @@ public class HostSourceGroupedLog extends AbstractGroupedLog {
 
 	@Override
 	protected boolean isGroupable(List<IEntry> group, IEntry next, Direction dir) {
-		//TODO stack traces with timestamps
+		// TODO stack traces with timestamps
 		if (dir == Direction.DOWN && next.getLogTime() == null)
 			return true;
 		if (dir == Direction.UP && group.get(0).getLogTime() == null)

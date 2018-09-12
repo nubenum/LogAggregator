@@ -9,6 +9,13 @@ import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 import de.nubenum.app.plugin.logaggregator.core.model.Entry;
 import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
 
+/**
+ * An entry-based log that will aggregate multiple ChildLogs, i.e. pull together
+ * the entries of all child logs like a zip. For sequential entries, it has to
+ * be made sure that no entries from any child are omitted, for offsets > 1, a
+ * random roughly matching entry might be chosen.
+ *
+ */
 public abstract class AbstractParentLog implements IEntryLog {
 	protected List<? extends IChildLog> logs;
 	private AsyncEntryRetriever retriever;
@@ -27,6 +34,17 @@ public abstract class AbstractParentLog implements IEntryLog {
 		return entry;
 	}
 
+	/**
+	 * Get the nearest entry in the given direction of all children
+	 *
+	 * @param reference
+	 *            The IEntry reference
+	 * @param direction
+	 *            The direction in which to search
+	 * @return The next entry
+	 * @throws IOException
+	 *             If the backing storage is unavailable
+	 */
 	protected IEntry getNextAt(IEntry reference, int direction) throws IOException {
 		retriever.clear();
 		for (IChildLog log : logs) {
@@ -40,6 +58,20 @@ public abstract class AbstractParentLog implements IEntryLog {
 		return top;
 	}
 
+	/**
+	 * Get an entry at a certain offset using heuristics, taking preferably an entry
+	 * from the child log that the reference entry originated from (to avoid binary
+	 * search)
+	 *
+	 * @param reference
+	 *            The IEntry reference
+	 * @param offset
+	 *            The offset, ideally larger than 1
+	 * @return The found entry that has approximately the given offset from the
+	 *         given reference
+	 * @throws IOException
+	 *             If the backing storage is unavailable
+	 */
 	protected IEntry getRandomAt(IEntry reference, int offset) throws IOException {
 		IChildLog anchorLog = getAnchorLog(reference);
 		IEntry entry = null;

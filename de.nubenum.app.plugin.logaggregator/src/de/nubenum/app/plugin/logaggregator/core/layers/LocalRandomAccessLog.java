@@ -12,9 +12,12 @@ import de.nubenum.app.plugin.logaggregator.core.FileRange;
 import de.nubenum.app.plugin.logaggregator.core.IFilePosition;
 import de.nubenum.app.plugin.logaggregator.core.IFileRange;
 import de.nubenum.app.plugin.logaggregator.core.RandomByteBuffer;
-import de.nubenum.app.plugin.logaggregator.core.SystemLog;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 
+/**
+ * An implementation for a single file that can be accessed randomly by byte.
+ *
+ */
 public class LocalRandomAccessLog implements IRandomAccessLog {
 	private static final int MIN_BLOCK_SIZE = 8192;
 	private static final int MAX_BLOCK_SIZE = 8192*8;
@@ -33,7 +36,6 @@ public class LocalRandomAccessLog implements IRandomAccessLog {
 	private void openFile() throws IOException {
 		if (file == null) {
 			this.file = FileChannel.open(path, StandardOpenOption.READ);
-			SystemLog.log("Opening " + path);
 		}
 	}
 
@@ -70,7 +72,7 @@ public class LocalRandomAccessLog implements IRandomAccessLog {
 	}
 
 	private void updateBlockSize(IFilePosition start, Direction dir) {
-		if (lastRange != null && lastRange.getStart(dir).equals(start)) {
+		if (lastRange != null && lastRange.getNext(dir).equals(start)) {
 			//TODO
 			blockSize *= 2;
 			if (blockSize > MAX_BLOCK_SIZE)

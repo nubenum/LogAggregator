@@ -110,7 +110,6 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 				logs.add(log);
 			}
 		}
-		SystemLog.log("Host: "+host.getName() + " SrcNo: "+ logs);
 		return logs;
 	}
 
@@ -125,12 +124,10 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 				logs.add(log);
 			}
 		}
-		SystemLog.log("Host No: "+logs.size());
 		return logs;
 	}
 
 	private void setupLogs() throws IOException {
-		SystemLog.log("Setting up logs...");
 		observableFiles.clear();
 		List<IChildLog> files = getHostLogs();
 		if (files.isEmpty())

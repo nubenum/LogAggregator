@@ -6,6 +6,10 @@ import de.nubenum.app.plugin.logaggregator.core.model.DeduplicatedEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
 
+/**
+ * A GroupedLog that groups duplicate entries occurring in different sources of one host.
+ *
+ */
 public class HostGroupedLog extends AbstractGroupedLog {
 
 	public HostGroupedLog(IEntryLog file) {

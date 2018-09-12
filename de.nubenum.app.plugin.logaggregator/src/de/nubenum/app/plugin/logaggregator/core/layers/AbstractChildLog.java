@@ -7,6 +7,13 @@ import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 import de.nubenum.app.plugin.logaggregator.core.model.Entry;
 import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
 
+/**
+ * A log that will cooperate with a ParentLog in order to aggregate multiple
+ * children to one parent. Particularly, it provides functionality to search the
+ * nearest entry to a foreign entry, i.e. an entry that did not originate from
+ * this child log and can thus not directly be used as a reference.
+ *
+ */
 public abstract class AbstractChildLog implements IChildLog {
 	private VirtualBinarySearch<IEntry> search;
 	private IEntryLog file;
@@ -30,6 +37,16 @@ public abstract class AbstractChildLog implements IChildLog {
 		});
 	}
 
+	/**
+	 * This will try to find the nearest entry based on the reference, either
+	 * directly if it is a proper entry, or by delegating a search if it is a
+	 * foreign entry.
+	 *
+	 * @param reference The reference IEntry
+	 * @param offset The offset
+	 * @return The found entry
+	 * @throws IOException If the backing storage is unavailable
+	 */
 	protected IEntry getAtBest(IEntry reference, int offset) throws IOException {
 		IEntry entry = null;
 		if (reference == Entry.FIRST || reference == Entry.LAST) {
@@ -38,7 +55,7 @@ public abstract class AbstractChildLog implements IChildLog {
 			entry = getAtEntry(reference, offset);
 		} else {
 			entry = getAtForeignEntry(reference, offset);
-			//TODO
+			// TODO
 			if (Math.abs(offset) > 1) {
 				entry = file.getAt(entry, offset);
 			}
@@ -47,6 +64,13 @@ public abstract class AbstractChildLog implements IChildLog {
 		return entry;
 	}
 
+	/**
+	 * Get an entry by a proper reference and offset taking into account the {@link IEntryLog#LOOKAROUND_BOUNDS}.
+	 * @param reference The IEntry reference
+	 * @param offset The offset
+	 * @return The obtained IEntry
+	 * @throws IOException If the backing storage is unavailable
+	 */
 	protected IEntry getAtEntry(IEntry reference, int offset) throws IOException {
 
 		if (Math.abs(offset) > LOOKAROUND_BOUNDS) {
@@ -54,7 +78,7 @@ public abstract class AbstractChildLog implements IChildLog {
 		}
 		int direction = Direction.get(offset).getValue();
 
-		for(int i=0;i<Math.abs(offset);i++) {
+		for (int i = 0; i < Math.abs(offset); i++) {
 			reference = file.getAt(reference, direction);
 			if (Entry.isFirstOrLast(reference))
 				break;
@@ -62,11 +86,18 @@ public abstract class AbstractChildLog implements IChildLog {
 		return reference;
 	}
 
+	/**
+	 * Get an entry by a foreign reference by employing a binary search.
+	 * @param reference The IEntry reference
+	 * @param offset The offset
+	 * @return The obtained IEntry
+	 * @throws IOException If the backing storage is unavailable
+	 */
 	protected IEntry getAtForeignEntry(IEntry reference, int offset) throws IOException {
 		Direction dir = Direction.get(offset);
 		Direction dirFromLastShown = Direction.get(reference.compareTo(lastShown));
 
-		search.setSearchDirection((long) Math.abs(offset)*dirFromLastShown.getValue());
+		search.setSearchDirection((long) Math.abs(offset) * dirFromLastShown.getValue());
 		IEntry entry = search.search(reference, lastShown);
 
 		if (entry == null)

@@ -12,6 +12,11 @@ import java.util.stream.Collectors;
 import de.nubenum.app.plugin.logaggregator.config.ILogHost;
 import de.nubenum.app.plugin.logaggregator.config.ILogSource;
 
+/**
+ * Implementing the ILogDirectory with generic startsWith filtering and sorting.
+ * This class should be concretized for different storage backends.
+ *
+ */
 public abstract class AbstractLogDirectory implements IUpdateInitiator, ILogDirectory {
 	private static final Pattern naturalSortEligible = Pattern.compile("(.*?)(\\d+)");
 	protected Path path;
@@ -26,25 +31,35 @@ public abstract class AbstractLogDirectory implements IUpdateInitiator, ILogDire
 			this.path = this.path.resolve(sourceParent);
 	}
 
-	protected abstract List<File> getUnfilteredSourceFiles(ILogSource source) throws IOException;
+	/**
+	 * Get all files from this directory
+	 *
+	 * @return A List of all files in that directory
+	 * @throws IOException
+	 *             If the directory is unavailable or no files were found
+	 */
+	protected abstract List<File> getAllFiles() throws IOException;
 
 	@Override
 	public List<File> getSourceFiles(ILogSource source) throws IOException {
-		List<File> files = getUnfilteredSourceFiles(source);
+		List<File> files = getAllFiles();
 
 		String match = Paths.get(source.getName()).getFileName().toString();
 		files = files.stream().filter(f -> f.getName().startsWith(match)).collect(Collectors.toList());
 
 		files.sort((a, b) -> {
-			if (isCurrentFile(a, source)) return 1;
-			if (isCurrentFile(b, source)) return -1;
+			if (isCurrentFile(a, source))
+				return 1;
+			if (isCurrentFile(b, source))
+				return -1;
 
 			int natural = naturalSortIfEligible(a.getName(), b.getName());
 			if (natural != 0)
 				return natural;
 
 			if (a.getName().length() != b.getName().length()) {
-				SystemLog.warn("ATTENTION! Rotated log files with different file name lengths were selected: " + a.getName() + " <-> " + b.getName()
+				SystemLog.warn("ATTENTION! Irregularities in rotated log file naming were detected: " + a.getName()
+				+ " <-> " + b.getName()
 				+ " This might indicate that the order is wrong or that your filter is not sufficiently restrictive.");
 			}
 			return a.getName().compareTo(b.getName());

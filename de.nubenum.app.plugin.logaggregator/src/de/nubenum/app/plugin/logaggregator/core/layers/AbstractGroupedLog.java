@@ -10,6 +10,22 @@ import de.nubenum.app.plugin.logaggregator.core.model.Entry;
 import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.LinedEntry;
 
+/**
+ * An entry-based log that groups multiple consecutive entries together, based
+ * on rules to be defined in concrete implementations of this abstract class.
+ * Too large groups will be truncated in the middle to avoid high memory
+ * consumption. This class employs multiple caches to avoid rerequesting and
+ * discarding entries multiple times. It uses three cache access methods:
+ * <ul>
+ * <li>Search the grouped cache by ReferenceOffset before obtaining anything
+ * else</li>
+ * <li>Search the adjacent cache for the first entry of the new group that was
+ * discarded the last time as a non-matching entry</li>
+ * <li>Search the grouped cache by child after obtaining the first child entry
+ * of the to-be-created group</li>
+ * </ul>
+ *
+ */
 public abstract class AbstractGroupedLog implements IEntryLog {
 
 	protected static final int MAX_GROUP_SIZE = 10000000;
@@ -56,7 +72,8 @@ public abstract class AbstractGroupedLog implements IEntryLog {
 
 		groupedCache.put(reference, degroupedOffset, entry);
 		if (reference.getSource() != null)
-			groupedCache.put(degroupedReference(entry, Direction.get(-degroupedOffset)), -degroupedOffset, groupedReference);
+			groupedCache.put(degroupedReference(entry, Direction.get(-degroupedOffset)), -degroupedOffset,
+					groupedReference);
 
 		return entry;
 	}
@@ -101,7 +118,8 @@ public abstract class AbstractGroupedLog implements IEntryLog {
 		return newGroup;
 	}
 
-	private IEntry addEntryToLimitedListInDirection(LinkedList<IEntry> list, IEntry entry, Direction dir, IEntry overflowEntry) {
+	private IEntry addEntryToLimitedListInDirection(LinkedList<IEntry> list, IEntry entry, Direction dir,
+			IEntry overflowEntry) {
 		if (dir == Direction.DOWN) {
 			if (list.size() >= TRUNCATE_GROUP_SIZE)
 				overflowEntry = entry;
@@ -120,16 +138,38 @@ public abstract class AbstractGroupedLog implements IEntryLog {
 
 	private void addOverflowEntry(LinkedList<IEntry> newGroup, IEntry overflowEntry, int entryCount) {
 		if (overflowEntry != null) {
-			newGroup.add(new LinedEntry("[TRUNCATED ~"+(entryCount-TRUNCATE_GROUP_SIZE)+" LINES]"));
+			newGroup.add(new LinedEntry("[TRUNCATED ~" + (entryCount - TRUNCATE_GROUP_SIZE) + " LINES]"));
 			newGroup.add(overflowEntry);
 		}
 	}
 
+	/**
+	 * Used for heuristics for offsets > 1
+	 * @return The estimated average group size
+	 */
 	protected abstract int getAvgGroupSize();
 
+	/**
+	 * From a List of IEntries, make a grouped entry, i.e. instantiate a child of GroupedEntry
+	 * @param entries The List of IEntries that the new group is to be made up of
+	 * @return An IEntry containing the given entries as children
+	 */
 	protected abstract IEntry makeGroup(List<IEntry> entries);
 
+	/**
+	 * Check whether a given IEntry is groupable with the given existing members of the group
+	 * @param entries The List of existing groupable entries with at least one entry
+	 * @param next The entry to be checked
+	 * @param dir The direction in which to append the entry
+	 * @return True if the given entry should be added to this group, false otherwise
+	 */
 	protected abstract boolean isGroupable(List<IEntry> entries, IEntry next, Direction dir);
 
+	/**
+	 * From a grouped entry that was created in this class, extract the first or last child to hand over to lower levels
+	 * @param reference An IEntry that may possibly be a grouped entry
+	 * @param dir The direction in which to get the bound entry, Direction.UP for the first child, Direction.DOWN for the last child
+	 * @return The first or last child depending on the Direction if reference is a grouped entry that was created in this class, the unaltered reference otherwise
+	 */
 	protected abstract IEntry degroupedReference(IEntry reference, Direction dir);
 }

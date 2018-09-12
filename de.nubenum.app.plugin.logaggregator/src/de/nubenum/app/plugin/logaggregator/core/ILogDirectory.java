@@ -19,5 +19,10 @@ public interface ILogDirectory {
 	 * @throws IOException when the directory is unavailable or no files were found
 	 */
 	List<File> getSourceFiles(ILogSource source) throws IOException;
+
+	/**
+	 * Get the Path of this directory
+	 * @return The Path
+	 */
 	Path getPath();
 }

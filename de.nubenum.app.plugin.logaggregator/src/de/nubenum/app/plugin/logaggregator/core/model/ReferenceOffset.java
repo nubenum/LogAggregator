@@ -2,6 +2,10 @@ package de.nubenum.app.plugin.logaggregator.core.model;
 
 import java.util.AbstractMap.SimpleImmutableEntry;
 
+/**
+ * An immutable pair representing a reference with an offset.
+ *
+ */
 public class ReferenceOffset {
 	private SimpleImmutableEntry<IEntry, Integer> data;
 

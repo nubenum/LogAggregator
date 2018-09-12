@@ -2,6 +2,10 @@ package de.nubenum.app.plugin.logaggregator.core.model;
 
 import java.util.List;
 
+/**
+ * An entry that has multiple children that were grouped together.
+ *
+ */
 public abstract class GroupedEntry extends Entry {
 	private List<IEntry> children;
 
@@ -51,6 +55,11 @@ public abstract class GroupedEntry extends Entry {
 		return false;
 	}
 
+	/**
+	 * Get the first or last child
+	 * @param dir The direction in which to get the child
+	 * @return The first child for UP, the last child for DOWN
+	 */
 	public IEntry getBoundChild(Direction dir) {
 		if (dir == Direction.DOWN)
 			return getChildren().get(getChildren().size()-1);

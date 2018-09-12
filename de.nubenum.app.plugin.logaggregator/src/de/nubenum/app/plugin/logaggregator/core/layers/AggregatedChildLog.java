@@ -4,6 +4,12 @@ import java.io.IOException;
 
 import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
 
+/**
+ * This represents the aggregated log of all hosts to layers above.
+ * Particularly, the logic of the ChildLog is reused to enable binary search by
+ * timestamp for jumping to a date.
+ *
+ */
 public class AggregatedChildLog extends AbstractChildLog {
 
 	public AggregatedChildLog(IEntryLog file) {

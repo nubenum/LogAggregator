@@ -8,11 +8,28 @@ import java.time.format.DateTimeParseException;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
+/**
+ * Representing the comparable timestamp of a log entry. More supported
+ * timestamp formats can be added. In this case, the timeExtractor pattern must
+ * be amended, and new entries added to the timeDetectors and timeFormats.
+ *
+ */
 public class LogTime implements Comparable<LogTime> {
+	/**
+	 * A virtual LogTime that is always the earliest.
+	 */
 	public static final LogTime MIN = new LogTime();
+	/**
+	 * A virtual LogTime that is always the latest.
+	 */
 	public static final LogTime MAX = new LogTime();
+	/**
+	 * A virtual LogTime that is undefined.
+	 */
 	public static final LogTime NONE = new LogTime();
-
+	/**
+	 * The default format to print out timestamps.
+	 */
 	public static final DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
 	private static final Pattern[] timeDetectors = {
@@ -28,12 +45,15 @@ public class LogTime implements Comparable<LogTime> {
 			DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SSS", Locale.US),
 			DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS", Locale.US),
 			DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.US),
-			null, //Unix time stamp
-			DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SSS zzz", Locale.US),
+			null, // Unix time stamp
+			DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SSS zzz", Locale.US)
 	};
 
 	private static final String timeExtractor = "(?:\\[?[0-9/-]+ [0-9:.]+(?: [A-Z]+)?\\]?|[0-9]{13,})[ ;]";
 
+	/**
+	 * @return The regex pattern used to extract timestamps from arbitrary strings.
+	 */
 	public static String getTimeExtractor() {
 		return timeExtractor;
 	}
@@ -44,12 +64,22 @@ public class LogTime implements Comparable<LogTime> {
 		time = null;
 	}
 
+	/**
+	 * Parse the given timestamp and instantiate the respective LogTime
+	 *
+	 * @param line
+	 *            A string representing a timestamp as obtained by matching against
+	 *            {@link #getTimeExtractor()}.
+	 * @throws DateTimeParseException
+	 *             If the timestamp could not be parsed
+	 */
 	public LogTime(String line) throws DateTimeParseException {
 		line = line.replaceAll("[^A-Z0-9-/:. ]", "").trim();
-		for(int i=0; i<timeDetectors.length; i++) {
+		for (int i = 0; i < timeDetectors.length; i++) {
 			if (timeDetectors[i].matcher(line).matches()) {
 				if (timeFormats[i] == null)
-					time = LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(line)), ZoneOffset.systemDefault());
+					time = LocalDateTime.ofInstant(Instant.ofEpochMilli(Long.parseLong(line)),
+							ZoneOffset.systemDefault());
 				else
 					time = LocalDateTime.parse(line, timeFormats[i]);
 				return;
@@ -58,8 +88,20 @@ public class LogTime implements Comparable<LogTime> {
 		throw new DateTimeParseException("No matching DateTime format found", line, 0);
 	}
 
+	/**
+	 * Init a LogTime from the given parameters, {@see LocalDateTime#of(int, int,
+	 * int, int, int, int, int)}
+	 *
+	 * @param year
+	 * @param month
+	 * @param dayOfMonth
+	 * @param hour
+	 * @param minute
+	 * @param second
+	 * @param millisecond
+	 */
 	public LogTime(int year, int month, int dayOfMonth, int hour, int minute, int second, int millisecond) {
-		time = LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, millisecond*1000000);
+		time = LocalDateTime.of(year, month, dayOfMonth, hour, minute, second, millisecond * 1000000);
 	}
 
 	@Override
@@ -95,9 +137,12 @@ public class LogTime implements Comparable<LogTime> {
 
 	@Override
 	public String toString() {
-		if (this == MIN) return "MIN";
-		if (this == MAX) return "MAX";
-		if (this == NONE) return "NONE";
+		if (this == MIN)
+			return "MIN";
+		if (this == MAX)
+			return "MAX";
+		if (this == NONE)
+			return "NONE";
 		return time.format(outputFormat);
 	}
 }

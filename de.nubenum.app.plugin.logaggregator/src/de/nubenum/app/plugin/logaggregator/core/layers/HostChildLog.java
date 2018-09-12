@@ -5,6 +5,10 @@ import java.io.IOException;
 import de.nubenum.app.plugin.logaggregator.config.ILogHost;
 import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
 
+/**
+ * A ChildLog that represents the aggregated logs of one host.
+ *
+ */
 public class HostChildLog extends AbstractChildLog {
 	private ILogHost host;
 
