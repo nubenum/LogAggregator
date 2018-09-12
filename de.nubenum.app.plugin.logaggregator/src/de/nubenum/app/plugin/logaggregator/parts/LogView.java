@@ -9,22 +9,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.e4.ui.services.IServiceConstants;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.search.IJavaSearchConstants;
-import org.eclipse.jdt.core.search.SearchEngine;
-import org.eclipse.jdt.core.search.SearchPattern;
-import org.eclipse.jdt.core.search.TypeNameMatch;
-import org.eclipse.jdt.core.search.TypeNameMatchRequestor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ISelection;
@@ -45,9 +34,6 @@ import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.IDE;
 
 import de.nubenum.app.plugin.logaggregator.core.UpdateEvent.Event;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
@@ -62,7 +48,6 @@ import de.nubenum.app.plugin.logaggregator.parts.tree.LogTreeViewer;
 
 //TODO make as editor
 public class LogView {
-	private static final String CONFIG_FILE_EXT = "logagg";
 
 	private LogController control;
 	private File configFile;
@@ -231,7 +216,7 @@ public class LogView {
 		detail = new StyledText(sash, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
 		detail.setFont(JFaceResources.getFont(JFaceResources.TEXT_FONT));
 
-		detail.addListener(SWT.MouseDown, event -> {
+		detail.addListener(SWT.MouseUp, event -> {
 			int offset = -1;
 			try {
 				offset = detail.getOffsetAtLocation(new Point(event.x, event.y));
@@ -242,47 +227,11 @@ public class LogView {
 				StyleRange range = detail.getStyleRangeAtOffset(offset);
 				if (range != null) {
 					EntryMessageLink link = (EntryMessageLink) range.data;
-					System.out.println(link.getLinkedPackage());
-					openLink(link);
+					LinkEnvironmentHandler env = new LinkEnvironmentHandler(link);
+					env.handle(sash);
 				}
 			}
 		});
-	}
-
-	private void openLink(EntryMessageLink link) {
-		SearchEngine s = new SearchEngine();
-		NullProgressMonitor monitor = new NullProgressMonitor();
-		TypeNameMatchRequestor collector = new TypeNameMatchRequestor() {
-			private boolean found = false;
-			@Override
-			public void acceptTypeNameMatch(TypeNameMatch result) {
-				if (found) return;
-				IPath path = result.getType().getPath();
-				openFileAtLine(path, link.getLinkedLine());
-				monitor.setCanceled(true);
-				found = true;
-			}
-		};
-
-		try {
-			s.searchAllTypeNames(link.getLinkedPackage().toCharArray(), SearchPattern.R_EXACT_MATCH, link.getLinkedClass().toCharArray(), IJavaSearchConstants.TYPE, IJavaSearchConstants.TYPE, SearchEngine.createWorkspaceScope(), collector, IJavaSearchConstants.WAIT_UNTIL_READY_TO_SEARCH, monitor);
-		} catch (OperationCanceledException e) {
-			return;
-		} catch (JavaModelException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void openFileAtLine(IPath path, int line) {
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-		try {
-			IMarker marker = file.createMarker(IMarker.TEXT);
-			marker.setAttribute(IMarker.LINE_NUMBER, line);
-			IDE.openEditor(page, marker);
-		} catch (CoreException e) {
-			return;
-		}
 	}
 
 	private void working(boolean working) {
@@ -386,7 +335,7 @@ public class LogView {
 		if (o instanceof IFile) {
 			IFile config = (IFile) o;
 			IPath configFilePath = config.getLocation();
-			if (configFilePath != null && configFilePath.getFileExtension().equals(CONFIG_FILE_EXT)) {
+			if (configFilePath != null && configFilePath.getFileExtension().equals(LinkEnvironmentHandler.CONFIG_FILE_EXT)) {
 				File newConfigFile = configFilePath.toFile();
 				if (!newConfigFile.equals(configFile)) {
 					configFile = newConfigFile;

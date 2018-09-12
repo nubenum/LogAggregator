@@ -19,12 +19,12 @@ public class EntryMessageLink extends EntryMessageMatch {
 	 * @param linkedMethod The name of the linked Method (e.g. testMethod)
 	 * @param linkedLine The number of the line (starting at 0)
 	 */
-	public EntryMessageLink(int start, int end, String linkedPackage, String linkedClass, String linkedMethod, String linkedLine) {
+	public EntryMessageLink(int start, int end, String linkedPackage, String linkedClass, String linkedMethod, int linkedLine) {
 		super(start, end);
 		this.linkedPackage = linkedPackage;
 		this.linkedClass = linkedClass;
 		this.linkedMethod = linkedMethod;
-		this.linkedLine = Integer.parseInt(linkedLine);
+		this.linkedLine = linkedLine;
 	}
 
 	/**

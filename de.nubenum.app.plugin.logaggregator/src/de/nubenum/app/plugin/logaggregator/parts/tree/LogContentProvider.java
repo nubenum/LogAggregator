@@ -1,7 +1,6 @@
 package de.nubenum.app.plugin.logaggregator.parts.tree;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.eclipse.jface.viewers.ILazyContentProvider;
 
@@ -16,44 +15,10 @@ import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.LinedEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.LogTime;
 import de.nubenum.app.plugin.logaggregator.core.model.ReferenceOffset;
-import de.nubenum.app.plugin.logaggregator.core.model.StackedEntry;
 import de.nubenum.app.plugin.logaggregator.parts.GuiEntry;
+import de.nubenum.app.plugin.logaggregator.parts.VirtualEntryConstants;
 
 public class LogContentProvider implements ILazyContentProvider {
-	public static final IEntry LOAD_ENTRY = new StackedEntry(Arrays.asList(
-			new LinedEntry("Click on a LogAggregator config file to display logs here. Click here to learn more."),
-			new LinedEntry("\n\n<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
-					"<!-- A LogAggregator config file might look like this. It needs to have the \".logagg\" file extension. -->\n" +
-					"<aggregatorConfig>\n" +
-					"	<!-- The location of the directory holding all log files. -->\n" +
-					"	<location>C:/logs/</location>\n" +
-					"	<hosts>\n" +
-					"		<!-- Subdirectories that contain similar types of logs, e.g. the same logs from different hosts. -->\n" +
-					"		<host>host1/</host>\n" +
-					"		<!-- Define a short name to be displayed in the UI. -->\n" +
-					"		<host shortName=\"alias\">host2/</host>\n" +
-					"	</hosts>\n" +
-					"	<sources>\n" +
-					"		<!-- Actual log files that are contained in each of the host directories. Files are matched using startsWith.\n" +
-					"		Thus, the file extension can be omitted to fetch all matching rotated log files. -->\n" +
-					"		<source>error</source>\n" +
-					"		<!-- In case some logs are not available on all hosts, use the ignoreNotFound attribute. The default, if omitted, is false. -->\n" +
-					"		<source ignoreNotFound=\"true\">subdirectory/stdout</source>\n" +
-					"		<source ignoreNotFound=\"false\">access</source>\n" +
-					"	</sources>\n" +
-					"	<!-- With the above config, the following files might be pulled in:\n" +
-					"	C:/logs/host1/error.log.5\n" +
-					"	C:/logs/host1/error.log.6\n" +
-					"	C:/logs/host1/error.log\n" +
-					"	C:/logs/host1/subdirectory/stdout.log\n" +
-					"	C:/logs/host1/access.log\n" +
-					"	C:/logs/host2/error.log\n" +
-					"	C:/logs/host2/access_18.01.01.log\n" +
-					"	C:/logs/host2/access.log\n" +
-					"	-->\n" +
-					"</aggregatorConfig>\n")
-			));
-
 	private static final int VIRTUAL_SIZE = 10000;
 	private final LogTreeViewer viewer;
 	private final IFilteredLog log;
@@ -117,7 +82,7 @@ public class LogContentProvider implements ILazyContentProvider {
 			int offset = getLastUpdatedIndexDiff(index);
 			IEntry entry = log.getAt(getLastUpdatedEntry(index), offset);
 			if (entry == null) {
-				doUpdateGuiElement(LOAD_ENTRY, index);
+				doUpdateGuiElement(VirtualEntryConstants.LOAD_ENTRY, index);
 				viewer.onUpdate(new UpdateEvent(Event.STOP));
 				return;
 			} else if (Entry.isFirstOrLast(entry)) {

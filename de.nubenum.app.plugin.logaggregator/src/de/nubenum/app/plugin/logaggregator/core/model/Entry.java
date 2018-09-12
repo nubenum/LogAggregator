@@ -127,7 +127,7 @@ public abstract class Entry implements IEntry {
 		List<EntryMessageLink> links = new ArrayList<>();
 		while (m.find()) {
 			links.add(new EntryMessageLink(m.start("cls"), m.end("line"), m.group("pkg"), m.group("cls"),
-					m.group("method"), m.group("line")));
+					m.group("method"), Integer.parseInt(m.group("line"))));
 		}
 		return links;
 	}
