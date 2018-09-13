@@ -10,5 +10,16 @@
             uri="fragment.e4xmi">
       </fragment>
    </extension>
+   
+    <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="LogAggregator"
+            extensions="logagg"
+            icon="icons/list.png"
+            class="de.nubenum.app.plugin.logaggregator.parts.LogView"
+            id="de.nubenum.app.plugin.logaggregator.parts.LogView">
+      </editor>
+   </extension>
 
 </plugin>

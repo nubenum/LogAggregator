@@ -10,6 +10,7 @@ import javax.inject.Named;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UISynchronize;
@@ -33,9 +34,15 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.part.EditorPart;
+import org.eclipse.ui.part.FileEditorInput;
 
 import de.nubenum.app.plugin.logaggregator.core.UpdateEvent.Event;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
@@ -49,7 +56,7 @@ import de.nubenum.app.plugin.logaggregator.core.model.StackedEntry;
 import de.nubenum.app.plugin.logaggregator.parts.tree.LogTreeViewer;
 
 //TODO make as editor
-public class LogView {
+public class LogView extends EditorPart {
 
 	private LogController control;
 	private File configFile;
@@ -69,11 +76,13 @@ public class LogView {
 	private Button up;
 	private Font bold;
 
+	private boolean editorMode = false;
+
 	@Inject UISynchronize sync;
 
 	public LogView() {
 		control = new LogController();
-		control.addListener(event -> sync.asyncExec(() -> {
+		control.addListener(event -> Display.getDefault().asyncExec(() -> {
 			if (event.getType() == Event.COUNT) {
 				countLines += event.getCount();
 				readLines(countLines);
@@ -91,9 +100,11 @@ public class LogView {
 		}));
 	}
 
+	@Override
 	@Focus
 	public void setFocus() {
-
+		if (counter != null)
+			counter.setFocus();
 	}
 
 	@PreDestroy
@@ -103,6 +114,7 @@ public class LogView {
 		control.close();
 	}
 
+	@Override
 	@PostConstruct
 	public void createPartControl(Composite container) {
 		GridLayout vert = new GridLayout(1, true);
@@ -207,7 +219,7 @@ public class LogView {
 	private void createTreeView(SashForm sash) {
 		viewer = new LogTreeViewer(sash, control);
 		this.viewer.addListener(event -> {
-			sync.asyncExec(() -> {
+			Display.getDefault().asyncExec(() -> {
 				if (event.getType() == Event.STOP) {
 					working(false);
 				} else if (event.getType() == Event.START) {
@@ -369,16 +381,55 @@ public class LogView {
 	}
 
 	private void setConfigFileSelection(Object o) {
+		if (editorMode)
+			return;
 		if (o instanceof IFile) {
 			IFile config = (IFile) o;
 			IPath configFilePath = config.getLocation();
-			if (configFilePath != null && configFilePath.getFileExtension().equals(LinkEnvironmentHandler.CONFIG_FILE_EXT)) {
-				File newConfigFile = configFilePath.toFile();
-				if (!newConfigFile.equals(configFile)) {
-					configFile = newConfigFile;
-					refresh();
-				}
+			setConfigFile(configFilePath);
+		}
+	}
+
+	private void setConfigFile(IPath configFilePath) {
+		if (configFilePath != null && configFilePath.getFileExtension().equals(LinkEnvironmentHandler.CONFIG_FILE_EXT)) {
+			File newConfigFile = configFilePath.toFile();
+			if (!newConfigFile.equals(configFile)) {
+				configFile = newConfigFile;
+				refresh();
 			}
 		}
+	}
+
+	@Override
+	public void doSave(IProgressMonitor arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void doSaveAs() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+		editorMode = true;
+		IPath path = ((FileEditorInput) input).getPath();
+		setConfigFile(path);
+		setSite(site);
+		setInput(input);
+	}
+
+	@Override
+	public boolean isDirty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isSaveAsAllowed() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
