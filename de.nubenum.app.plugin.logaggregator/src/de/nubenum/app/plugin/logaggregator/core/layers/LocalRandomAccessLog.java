@@ -101,4 +101,9 @@ public class LocalRandomAccessLog implements IRandomAccessLog {
 		}
 		return length;
 	}
+
+	@Override
+	public String toString() {
+		return path.getFileName().toString();
+	}
 }

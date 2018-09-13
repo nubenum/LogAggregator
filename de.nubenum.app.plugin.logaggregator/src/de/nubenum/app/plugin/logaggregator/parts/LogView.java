@@ -15,6 +15,7 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -22,6 +23,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -62,7 +64,10 @@ public class LogView {
 	private Button stack;
 	private Label counter;
 	private ProgressBar status;
-
+	private Button apply;
+	private Button down;
+	private Button up;
+	private Font bold;
 
 	@Inject UISynchronize sync;
 
@@ -79,7 +84,7 @@ public class LogView {
 			} else if (event.getType() == Event.APPEND) {
 				this.viewer.append();
 			} else if (event.getType() == Event.REFRESH) {
-				this.viewer.stopAndRefresh();
+				this.viewer.refreshOnBottom();
 			} else if (event.getType() == Event.STOP) {
 				working(false);
 			}
@@ -93,6 +98,8 @@ public class LogView {
 
 	@PreDestroy
 	public void destroy() {
+		if (bold != null)
+			bold.dispose();
 		control.close();
 	}
 
@@ -153,30 +160,33 @@ public class LogView {
 		level.setItems(Level.stringValues());
 		level.select(level.getItemCount()-1);
 		level.setToolTipText("The minimum log level (all higher levels are matched)");
+		level.addListener(SWT.Selection, e -> checkIfSearchDirty());
 
 		stack = new Button(filter, SWT.CHECK);
 		stack.setText("Only Stacktraces");
 		stack.setToolTipText("Match entries with multiple lines only");
+		stack.addListener(SWT.Selection, e -> checkIfSearchDirty());
 
 		regex = new Text(filter, SWT.BORDER);
 		regex.setMessage("Match messages by regex...");
 		regex.setToolTipText("Use a plain search string or a Java-esque regex (use ^$ to match beginning, end or complete message; start with (?i) to match case insensitively)");
+		regex.addListener(SWT.KeyUp, e -> checkIfSearchDirty());
 
 		//TODO key bindings
-		Button up = new Button(filter, SWT.PUSH);
+		up = new Button(filter, SWT.PUSH);
 		up.setText("\u2191");
 		up.setToolTipText("Jump to previous matching entry");
 		up.addListener(SWT.Selection, e -> jumpToMatch(Direction.UP));
 
-		Button down = new Button(filter, SWT.PUSH);
+		down = new Button(filter, SWT.PUSH);
 		down.setText("\u2193");
 		down.setToolTipText("Jump to next matching entry");
 		down.addListener(SWT.Selection, e -> jumpToMatch(Direction.DOWN));
 
-		Button apply = new Button(filter, SWT.PUSH);
+		apply = new Button(filter, SWT.PUSH);
 		apply.setText("Filter");
 		apply.setToolTipText("Only show matching entries");
-		apply.addListener(SWT.Selection, e -> viewer.applyFilter(getMatcher()));
+		apply.addListener(SWT.Selection, e -> applyFilter());
 	}
 
 	private void createStatusView(Composite filter) {
@@ -234,6 +244,27 @@ public class LogView {
 		});
 	}
 
+	private void checkIfSearchDirty() {
+		IEntryMatcher before = control.getLog().getMatcher();
+		IEntryMatcher after = getMatcher();
+		boolean isDirty = before == null && after.isRestrictive() || before != null && !after.equals(before);
+		setSearchButtonsDirty(isDirty);
+	}
+
+	private void setSearchButtonsDirty(boolean dirty) {
+		Font font = JFaceResources.getDefaultFont();
+		if (dirty) {
+			if (bold == null) {
+				FontDescriptor descriptor = FontDescriptor.createFrom(apply.getFont()).setStyle(SWT.BOLD);
+				bold = descriptor.createFont(apply.getDisplay());
+			}
+			font = bold;
+		}
+		apply.setFont(font);
+		up.setFont(font);
+		down.setFont(font);
+	}
+
 	private void working(boolean working) {
 		if (status != null) status.setVisible(working);
 	}
@@ -269,7 +300,13 @@ public class LogView {
 		viewer.jumpToDate(ts);
 	}
 
+	private void applyFilter() {
+		setSearchButtonsDirty(false);
+		viewer.applyFilter(getMatcher());
+	}
+
 	private void jumpToMatch(Direction dir) {
+		setSearchButtonsDirty(false);
 		working(true);
 		viewer.jumpToMatch(getMatcher(), dir);
 	}

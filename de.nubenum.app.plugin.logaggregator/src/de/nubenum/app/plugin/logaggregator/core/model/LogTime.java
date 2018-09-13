@@ -73,8 +73,8 @@ public class LogTime implements Comparable<LogTime> {
 	 * @throws DateTimeParseException
 	 *             If the timestamp could not be parsed
 	 */
-	public LogTime(String line) throws DateTimeParseException {
-		line = line.replaceAll("[^A-Z0-9-/:. ]", "").trim();
+	public LogTime(String input) throws DateTimeParseException {
+		String line = input.replaceAll("[^A-Z0-9-/:. ]", "").trim();
 		for (int i = 0; i < timeDetectors.length; i++) {
 			if (timeDetectors[i].matcher(line).matches()) {
 				if (timeFormats[i] == null)
@@ -85,7 +85,7 @@ public class LogTime implements Comparable<LogTime> {
 				return;
 			}
 		}
-		throw new DateTimeParseException("No matching DateTime format found", line, 0);
+		throw new DateTimeParseException("No matching DateTime format found for \"" + input + "\"", line, 0);
 	}
 
 	/**

@@ -32,4 +32,9 @@ public class ReferenceOffset {
 	public int getOffset() {
 		return data.getValue();
 	}
+
+	@Override
+	public String toString() {
+		return getEntry().toString() + " | " + getOffset();
+	}
 }

@@ -38,7 +38,8 @@ public class LogController implements IUpdateInitiator {
 
 	public void setConfigFile(File file) {
 		new Thread(() -> {
-			configFile.setFile(file);
+			if (file != null)
+				configFile.setFile(file);
 			try {
 				configFile.read();
 				manager.setConfig(configFile.getConfig());

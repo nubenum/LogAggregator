@@ -88,18 +88,19 @@ public class GuiEntry implements IEntry {
 	}
 
 	public String getLevelString() {
-		String ret = "";
+		String count = "";
 		int size = entry.getChildren().size();
 		if (size > 0) {
 			if (size > IEntryLog.TRUNCATE_GROUP_SIZE)
-				ret = "(10000+)";
+				count = " (10000+)";
 			else
-				ret = "("+entry.getChildren().size()+")";
+				count = " ("+entry.getChildren().size()+")";
 		}
+		String lvl = "NONE";
 		if (entry.getLevel() != null && entry.getLogTime() != null) {
-			ret = entry.getLevel().toString() + " " + ret;
+			lvl = entry.getLevel().toString();
 		}
-		return ret;
+		return lvl + count;
 	}
 
 	public Color getLevelColor() {

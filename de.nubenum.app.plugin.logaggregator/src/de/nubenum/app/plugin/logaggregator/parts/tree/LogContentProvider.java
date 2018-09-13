@@ -219,9 +219,16 @@ public class LogContentProvider implements ILazyContentProvider {
 		viewer.setTopItem(VIRTUAL_SIZE/2);
 	}
 
-	public void append() {
+	public boolean isAtBottom() {
 		ReferenceOffset bottom = viewer.getViewportBottom();
 		if (bottom.getOffset() >= VIRTUAL_SIZE-1) {
+			return true;
+		}
+		return false;
+	}
+
+	public void append() {
+		if (isAtBottom()) {
 			ReferenceOffset up = viewer.getViewportTop();
 			switchPage(up.getEntry(), up.getOffset());
 		}

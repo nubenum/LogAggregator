@@ -47,16 +47,17 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 		this.watcher.addListener(e -> {
 			if (e.getType() == Event.REFRESH) {
 				try {
+					SystemLog.log("Reloading due to file change on backend storage");
 					setupLogs();
 					listeners.forEach(l -> l.onUpdate(e));
 				} catch (IOException exc) {
 					listeners.forEach(l -> l.onUpdate(new UpdateEvent(exc)));
 				}
 			} else {
+				SystemLog.log("Trying to update due to append on backend storage");
 				observableFiles.forEach((f, n) -> {
 					try {
-						//TODO
-						System.out.println(f.getLength(true));
+						f.getLength(true);
 					} catch (IOException e1) {
 					}
 				});
@@ -88,10 +89,10 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 					observableFiles.put(log, null);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
 			if (!source.getIgnoreNotFound())
 				throw new IOException(host.getName()+source.getName() + " was not found. You can add the tag ignoreNotFound=\"true\" to the respective source in the config file to ignore this error.", e);
 		}
+		SystemLog.log(host.getName()+source.getName() + ": " + list.stream().map(l -> l.toString()).collect(Collectors.joining(", ")));
 		return list;
 	}
 

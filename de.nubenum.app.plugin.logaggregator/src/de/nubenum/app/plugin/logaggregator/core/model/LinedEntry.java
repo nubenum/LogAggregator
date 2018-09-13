@@ -20,6 +20,7 @@ public class LinedEntry extends Entry {
 	private static Pattern pattern;
 	private IFileRange range = null;
 	private String message = null;
+	private String parsedPart = null;
 	private Level level = null;
 	private ILogHost host = null;
 	private ILogSource source = null;
@@ -66,11 +67,16 @@ public class LinedEntry extends Entry {
 		Matcher matcher = getPattern().matcher(line);
 		if (matcher.matches()) {
 			try {
-				if (matcher.group("ts") != null)
-					this.time = new LogTime(matcher.group("ts"));
 				String msg = matcher.group("msg");
-				if (msg != null)
+				String ts = matcher.group("ts");
+				String lvl = matcher.group("lvl");
+				if (ts != null)
+					this.time = new LogTime(ts);
+
+				if (msg != null) {
 					this.message = msg;
+					this.parsedPart = (ts != null ? ts : "") + (lvl != null ? lvl : "");
+				}
 			} catch (DateTimeParseException e) {
 				SystemLog.log(e);
 			}
@@ -102,7 +108,7 @@ public class LinedEntry extends Entry {
 
 	@Override
 	public String getMessageComplete() {
-		return message;
+		return parsedPart+message;
 	}
 
 	@Override

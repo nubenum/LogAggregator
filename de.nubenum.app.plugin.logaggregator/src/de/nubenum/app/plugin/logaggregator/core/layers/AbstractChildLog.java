@@ -2,6 +2,7 @@ package de.nubenum.app.plugin.logaggregator.core.layers;
 
 import java.io.IOException;
 
+import de.nubenum.app.plugin.logaggregator.core.SystemLog;
 import de.nubenum.app.plugin.logaggregator.core.VirtualBinarySearch;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 import de.nubenum.app.plugin.logaggregator.core.model.Entry;
@@ -29,6 +30,7 @@ public abstract class AbstractChildLog implements IChildLog {
 					return null;
 				return entry;
 			} catch (IOException e) {
+				SystemLog.log(e);
 				return null;
 			}
 		});

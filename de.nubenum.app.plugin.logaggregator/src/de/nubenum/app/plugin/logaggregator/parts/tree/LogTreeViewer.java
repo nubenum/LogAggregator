@@ -71,6 +71,7 @@ public class LogTreeViewer implements IUpdateInitiator, IUpdateListener {
 		TableViewerColumn timeColumn = new TableViewerColumn(table, SWT.NONE);
 		timeColumn.getColumn().setWidth(150);
 		timeColumn.getColumn().setText("Time");
+		timeColumn.getColumn().setToolTipText("This will be highlighted red if badly ordered timestamps were detected and \"spoofed\".");
 		timeColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object o) {
@@ -85,6 +86,7 @@ public class LogTreeViewer implements IUpdateInitiator, IUpdateListener {
 		TableViewerColumn hostColumn = new TableViewerColumn(table, SWT.NONE);
 		hostColumn.getColumn().setWidth(70);
 		hostColumn.getColumn().setText("Host");
+		hostColumn.getColumn().setToolTipText("The host from which the respective entry originates. The tooltip will give you the exact log file.");
 		hostColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object o) {
@@ -105,6 +107,7 @@ public class LogTreeViewer implements IUpdateInitiator, IUpdateListener {
 		TableViewerColumn levelColumn = new TableViewerColumn(table, SWT.NONE);
 		levelColumn.getColumn().setWidth(100);
 		levelColumn.getColumn().setText("Level (Count)");
+		levelColumn.getColumn().setToolTipText("The log level of the entry or NONE if no level was specified, and the amount of children this entry has (this can either be the number of lines for stacktraces or the number of duplicates for deduplicated entries). This will be highlighted red for ERROR and higher and yellowish for WARNING and higher.");
 		levelColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object o) {
@@ -119,6 +122,7 @@ public class LogTreeViewer implements IUpdateInitiator, IUpdateListener {
 		TableViewerColumn msgColumn = new TableViewerColumn(table, SWT.NONE);
 		msgColumn.getColumn().setWidth(3000);
 		msgColumn.getColumn().setText("Message");
+		msgColumn.getColumn().setToolTipText("The log message. Stacktraces will be highlighted red.");
 		msgColumn.setLabelProvider(new DelegatingStyledCellLabelProvider(new StyledLogLabelProvider(control)));
 	}
 
@@ -169,6 +173,12 @@ public class LogTreeViewer implements IUpdateInitiator, IUpdateListener {
 		provider.append();
 	}
 
+	public void refreshOnBottom() {
+		if (provider.isAtBottom()) {
+			control.setConfigFile(null);
+		}
+	}
+
 	public void replace(GuiEntry guiEntry, int index) {
 		table.replace(guiEntry, index);
 	}
@@ -215,4 +225,5 @@ public class LogTreeViewer implements IUpdateInitiator, IUpdateListener {
 	public void removeListener(IUpdateListener listener) {
 		this.listeners.remove(listener);
 	}
+
 }

@@ -40,4 +40,18 @@ public class EntryMatcher implements IEntryMatcher {
 		return true;
 	}
 
+	@Override
+	public boolean equals(Object other) {
+		if (this == other)
+			return true;
+		if (other instanceof EntryMatcher) {
+			EntryMatcher matcher = (EntryMatcher) other;
+			if (minLevel == matcher.getMinLevel()
+					&& (pattern == matcher.getMessagePattern() ||
+					pattern != null && matcher.getMessagePattern() != null && pattern.toString().equals(matcher.getMessagePattern().toString()))
+					&& type == matcher.getType())
+				return true;
+		}
+		return false;
+	}
 }
