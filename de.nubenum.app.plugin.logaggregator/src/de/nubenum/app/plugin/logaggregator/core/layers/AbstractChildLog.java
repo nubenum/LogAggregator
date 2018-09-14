@@ -57,7 +57,7 @@ public abstract class AbstractChildLog implements IChildLog {
 			entry = getAtEntry(reference, offset);
 		} else {
 			entry = getAtForeignEntry(reference, offset);
-			// TODO
+			//TODO handle offset > 1 in foreign or here
 			if (Math.abs(offset) > 1) {
 				entry = file.getAt(entry, offset);
 			}

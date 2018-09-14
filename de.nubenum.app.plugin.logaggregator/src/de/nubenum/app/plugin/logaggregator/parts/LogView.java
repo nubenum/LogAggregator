@@ -51,7 +51,6 @@ import de.nubenum.app.plugin.logaggregator.core.model.LogTime;
 import de.nubenum.app.plugin.logaggregator.core.model.StackedEntry;
 import de.nubenum.app.plugin.logaggregator.parts.tree.LogTreeViewer;
 
-//TODO make as editor
 public class LogView extends EditorPart {
 
 	private LogController control;

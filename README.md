@@ -1,8 +1,9 @@
 # LogAggregator
 
-LogAggregator is an Eclipse Plugin that allows you to view a lot of separate log files in one unified, chronological view.
+LogAggregator is an Eclipse Plugin that allows you to view a lot of separate log files in one unified, chronological view. It is particularly suited if you have got multiple different log files that partly contain identical entries and/or you have got similar types of log files from different locations e.g. from a distributed system with multiple hosts. It will also pull together rotated logs.
 
 ![Screenshot](screenshot.png "Screenshot")
+
 
 ## Install
 Install and update this plugin directly from the p2 repository:
@@ -11,7 +12,7 @@ https://stc.nubenum.de/cdn/p2/
 (You might need to untick the checkbox "Group items by category" in Eclipse's Install New Software Dialog.)
 ## Setup
 
-After having installed the plugin, you can open it via Window > Show View > Other... > LogAggregator or via Quick Access. In order to view log files, you need to create a configuration file indicating the log files you want to view. A LogAggregator config file might look like the following. You must save this file with the ".logagg" extension preferably somewhere in your workspace. You can then click on the file once in Package Explorer while LogAggregator is opened to view the configured log files.
+After having installed the plugin, you can open it by double clicking on a `.logagg` configuration file in your Package Explorer (i.e. the plugin is an editor, even though it doesn't edit anything). You can create an example config file via `File > New > Other... > LogAggregator Config File` or manually by pasting the following snippet in a new text file with the `.logagg` extension. Opening this configuration file in the XML editor of your choice, you will have to indicate the log files you want to view. A LogAggregator config file might look like the following:
 ```
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
@@ -77,9 +78,9 @@ You can match by:
 
 * __Log Level.__ All higher levels will be matched.
 * __Entry Type.__ Only Stacktraces are matched.
-* __Message.__ The message search string can be a Java-esque regex and will match entries containing the pattern. If you want to match the entire message, use `^$`. If you want to match case insensitively, use the embedded flag `(?i)` (see documentation about Java regexes to learn more).
+* __Message.__ The message search string can be a Java-esque regex and will match entries containing the pattern. If you want to match the entire message, use `^$`. If you want to match case insensitively, use the embedded flag `(?i)` (see documentation about Java regexes to learn more). Message pattern matches will be highlighted in the list and in the detail view.
 
-Message pattern matches will be highlighted in the list and in the detail view. Tip: You can adapt the search pattern and click again on an entry to update the detail view without reapplying the filter or jumping.
+After modifying the match rules, you need to click on the Filter or one of the arrow buttons to apply the rules. Tip: You can adapt the search pattern and click again on an entry to update the detail view highlighting without reapplying the filter or jumping.
 
 ---
 

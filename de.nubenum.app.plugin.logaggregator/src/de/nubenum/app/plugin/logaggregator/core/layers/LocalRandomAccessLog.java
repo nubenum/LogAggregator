@@ -73,7 +73,7 @@ public class LocalRandomAccessLog implements IRandomAccessLog {
 
 	private void updateBlockSize(IFilePosition start, Direction dir) {
 		if (lastRange != null && lastRange.getNext(dir).equals(start)) {
-			//TODO
+			//TODO performance analysis
 			blockSize *= 2;
 			if (blockSize > MAX_BLOCK_SIZE)
 				blockSize = MAX_BLOCK_SIZE;

@@ -120,7 +120,7 @@ public class LinedLogTest {
 		assertEquals("amet sit dolor ipsum0 Lorem", entry.getMessage());
 		assertEquals(new FileRange(28, 27), entry.getRange());
 		entry = lined.getAt(entry, -1);
-		//TODO first
+
 		assertEquals("Lorem0 ipsum döor sit amet", entry.getMessage());
 		assertEquals(new FileRange(0, 27), entry.getRange());
 		entry = lined.getAt(entry, -1);

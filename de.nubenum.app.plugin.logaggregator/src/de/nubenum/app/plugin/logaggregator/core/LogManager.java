@@ -74,7 +74,7 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 
 	private List<IRandomAccessLog> getSourceFiles(ILogHost host, ILogSource source) throws IOException {
 		Path path = Paths.get(config.getLocation());
-		//TODO filter dupl
+		//TODO filter duplicate dirs
 		ILogDirectory dir = new LocalLogDirectory(path, host, source);
 		watcher.addPath(dir.getPath());
 		List<IRandomAccessLog> list = new ArrayList<>();
@@ -157,8 +157,7 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 			try {
 				setupLogs();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				SystemLog.log(e);
 			}
 		}
 		listeners.forEach(l -> l.onUpdate(event));
