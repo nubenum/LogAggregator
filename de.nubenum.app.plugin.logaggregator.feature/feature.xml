@@ -4,6 +4,12 @@
       label="LogAggregator"
       version="2.0.0.qualifier">
 
+   <description>
+      Eclipse Plugin to view a lot of separate log files in one unified, chronological view
+--
+Powered by IT Designers GmbH (www.it-designers.de)
+   </description>
+
    <license url="">
       MIT License
 

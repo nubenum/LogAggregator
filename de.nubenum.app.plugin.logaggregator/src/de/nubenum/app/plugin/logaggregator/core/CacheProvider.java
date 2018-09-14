@@ -18,6 +18,8 @@ public class CacheProvider implements IEntryLog {
 
 	public CacheProvider() {
 		cache = new LinkedHashMap<ReferenceOffset, IEntry>(MAX_SIZE * 4 / 3, 0.75f, false) {
+			private static final long serialVersionUID = -4731634430629826923L;
+
 			@Override
 			protected boolean removeEldestEntry(java.util.Map.Entry<ReferenceOffset, IEntry> eldest) {
 				return size() > MAX_SIZE;

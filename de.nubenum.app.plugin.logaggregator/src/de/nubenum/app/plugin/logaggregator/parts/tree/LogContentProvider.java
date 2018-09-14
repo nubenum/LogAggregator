@@ -16,7 +16,7 @@ import de.nubenum.app.plugin.logaggregator.core.model.LinedEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.LogTime;
 import de.nubenum.app.plugin.logaggregator.core.model.ReferenceOffset;
 import de.nubenum.app.plugin.logaggregator.parts.GuiEntry;
-import de.nubenum.app.plugin.logaggregator.parts.VirtualEntryConstants;
+import de.nubenum.app.plugin.logaggregator.parts.DefaultConstants;
 
 public class LogContentProvider implements ILazyContentProvider {
 	private static final int VIRTUAL_SIZE = 10000;
@@ -82,7 +82,7 @@ public class LogContentProvider implements ILazyContentProvider {
 			int offset = getLastUpdatedIndexDiff(index);
 			IEntry entry = log.getAt(getLastUpdatedEntry(index), offset);
 			if (entry == null) {
-				doUpdateGuiElement(VirtualEntryConstants.LOAD_ENTRY, index);
+				doUpdateGuiElement(DefaultConstants.LOAD_ENTRY, index);
 				viewer.onUpdate(new UpdateEvent(Event.STOP));
 				return;
 			} else if (Entry.isFirstOrLast(entry)) {

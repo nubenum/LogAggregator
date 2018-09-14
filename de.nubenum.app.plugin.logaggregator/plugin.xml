@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
-<plugin>
-
-   <extension
-         id="de.nubenum.app.plugin.logaggregator.fragment"
-         point="org.eclipse.e4.workbench.model">
-      <fragment
-            apply="notexists"
-            uri="fragment.e4xmi">
-      </fragment>
-   </extension>
-   
+<plugin>   
     <extension
          point="org.eclipse.ui.editors">
       <editor
@@ -20,6 +10,16 @@
             class="de.nubenum.app.plugin.logaggregator.parts.LogView"
             id="de.nubenum.app.plugin.logaggregator.parts.LogView">
       </editor>
-   </extension>
+    </extension>
 
+	<extension point="org.eclipse.ui.newWizards">
+	  <wizard
+	      id="de.nubenum.app.plugin.logaggregator.wizard"
+	      name="LogAggregator Configuration File"
+	      class="de.nubenum.app.plugin.logaggregator.parts.NewConfigWizard"
+	      icon="icons/list.png">
+	    <description>Create a new example LogAggregator Config File</description>
+	    <selection class="org.eclipse.core.resources.IResource" /> 
+	  </wizard>
+	</extension>
 </plugin>

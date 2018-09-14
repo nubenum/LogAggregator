@@ -56,7 +56,7 @@ public class LinkEnvironmentHandler {
 		IFile file = saveFileAs(container);
 		if (file != null)
 		{
-			InputStream source = new ByteArrayInputStream(VirtualEntryConstants.DEFAULT_CONFIG.getBytes());
+			InputStream source = new ByteArrayInputStream(DefaultConstants.DEFAULT_CONFIG.getBytes());
 			try {
 				file.create(source, IResource.NONE, null);
 			} catch (CoreException e) {
@@ -67,8 +67,8 @@ public class LinkEnvironmentHandler {
 	}
 
 	private boolean executeVirtualAction(Composite container) {
-		if (link.getLinkedPackage().equals(VirtualEntryConstants.VIRTUAL_ACTION)) {
-			if (link.getLinkedMethod().equals(VirtualEntryConstants.VIRTUAL_ACTION_CREATE_DEFAULT))
+		if (link.getLinkedPackage().equals(DefaultConstants.VIRTUAL_ACTION)) {
+			if (link.getLinkedMethod().equals(DefaultConstants.VIRTUAL_ACTION_CREATE_DEFAULT))
 				createDefaultConfigFile(container);
 			return true;
 		}
@@ -99,12 +99,25 @@ public class LinkEnvironmentHandler {
 		}
 	}
 
-	private void openFileAtLine(IFile file, int line) {
+	private static void openFileAtLine(IFile file, int line) {
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		try {
 			IMarker marker = file.createMarker(IMarker.TEXT);
 			marker.setAttribute(IMarker.LINE_NUMBER, line);
 			IDE.openEditor(page, marker);
+			marker.delete();
+		} catch (CoreException e) {
+			return;
+		}
+	}
+
+	public static void openTextFile(IFile file) {
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		try {
+			IMarker marker = file.createMarker(IMarker.TEXT);
+			marker.setAttribute(IDE.EDITOR_ID_ATTR, "org.eclipse.ui.DefaultTextEditor");
+			IDE.openEditor(page, marker);
+			marker.delete();
 		} catch (CoreException e) {
 			return;
 		}

@@ -6,20 +6,15 @@ import java.util.regex.PatternSyntaxException;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UISynchronize;
-import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.StyleRange;
@@ -51,6 +46,7 @@ import de.nubenum.app.plugin.logaggregator.core.model.EntryMessageLink;
 import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.IEntryMatcher;
 import de.nubenum.app.plugin.logaggregator.core.model.Level;
+import de.nubenum.app.plugin.logaggregator.core.model.LinedEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.LogTime;
 import de.nubenum.app.plugin.logaggregator.core.model.StackedEntry;
 import de.nubenum.app.plugin.logaggregator.parts.tree.LogTreeViewer;
@@ -76,8 +72,6 @@ public class LogView extends EditorPart {
 	private Button up;
 	private Font bold;
 
-	private boolean editorMode = false;
-
 	@Inject UISynchronize sync;
 
 	public LogView() {
@@ -89,7 +83,7 @@ public class LogView extends EditorPart {
 				counter.pack();
 				counter.getParent().pack();
 			} else if (event.getType() == Event.EXCEPTION) {
-				MessageDialog.openInformation(null, "Error", event.getException().getMessage());
+				handleConfigError(event.getException());
 			} else if (event.getType() == Event.APPEND) {
 				this.viewer.append();
 			} else if (event.getType() == Event.REFRESH) {
@@ -98,6 +92,17 @@ public class LogView extends EditorPart {
 				working(false);
 			}
 		}));
+	}
+
+	private void handleConfigError(Exception e) {
+		working(false);
+		boolean openInEditor = MessageDialog.openConfirm(null, "Error",
+				e.getMessage() + "\n\nDo you want to open the config file in a text editor to fix this?");
+		if (openInEditor) {
+			IFile file = ((FileEditorInput) getEditorInput()).getFile();
+			LinkEnvironmentHandler.openTextFile(file);
+		}
+		updateDetailView(new GuiEntry(new LinedEntry(e.getMessage())));
 	}
 
 	@Override
@@ -226,8 +231,7 @@ public class LogView extends EditorPart {
 					working(true);
 				} else if (event.getType() == Event.ENTRY) {
 					GuiEntry guiEntry = (GuiEntry) event.getEntry();
-					detail.setText(guiEntry.getMessageComplete());
-					detail.setStyleRanges(guiEntry.getMessageCompleteStyleRanges(getMatcher()));
+					updateDetailView(guiEntry);
 				}
 			});
 		});
@@ -254,6 +258,11 @@ public class LogView extends EditorPart {
 				}
 			}
 		});
+	}
+
+	private void updateDetailView(GuiEntry guiEntry) {
+		detail.setText(guiEntry.getMessageComplete());
+		detail.setStyleRanges(guiEntry.getMessageCompleteStyleRanges(getMatcher()));
 	}
 
 	private void checkIfSearchDirty() {
@@ -328,66 +337,11 @@ public class LogView extends EditorPart {
 	}
 
 	public void refresh() {
+		if (detail != null)
+			detail.setText("");
 		working(true);
+		//TODO endless repeat after refresh on multi same ts?
 		control.setConfigFile(configFile);
-	}
-
-	/**
-	 * This method is kept for E3 compatiblity.
-	 *
-	 * @param s
-	 *            the selection received from JFace (E3 mode)
-	 */
-	@Inject
-	@Optional
-	public void setSelection(@Named(IServiceConstants.ACTIVE_SELECTION) ISelection s) {
-		if (s == null || s.isEmpty())
-			return;
-
-		if (s instanceof IStructuredSelection) {
-			IStructuredSelection iss = (IStructuredSelection) s;
-			setSelection(iss.toArray());
-		}
-	}
-
-	/**
-	 * This method manages the selection of a config file.
-	 *
-	 * @param o
-	 *            : the current object received
-	 */
-	@Inject
-	@Optional
-	public void setSelection(@Named(IServiceConstants.ACTIVE_SELECTION) Object o) {
-
-		// Remove the 2 following lines in pure E4 mode, keep them in mixed mode
-		if (o instanceof ISelection) // Already captured
-			return;
-
-		setConfigFileSelection(o);
-	}
-
-	/**
-	 * This method manages the multiple selection of config files.
-	 *
-	 * @param o
-	 *            : the current array of objects received in case of multiple selection
-	 */
-	@Inject
-	@Optional
-	public void setSelection(@Named(IServiceConstants.ACTIVE_SELECTION) Object[] selectedObjects) {
-		if (selectedObjects != null && selectedObjects.length > 0)
-			setConfigFileSelection(selectedObjects[0]);
-	}
-
-	private void setConfigFileSelection(Object o) {
-		if (editorMode)
-			return;
-		if (o instanceof IFile) {
-			IFile config = (IFile) o;
-			IPath configFilePath = config.getLocation();
-			setConfigFile(configFilePath);
-		}
 	}
 
 	private void setConfigFile(IPath configFilePath) {
@@ -402,34 +356,33 @@ public class LogView extends EditorPart {
 
 	@Override
 	public void doSave(IProgressMonitor arg0) {
-		// TODO Auto-generated method stub
-
+		return;
 	}
 
 	@Override
 	public void doSaveAs() {
-		// TODO Auto-generated method stub
-
+		return;
 	}
 
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-		editorMode = true;
 		IPath path = ((FileEditorInput) input).getPath();
 		setConfigFile(path);
 		setSite(site);
 		setInput(input);
+
+		String name = configFile.getName();
+		setPartName(name.substring(0, name.lastIndexOf(".")));
+		setContentDescription(configFile.getParent());
 	}
 
 	@Override
 	public boolean isDirty() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean isSaveAsAllowed() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }
