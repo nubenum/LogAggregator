@@ -1,5 +1,6 @@
 package de.nubenum.app.plugin.logaggregator.core.model;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -53,5 +54,10 @@ public class EntryMatcher implements IEntryMatcher {
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(minLevel, pattern, type);
 	}
 }

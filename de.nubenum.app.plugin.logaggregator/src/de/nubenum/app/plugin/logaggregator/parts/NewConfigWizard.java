@@ -11,7 +11,7 @@ import org.eclipse.ui.ide.IDE;
 public class NewConfigWizard extends Wizard implements INewWizard {
 
 	private IStructuredSelection selection;
-	private NewConfigWizardPage newFileWizardPage;
+	private NewConfigWizardPage newConfigWizardPage;
 	private IWorkbench workbench;
 
 	public NewConfigWizard() {
@@ -20,13 +20,13 @@ public class NewConfigWizard extends Wizard implements INewWizard {
 
 	@Override
 	public void addPages() {
-		newFileWizardPage = new NewConfigWizardPage(selection);
-		addPage(newFileWizardPage);
+		newConfigWizardPage = new NewConfigWizardPage(selection);
+		addPage(newConfigWizardPage);
 	}
 
 	@Override
 	public boolean performFinish() {
-		IFile file = newFileWizardPage.createNewFile();
+		IFile file = newConfigWizardPage.createNewFile();
 		if (file != null) {
 			try {
 				IDE.openEditor(workbench.getActiveWorkbenchWindow().getActivePage(), file);
