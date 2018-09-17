@@ -19,6 +19,11 @@ public abstract class GroupedEntry extends Entry {
 	}
 
 	@Override
+	public String getParsedPart() {
+		return getChildren().get(0).getParsedPart();
+	}
+
+	@Override
 	public LogTime getLogTime() {
 		return getChildren().get(0).getLogTime();
 	}

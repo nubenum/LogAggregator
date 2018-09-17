@@ -99,15 +99,15 @@ public class LinedEntryTest {
 		assertEquals("example.common", l.getLinkedPackage());
 		assertEquals("execute", l.getLinkedMethod());
 		assertEquals(117, l.getLinkedLine());
-		assertEquals(64, l.getStart());
-		assertEquals(77, l.getEnd());
+		assertEquals(33, l.getStart());
+		assertEquals(46, l.getEnd());
 	}
 
 	@Test
 	public void getMatchesTest() {
 		LinedEntry a = new LinedEntry("2018-06-02 16:10:31:465 [INFO]   at example.common.Test.execute(Test.java:117)", new FileRange(1, 42), null, null);
 		IEntryMatcher f = new EntryMatcher(Level.ALL, "execute", IEntry.class);
-		EntryMessageMatch l = a.getMatches(f, true).get(0);
+		EntryMessageMatch l = a.getMatches(f, false).get(0);
 		assertEquals(25, l.getStart());
 		assertEquals(32, l.getEnd());
 	}

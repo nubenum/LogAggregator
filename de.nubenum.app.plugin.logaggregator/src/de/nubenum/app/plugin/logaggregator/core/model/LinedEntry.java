@@ -108,7 +108,12 @@ public class LinedEntry extends Entry {
 
 	@Override
 	public String getMessageComplete() {
-		return parsedPart+message;
+		return message;
+	}
+
+	@Override
+	public String getParsedPart() {
+		return parsedPart;
 	}
 
 	@Override

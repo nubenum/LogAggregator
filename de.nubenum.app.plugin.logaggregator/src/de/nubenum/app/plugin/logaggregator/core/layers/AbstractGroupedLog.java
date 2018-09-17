@@ -72,7 +72,8 @@ public abstract class AbstractGroupedLog implements IEntryLog {
 
 		if (!Entry.isFirstOrLast(reference)) {
 			groupedCache.put(reference, degroupedOffset, entry);
-			groupedCache.put(degroupedReference(entry, Direction.get(-degroupedOffset)), -degroupedOffset, groupedReference);
+			if (reference.getSource() != null)
+				groupedCache.put(degroupedReference(entry, Direction.get(-degroupedOffset)), -degroupedOffset, groupedReference);
 		}
 
 		return entry;

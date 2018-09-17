@@ -78,7 +78,7 @@ public class FilteredLogTest {
 
 	@Test
 	public void testRegex() throws IOException {
-		log.setMatcher(new EntryMatcher(Level.ALL, "Lor[ei]m", IEntry.class));
+		log.setMatcher(new EntryMatcher(Level.ALL, "^Lor[ei]m", IEntry.class));
 		log.toggleFilter(true);
 
 		IEntry entry = log.getAt(Entry.FIRST, 1);

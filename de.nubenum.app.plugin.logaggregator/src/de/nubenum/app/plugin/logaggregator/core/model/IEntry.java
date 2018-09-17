@@ -99,4 +99,9 @@ public interface IEntry extends Comparable<IEntry> {
 	 * @return The source log that this entry originated from.
 	 */
 	public ILogSource getSource();
+
+	/**
+	 * @return The raw part of the log line that was parsed (i.e. timestamp, level, etc.)
+	 */
+	public String getParsedPart();
 }

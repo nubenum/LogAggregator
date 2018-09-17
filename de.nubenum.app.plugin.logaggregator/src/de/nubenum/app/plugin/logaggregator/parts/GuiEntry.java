@@ -124,6 +124,13 @@ public class GuiEntry implements IEntry {
 		return entry.getMessageComplete();
 	}
 
+	@Override
+	public String getParsedPart() {
+		if (entry == null || entry.getParsedPart() == null)
+			return "";
+		return entry.getParsedPart();
+	}
+
 	public StyleRange[] getMessageCompleteStyleRanges(IEntryMatcher matcher) {
 		if (entry == null)
 			return new StyleRange[] {};

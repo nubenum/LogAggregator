@@ -59,7 +59,7 @@ Log files being matched using startsWith, there is one caveat: Different types o
 ### List & Detail View
 There are four columns in the list view:
 
-* __Time.__ This will be highlighted red if badly ordered timestamps were detected and "spoofed".
+* __Time.__ This will be highlighted red if badly ordered timestamps were detected and "spoofed". The tooltip will give you the raw timestamp and level as it was read from the file.
 * __Host.__ The host from which the respective entry originates. The tooltip will give you the exact log file.
 * __Level (Count).__ The log level of the entry, if available, and the amount of children this entry has (this can either be the number of lines for stacktraces or the number of duplicates for deduplicated entries). This will be highlighted red for ERROR and higher and yellowish for WARNING and higher.
 * __Message.__ The log message. Stacktraces will be highlighted red.

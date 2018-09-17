@@ -71,11 +71,15 @@ public class LogTreeViewer implements IUpdateInitiator, IUpdateListener {
 		TableViewerColumn timeColumn = new TableViewerColumn(table, SWT.NONE);
 		timeColumn.getColumn().setWidth(150);
 		timeColumn.getColumn().setText("Time");
-		timeColumn.getColumn().setToolTipText("This will be highlighted red if badly ordered timestamps were detected and \"spoofed\".");
+		timeColumn.getColumn().setToolTipText("This will be highlighted red if badly ordered timestamps were detected and \"spoofed\". The tooltip will give you the raw timestamp and level as it was read from the file.");
 		timeColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object o) {
 				return ((GuiEntry) o).getLogTimeString();
+			}
+			@Override
+			public String getToolTipText(Object o) {
+				return ((GuiEntry) o).getParsedPart();
 			}
 			@Override
 			public Color getForeground(Object o) {
@@ -112,6 +116,10 @@ public class LogTreeViewer implements IUpdateInitiator, IUpdateListener {
 			@Override
 			public String getText(Object o) {
 				return ((GuiEntry) o).getLevelString();
+			}
+			@Override
+			public String getToolTipText(Object o) {
+				return ((GuiEntry) o).getParsedPart();
 			}
 			@Override
 			public Color getForeground(Object o) {
