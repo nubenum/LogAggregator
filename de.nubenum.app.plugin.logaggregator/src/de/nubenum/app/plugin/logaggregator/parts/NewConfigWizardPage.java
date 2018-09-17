@@ -40,7 +40,7 @@ public class NewConfigWizardPage extends WizardNewFileCreationPage {
 		super.createAdvancedControls(parent);
 
 		Label label = new Label(parent, SWT.WRAP);
-		label.setText("Choose a location that contains a tree of log files to try and generate a suitable config file automatically. "
+		label.setText("Choose a location that contains a tree of log files to try and generate a suitable config file from that automatically. "
 				+ "You will have to adapt the config file to suit your needs with a text or XML editor. "
 				+ "If no location is selected, an example file will be generated.");
 		GridData data = new GridData(SWT.FILL, SWT.CENTER, true, false);

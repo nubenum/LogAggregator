@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,6 +49,7 @@ public abstract class AbstractLogDirectory implements IUpdateInitiator, ILogDire
 		String match = Paths.get(source.getName()).getFileName().toString();
 		files = files.stream().filter(f -> f.getName().startsWith(match)).collect(Collectors.toList());
 
+		Collection<File> lengthErrors = new ArrayList<>();
 		files.sort((a, b) -> {
 			if (isCurrentFile(a, source))
 				return 1;
@@ -57,10 +60,12 @@ public abstract class AbstractLogDirectory implements IUpdateInitiator, ILogDire
 			if (natural != 0)
 				return natural;
 
-			if (a.getName().length() != b.getName().length()) {
+			if (a.getName().length() != b.getName().length() && !lengthErrors.contains(a) && !lengthErrors.contains(b)) {
 				SystemLog.warn("ATTENTION! Irregularities in rotated log file naming were detected: " + a.getName()
 				+ " <-> " + b.getName()
 				+ " This might indicate that the order is wrong or that your filter is not sufficiently restrictive.");
+				lengthErrors.add(a);
+				lengthErrors.add(b);
 			}
 			return a.getName().compareTo(b.getName());
 		});
@@ -68,7 +73,7 @@ public abstract class AbstractLogDirectory implements IUpdateInitiator, ILogDire
 	}
 
 	private boolean isCurrentFile(File file, ILogSource source) {
-		return file.getName().split("\\.").length == 2;
+		return file.getName().split("\\.").length <= 2;
 	}
 
 	private int naturalSortIfEligible(String a, String b) {
