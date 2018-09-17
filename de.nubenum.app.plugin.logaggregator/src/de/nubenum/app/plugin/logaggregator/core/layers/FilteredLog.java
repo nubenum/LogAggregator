@@ -42,7 +42,7 @@ public class FilteredLog implements IFilteredLog {
 			i += offset;
 			if (Entry.isFirstOrLast(reference))
 				break;
-			if (i % 10000 == 0 && Thread.interrupted())
+			if (i % 100 == 0 && Thread.interrupted())
 				return null;
 		} while (matcher != null && filtered && !reference.matches(matcher));
 		return new ReferenceOffset(reference, i);

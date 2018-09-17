@@ -72,6 +72,8 @@ public class LogView extends EditorPart {
 	public LogView() {
 		control = new LogController();
 		control.addListener(event -> Display.getDefault().asyncExec(() -> {
+			if (status.isDisposed())
+				return;
 			if (event.getType() == Event.COUNT) {
 				countLines += event.getCount();
 				readLines(countLines);

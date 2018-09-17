@@ -2,12 +2,14 @@ package de.nubenum.app.plugin.logaggregator.config;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -36,23 +38,47 @@ public class AutoConfigCreator {
 		extractHosts(files, hosts);
 		extractRelativeSources(hosts, files, sources);
 		makeLogHosts(hosts, logHosts);
-		makeLogSources(sources, logSources);
-		//setIgnoreNotFounds(files, hosts, sources);
+		makeLogSources(sources, logSources, logHosts);
 	}
 
-	private void makeLogHosts(Set<File> hosts, List<ILogHost> logHosts) {
+	private void makeLogHosts(final Set<File> hosts, final List<ILogHost> logHosts) {
 		for (File host : hosts) {
 			ILogHost logHost = new XmlLogHost();
-			logHost.setName(location.relativize(host.toPath().getParent()).toString());
+			logHost.setName(location.relativize(host.toPath()).toString());
+			logHosts.add(logHost);
 		}
+		logHosts.sort((a,b) -> a.getName().compareTo(a.getName()));
 	}
 
-	private void makeLogSources(HashMap<File, Integer> sources, List<ILogSource> logSources) {
-		// TODO Auto-generated method stub
+	private void makeLogSources(final HashMap<File, Integer> sources, final List<ILogSource> logSources, final List<ILogHost> logHosts) {
+		int hostCount = logHosts.size();
+		for (Map.Entry<File, Integer> entry : sources.entrySet()) {
+			ILogSource logSource = new XmlLogSource();
+			if (entry.getValue() != hostCount)
+				logSource.setIgnoreNotFound(true);
 
+			String nameWoExtension = getNameWithoutExtension(entry.getKey());
+			String parent = entry.getKey().getParent();
+			String path = parent == null ? nameWoExtension : Paths.get(parent, nameWoExtension).toString();
+			/*
+			int nameLen = nameWoExtension.length();
+			int i = 0;
+			String extensionFragment;
+			do {
+				extensionFragment = entry.getKey().getName().substring(nameLen, nameLen+i);
+				i++;
+			} while (anyOtherLogSourceStartsWith(path+extensionFragment, logSources) && nameLen+i <= entry.getKey().getName().length());*/
+			logSource.setName(path);
+			logSources.add(logSource);
+		}
+		logSources.sort((a,b) -> a.getName().compareTo(a.getName()));
 	}
 
-	private void extractRelativeSources(Set<File> hosts, List<File> absoluteSources, HashMap<File, Integer> relativeSources) {
+	private boolean anyOtherLogSourceStartsWith(String path, final List<ILogSource> logSources) {
+		return logSources.stream().anyMatch(s -> s.getName().startsWith(path));
+	}
+
+	private void extractRelativeSources(final Set<File> hosts, final List<File> absoluteSources, final HashMap<File, Integer> relativeSources) {
 		for (File source : absoluteSources) {
 			File parent = findParent(source, hosts);
 			if (parent == null)
@@ -66,7 +92,6 @@ public class AutoConfigCreator {
 	private File findParent(File source, Set<File> hosts) {
 		return hosts.stream().filter(host -> source.toString().startsWith(host.toString())).findFirst().orElse(null);
 	}
-
 
 	private List<File> traverse(File dir) {
 		if (!dir.isDirectory())
@@ -103,7 +128,7 @@ public class AutoConfigCreator {
 		return filtered;
 	}
 
-	private void extractHosts(List<File> files, final Set<File> hosts) {
+	private void extractHosts(final List<File> files, final Set<File> hosts) {
 		for (File file : files) {
 			hosts.add(file.getParentFile());
 		}
@@ -115,16 +140,11 @@ public class AutoConfigCreator {
 		while (i.hasNext()) {
 			File host = i.next();
 			Predicate<File> isChildOf = parentHost -> {
-				System.out.println(host.getParent()+"|"+parentHost.toString());
 				return host.getParent().startsWith(parentHost.toString());
 			};
 			if (hosts.stream().anyMatch(isChildOf))
 				i.remove();
 		}
-	}
-
-	private void setIgnoreNotFounds(List<File> files, final Set<ILogHost> hosts, final Set<ILogSource> sources) {
-		return;
 	}
 
 	private void sortByName(final List<File> files) {

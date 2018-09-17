@@ -19,13 +19,13 @@ public class XmlLogHost implements ILogHost {
 	@Override
 	public void setName(String name) {
 		this.name = name;
-		if (this.shortName == null)
-			this.shortName = name;
 	}
 
 	@XmlAttribute
 	@Override
 	public String getShortName() {
+		if (shortName == null)
+			return name;
 		return shortName;
 	}
 
