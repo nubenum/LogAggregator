@@ -68,6 +68,7 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 
 	public void setConfig(IConfig config) throws IOException {
 		this.config = config;
+		ConfigProvider.setConfig(config);
 		SystemLog.log("Read config sources:" + config.getSources().stream().map(l->l.getName()).collect(Collectors.joining(",")));
 		setupLogs();
 	}

@@ -44,4 +44,8 @@ public interface IConfig {
 	 * @param location The location.
 	 */
 	void setLocation(String location);
+
+	IOptions getOptions();
+
+	void setOptions(IOptions options);
 }

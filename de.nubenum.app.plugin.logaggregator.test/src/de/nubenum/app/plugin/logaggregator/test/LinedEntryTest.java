@@ -99,8 +99,8 @@ public class LinedEntryTest {
 		assertEquals("example.common", l.getLinkedPackage());
 		assertEquals("execute", l.getLinkedMethod());
 		assertEquals(117, l.getLinkedLine());
-		assertEquals(33, l.getStart());
-		assertEquals(46, l.getEnd());
+		assertEquals(64, l.getStart());
+		assertEquals(77, l.getEnd());
 	}
 
 	@Test

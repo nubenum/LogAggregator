@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import de.nubenum.app.plugin.logaggregator.core.AsyncEntryRetriever;
+import de.nubenum.app.plugin.logaggregator.core.ConfigProvider;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 import de.nubenum.app.plugin.logaggregator.core.model.Entry;
 import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
@@ -50,7 +51,7 @@ public abstract class AbstractParentLog implements IEntryLog {
 		for (IChildLog log : logs) {
 			retriever.add(() -> log.getAt(reference, direction));
 		}
-		List<IEntry> stacked = retriever.get();
+		List<IEntry> stacked = ConfigProvider.getEnableMultithreading() ? retriever.get() : retriever.getSynchroneously();
 
 		Direction dir = Direction.get(direction);
 

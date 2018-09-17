@@ -9,9 +9,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "aggregatorConfig")
 public class XmlConfig implements IConfig {
-	
+
 	private List<? extends ILogHost> hosts = new ArrayList<XmlLogHost>();
 	private List<? extends ILogSource> sources = new ArrayList<XmlLogSource>();
+	private IOptions options;
 	private String location;
 
 	@Override
@@ -37,12 +38,25 @@ public class XmlConfig implements IConfig {
 	public void setSources(List<? extends ILogSource> sources) {
 		this.sources = sources;
 	}
-	
+
+	@XmlElement(name = "options", type = XmlOptions.class)
+	@Override
+	public IOptions getOptions() {
+		return options;
+	}
+
+	@Override
+	public void setOptions(IOptions options) {
+		this.options = options;
+	}
+
+	@Override
 	@XmlElement(name = "location")
 	public String getLocation() {
 		return location;
 	}
 
+	@Override
 	public void setLocation(String location) {
 		this.location = location;
 	}

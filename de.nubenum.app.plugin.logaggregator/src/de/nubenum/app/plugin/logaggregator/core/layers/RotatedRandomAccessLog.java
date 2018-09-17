@@ -82,7 +82,7 @@ public class RotatedRandomAccessLog implements IRandomAccessLog {
 			throws IOException, EndOfLogReachedException {
 
 		RandomByteBuffer buffer = file.getAt(start, dir);
-		IFileRange range = new FileRange(start, buffer.getLength(), dir);
+		IFileRange range = new FileRange(start, buffer.getOffsetLength(), dir);
 		int offset = start.distance(range.getTop());
 		return new RandomByteBuffer(buffer, range, offset, dir);
 	}
