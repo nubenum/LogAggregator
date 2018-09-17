@@ -2,6 +2,10 @@ package de.nubenum.app.plugin.logaggregator.config;
 
 import java.util.List;
 
+/**
+ * Representing a configuration containing the location, hosts, sources.
+ *
+ */
 public interface IConfig {
 	/**
 	 * Get all hosts.
@@ -19,9 +23,7 @@ public interface IConfig {
 	void setHosts(List<? extends ILogHost> hosts);
 
 	/**
-	 * Get all sources. A source is a single type of log file (e.g. error, access,
-	 * SystemOut). A single source may actually consist of multiple files if log
-	 * rotation is used.
+	 * Get all sources.
 	 *
 	 * @return
 	 */
@@ -29,19 +31,24 @@ public interface IConfig {
 
 	/**
 	 * Set the sources.
-	 * @param files The List of sources.
+	 *
+	 * @param files
+	 *            The List of sources.
 	 */
 	void setSources(List<? extends ILogSource> files);
 
 	/**
 	 * Get the location where the host directories are to be found.
+	 *
 	 * @return The location
 	 */
 	String getLocation();
 
 	/**
 	 * Set the location.
-	 * @param location The location.
+	 *
+	 * @param location
+	 *            The location.
 	 */
 	void setLocation(String location);
 

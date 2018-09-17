@@ -11,8 +11,8 @@ import javax.xml.bind.Unmarshaller;
 public class XmlConfigFile implements IConfigFile {
 	private JAXBContext context;
 	private File file;
-	private IConfig config; 
-	
+	private IConfig config;
+
 	public XmlConfigFile() throws IOException {
 		try {
 			context = JAXBContext.newInstance(XmlConfig.class);
@@ -20,19 +20,23 @@ public class XmlConfigFile implements IConfigFile {
 			throw new IOException(e);
 		}
 	}
-	
+
+	@Override
 	public void setFile(File file) {
 		this.file = file;
 	}
-	
+
+	@Override
 	public IConfig getConfig() {
 		return config;
 	}
-	
+
+	@Override
 	public void setConfig(IConfig config) {
 		this.config = config;
 	}
-	
+
+	@Override
 	public void read() throws IOException {
 		try {
 			Unmarshaller um = context.createUnmarshaller();
@@ -41,7 +45,8 @@ public class XmlConfigFile implements IConfigFile {
 			throw new IOException(e);
 		}
 	}
-	
+
+	@Override
 	public void write() throws IOException {
 		try {
 			Marshaller m = context.createMarshaller();
@@ -49,6 +54,6 @@ public class XmlConfigFile implements IConfigFile {
 			m.marshal(config, file);
 		} catch (JAXBException e) {
 			throw new IOException(e);
-		}		
+		}
 	}
 }

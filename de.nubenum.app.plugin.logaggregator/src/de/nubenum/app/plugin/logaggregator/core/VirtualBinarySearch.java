@@ -32,7 +32,7 @@ public class VirtualBinarySearch<Element> {
 		Element newPivot;
 		boolean binaryMode = false;
 
-		for(int i=0;i<MAX_STEPS;i++) {
+		for(int i=0; i<MAX_STEPS; i++) {
 			newPivot = retriever.apply(pivot, offset);
 			if (newPivot == null) {
 				offset /= 2;
@@ -54,7 +54,7 @@ public class VirtualBinarySearch<Element> {
 				pivot = newPivot;
 				oldDir = newDir;
 			}
-			if (Thread.interrupted())
+			if (i % 100 == 0 && Thread.interrupted())
 				return null;
 		}
 

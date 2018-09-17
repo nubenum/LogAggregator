@@ -18,7 +18,7 @@
 	      name="LogAggregator Configuration File"
 	      class="de.nubenum.app.plugin.logaggregator.parts.NewConfigWizard"
 	      icon="icons/list.png">
-	    <description>Create a new example LogAggregator Config File</description>
+	    <description>Create a new LogAggregator Config File</description>
 	    <selection class="org.eclipse.core.resources.IResource" /> 
 	  </wizard>
 	</extension>

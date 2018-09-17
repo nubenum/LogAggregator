@@ -5,13 +5,11 @@ import java.util.regex.PatternSyntaxException;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.inject.Inject;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
@@ -71,11 +69,11 @@ public class LogView extends EditorPart {
 	private Button up;
 	private Font bold;
 
-	@Inject UISynchronize sync;
-
 	public LogView() {
 		control = new LogController();
 		control.addListener(event -> Display.getDefault().asyncExec(() -> {
+			if (status.isDisposed())
+				return;
 			if (event.getType() == Event.COUNT) {
 				countLines += event.getCount();
 				readLines(countLines);
@@ -371,7 +369,7 @@ public class LogView extends EditorPart {
 		setInput(input);
 
 		String name = configFile.getName();
-		setPartName(name.substring(0, name.lastIndexOf(".")));
+		setPartName(name.substring(0, Math.max(0, name.lastIndexOf("."))));
 		setContentDescription(configFile.getParent());
 	}
 

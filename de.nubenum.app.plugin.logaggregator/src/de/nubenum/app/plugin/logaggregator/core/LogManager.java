@@ -90,8 +90,9 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 					observableFiles.put(log, null);
 			}
 		} catch (IOException e) {
+			//TODO lazy loading not found ignored?
 			if (!source.getIgnoreNotFound())
-				throw new IOException(host.getName()+source.getName() + " was not found. You can add the tag ignoreNotFound=\"true\" to the respective source in the config file to ignore this error.", e);
+				throw new IOException(Paths.get(host.getName(), source.getName()) + " was not found. You can add the tag ignoreNotFound=\"true\" to the respective source in the config file to ignore this error.", e);
 		}
 		SystemLog.log(host.getName()+source.getName() + ": " + list.stream().map(l -> l.toString()).collect(Collectors.joining(", ")));
 		return list;
