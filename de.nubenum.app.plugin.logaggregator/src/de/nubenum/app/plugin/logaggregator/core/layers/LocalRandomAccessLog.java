@@ -6,10 +6,15 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import de.nubenum.app.plugin.logaggregator.core.ConfigProvider;
 import de.nubenum.app.plugin.logaggregator.core.EndOfLogReachedException;
-import de.nubenum.app.plugin.logaggregator.core.SystemLog;
+import de.nubenum.app.plugin.logaggregator.core.IUpdateInitiator;
+import de.nubenum.app.plugin.logaggregator.core.IUpdateListener;
+import de.nubenum.app.plugin.logaggregator.core.UpdateEvent;
+import de.nubenum.app.plugin.logaggregator.core.UpdateEvent.Event;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 import de.nubenum.app.plugin.logaggregator.core.model.FilePosition;
 import de.nubenum.app.plugin.logaggregator.core.model.FileRange;
@@ -21,10 +26,12 @@ import de.nubenum.app.plugin.logaggregator.core.model.RandomByteBuffer;
  * An implementation for a single file that can be accessed randomly by byte.
  *
  */
-public class LocalRandomAccessLog implements IRandomAccessLog {
+public class LocalRandomAccessLog implements IRandomAccessLog, IUpdateInitiator {
 	private static final int MIN_BLOCK_SIZE = 8192;
 	private static final int MAX_BLOCK_SIZE = 8192*8;
 	private int blockSize = MIN_BLOCK_SIZE;
+
+	private List<IUpdateListener> listeners = new ArrayList<>();
 
 	private IFileRange lastRange = null;
 
@@ -33,17 +40,25 @@ public class LocalRandomAccessLog implements IRandomAccessLog {
 	private long length = -1;
 
 	private RandomByteBuffer entireFileCache = null;
+	private boolean enableEntireFileCache;
+
+	public LocalRandomAccessLog(Path path, boolean enableEntireFileCache) {
+		this.path = path;
+		this.enableEntireFileCache = enableEntireFileCache;
+	}
 
 	public LocalRandomAccessLog(Path path) {
-		this.path = path;
+		this(path, false);
 	}
 
 	private void openFile() throws IOException {
 		if (file == null) {
 			this.file = FileChannel.open(path, StandardOpenOption.READ);
-			if (ConfigProvider.getEnableEntireFileCache()) {
+			int length = (int) getLength();
+			listeners.forEach(l -> l.onUpdate(new UpdateEvent(Event.SIZE, length)));
+			//SystemLog.log("Opening " + path.getFileName());
+			if (enableEntireFileCache) {
 				//TODO
-				SystemLog.log("Actual entire file access " + path.getFileName());
 				entireFileCache = new RandomByteBuffer(Files.readAllBytes(path));
 			}
 		}
@@ -59,14 +74,15 @@ public class LocalRandomAccessLog implements IRandomAccessLog {
 
 		start = translateFirstLast(start);
 
-		if (entireFileCache != null) {
-			return new RandomByteBuffer(entireFileCache, (int) start.getByteOffset(), dir);
-		}
-
 		updateBlockSize(start, dir);
 		lastRange = new FileRange(start, blockSize, dir).clip(fileLength);
 		long top = lastRange.getTop().getByteOffset();
 		int len = lastRange.getLength();
+
+		if (entireFileCache != null) {
+			//TODO without copy
+			return new RandomByteBuffer(Arrays.copyOfRange(entireFileCache.getBytes(), (int) top, (int)top+len));
+		}
 
 		openFile();
 		ByteBuffer buf = ByteBuffer.allocate(len);
@@ -119,5 +135,15 @@ public class LocalRandomAccessLog implements IRandomAccessLog {
 	@Override
 	public String toString() {
 		return path.getFileName().toString();
+	}
+
+	@Override
+	public void addListener(IUpdateListener listener) {
+		listeners.add(listener);
+	}
+
+	@Override
+	public void removeListener(IUpdateListener listener) {
+		listeners.remove(listener);
 	}
 }

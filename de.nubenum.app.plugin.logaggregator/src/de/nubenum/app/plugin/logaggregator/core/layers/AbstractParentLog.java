@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import de.nubenum.app.plugin.logaggregator.core.AsyncEntryRetriever;
-import de.nubenum.app.plugin.logaggregator.core.ConfigProvider;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
 import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
@@ -21,9 +20,13 @@ public abstract class AbstractParentLog implements IEntryLog {
 	protected List<? extends IChildLog> logs;
 	private AsyncEntryRetriever retriever;
 
-	public AbstractParentLog(List<? extends IChildLog> logs) {
+	public AbstractParentLog(List<? extends IChildLog> logs, boolean enableMultithreading) {
 		this.logs = logs;
-		this.retriever = new AsyncEntryRetriever(logs.size());
+		this.retriever = new AsyncEntryRetriever(enableMultithreading ? logs.size() : 0);
+	}
+
+	public AbstractParentLog(List<? extends IChildLog> logs) {
+		this(logs, true);
 	}
 
 	@Override
@@ -51,7 +54,7 @@ public abstract class AbstractParentLog implements IEntryLog {
 		for (IChildLog log : logs) {
 			retriever.add(() -> log.getAt(reference, direction));
 		}
-		List<IEntry> stacked = ConfigProvider.getEnableMultithreading() ? retriever.get() : retriever.getSynchroneously();
+		List<IEntry> stacked = retriever.get();
 
 		Direction dir = Direction.get(direction);
 

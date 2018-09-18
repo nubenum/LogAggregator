@@ -26,10 +26,13 @@ public class AsyncEntryRetriever {
 	 *
 	 * @param threadNum
 	 *            The number of threads to create. This should ideally coincide with
-	 *            the number of Tasks that will be submitted in a single run
+	 *            the number of Tasks that will be submitted in a single run. If 0,
+	 *            Tasks will be executed in the same thread using
+	 *            {@link #getSynchroneously()}
 	 */
 	public AsyncEntryRetriever(int threadNum) {
-		batch = Executors.newFixedThreadPool(threadNum);
+		if (threadNum > 0)
+			batch = Executors.newFixedThreadPool(threadNum);
 	}
 
 	/**
@@ -61,6 +64,8 @@ public class AsyncEntryRetriever {
 	 *             caught, logged and otherwise ignored.
 	 */
 	public List<IEntry> get() throws IOException {
+		if (batch == null)
+			return getSynchroneously();
 		try {
 			List<Future<IEntry>> futures = batch.invokeAll(tasks);
 			List<IEntry> entries = new ArrayList<>();
@@ -74,7 +79,7 @@ public class AsyncEntryRetriever {
 			return entries;
 		} catch (InterruptedException e) {
 			clear();
-
+			SystemLog.log("gulp interrupt");
 			return new ArrayList<IEntry>();
 		}
 	}

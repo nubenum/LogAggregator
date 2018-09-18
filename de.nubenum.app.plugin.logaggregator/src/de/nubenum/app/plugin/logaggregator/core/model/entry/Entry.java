@@ -164,6 +164,7 @@ public abstract class Entry implements IEntry {
 	@Override
 	public String toString() {
 		String host = getHost() != null ? getHost().getShortName() : "";
-		return getLogTime() + " " + host + " " + getChildren().size() + " " + getMessage();
+		String source = getSource() != null ? getSource().getName() : "";
+		return getLogTime() + " " + host + "/" + source + " (" + getChildren().size() + ") " + getMessage();
 	}
 }

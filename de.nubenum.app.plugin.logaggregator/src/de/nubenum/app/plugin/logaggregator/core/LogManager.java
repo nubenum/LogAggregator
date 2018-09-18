@@ -41,6 +41,9 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 	private List<IRandomAccessLog> closableFiles = new CopyOnWriteArrayList<>();
 	private PathWatcher watcher;
 
+	private boolean enableMultithreading;
+	private boolean enableEntireFileCache;
+
 	public LogManager() {
 		this.log = new FilteredLog();
 		this.watcher = new PathWatcher();
@@ -68,9 +71,18 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 
 	public void setConfig(IConfig config) throws IOException {
 		this.config = config;
-		ConfigProvider.setConfig(config);
+		setConfigOptions();
 		SystemLog.log("Read config sources:" + config.getSources().stream().map(l->l.getName()).collect(Collectors.joining(",")));
 		setupLogs();
+	}
+
+	private void setConfigOptions() {
+		enableMultithreading = true;
+		enableEntireFileCache = false;
+		if (config != null && config.getOptions() != null && config.getOptions().getEnableMultithreading() != null)
+			enableMultithreading = config.getOptions().getEnableMultithreading();
+		if (config != null && config.getOptions() != null && config.getOptions().getEnableEntireFileCache() != null)
+			enableEntireFileCache = config.getOptions().getEnableEntireFileCache();
 	}
 
 	private List<IRandomAccessLog> getSourceFiles(ILogHost host, ILogSource source) throws IOException {
@@ -84,7 +96,8 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 			Iterator<File> it = files.iterator();
 			while (it.hasNext()) {
 				File file = it.next();
-				IRandomAccessLog log = new LocalRandomAccessLog(file.toPath());
+				LocalRandomAccessLog log = new LocalRandomAccessLog(file.toPath(), enableEntireFileCache);
+				log.addListener(this);
 				list.add(log);
 				if (!it.hasNext())
 					observableFiles.put(log, null);
@@ -123,7 +136,7 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 		for(ILogHost host: hosts) {
 			List<IChildLog> files = getHostSourceLogs(host);
 			if (!files.isEmpty()) {
-				IChildLog log = new HostChildLog(new HostGroupedLog(new HostParentLog(files)), host);
+				IChildLog log = new HostChildLog(new HostGroupedLog(new HostParentLog(files, enableMultithreading)), host);
 				logs.add(log);
 			}
 		}
@@ -135,7 +148,7 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 		List<IChildLog> files = getHostLogs();
 		if (files.isEmpty())
 			throw new IOException("No logs were found at all. Please check whether the log location is available.");
-		IEntryLog agg = new AggregatedChildLog(new AggregatedGroupedLog(new AggregatedParentLog(files)));
+		IEntryLog agg = new AggregatedChildLog(new AggregatedGroupedLog(new AggregatedParentLog(files, enableMultithreading)));
 		log.setLog(agg);
 	}
 

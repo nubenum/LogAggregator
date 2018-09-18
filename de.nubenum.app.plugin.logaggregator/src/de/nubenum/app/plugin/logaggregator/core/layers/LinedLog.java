@@ -9,6 +9,7 @@ import de.nubenum.app.plugin.logaggregator.core.EndOfLogReachedException;
 import de.nubenum.app.plugin.logaggregator.core.IUpdateInitiator;
 import de.nubenum.app.plugin.logaggregator.core.IUpdateListener;
 import de.nubenum.app.plugin.logaggregator.core.UpdateEvent;
+import de.nubenum.app.plugin.logaggregator.core.UpdateEvent.Event;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogHost;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
@@ -58,6 +59,9 @@ public class LinedLog implements IEntryLog, IUpdateInitiator {
 
 	@Override
 	public IEntry getAt(IEntry reference, int offset) throws IOException {
+		if (Thread.interrupted()) {
+			return null;
+		}
 		if (offset == 0)
 			return reference;
 		RandomByteBuffer buffer = new RandomByteBuffer();
@@ -91,7 +95,7 @@ public class LinedLog implements IEntryLog, IUpdateInitiator {
 	private void countReadLines() {
 		readLines++;
 		if (readLines % 100000 == 0) {
-			listeners.forEach(l -> l.onUpdate(new UpdateEvent(100000)));
+			listeners.forEach(l -> l.onUpdate(new UpdateEvent(Event.COUNT, 100000)));
 		}
 	}
 

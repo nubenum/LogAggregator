@@ -54,8 +54,10 @@ public class VirtualBinarySearch<Element> {
 				pivot = newPivot;
 				oldDir = newDir;
 			}
-			if (i % 100 == 0 && Thread.interrupted())
+			if (Thread.interrupted()) {
+				SystemLog.log("interrupt"+Math.random());
 				return null;
+			}
 		}
 
 		return null;

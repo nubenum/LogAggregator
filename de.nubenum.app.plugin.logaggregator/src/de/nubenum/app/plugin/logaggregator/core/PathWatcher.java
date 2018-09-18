@@ -1,17 +1,12 @@
 package de.nubenum.app.plugin.logaggregator.core;
 
 import java.io.IOException;
-import java.nio.file.ClosedWatchServiceException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
-import java.nio.file.WatchEvent;
-import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.List;
-
-import de.nubenum.app.plugin.logaggregator.core.UpdateEvent.Event;
 
 /**
  * Watches a number of paths a notifies listeners to updates to these files with
@@ -64,13 +59,14 @@ public class PathWatcher implements IUpdateInitiator {
 		}
 	}
 
-	private void watch() {
+	private void watch() {/*
 		new Thread(() -> {
 			while (true) {
 				WatchKey key;
 				try {
 					key = watcher.take();
 				} catch (InterruptedException | ClosedWatchServiceException x) {
+					Thread.currentThread().interrupt();
 					return;
 				}
 				if (System.currentTimeMillis() - lastUpdateTs > MIN_UPDATE_INTERVAL) {
@@ -93,7 +89,7 @@ public class PathWatcher implements IUpdateInitiator {
 				if (!valid)
 					return;
 			}
-		}).start();
+		}).start();*/
 	}
 
 	@Override

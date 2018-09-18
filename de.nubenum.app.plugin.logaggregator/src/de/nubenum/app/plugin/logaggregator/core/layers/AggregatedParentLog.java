@@ -8,7 +8,12 @@ import java.util.List;
  */
 public class AggregatedParentLog extends AbstractParentLog {
 
-	public AggregatedParentLog(List<IChildLog> logs) {
+	public AggregatedParentLog(List<? extends IChildLog> logs, boolean enableMultithreading) {
+		super(logs, enableMultithreading);
+	}
+
+	public AggregatedParentLog(List<? extends IChildLog> logs) {
 		super(logs);
 	}
+
 }

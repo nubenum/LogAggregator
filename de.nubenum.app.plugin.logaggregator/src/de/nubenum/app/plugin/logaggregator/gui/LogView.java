@@ -54,6 +54,7 @@ public class LogView extends EditorPart {
 	private LogController control;
 	private File configFile;
 	private int countLines = 0;
+	private int countMBytes = 0;
 
 	private LogTreeViewer viewer;
 	private StyledText detail;
@@ -75,10 +76,11 @@ public class LogView extends EditorPart {
 			if (status.isDisposed())
 				return;
 			if (event.getType() == Event.COUNT) {
-				countLines += event.getCount();
-				readLines(countLines);
-				counter.pack();
-				counter.getParent().pack();
+				countLines += event.getNum();
+				updateCounter();
+			} else if (event.getType() == Event.SIZE) {
+				countMBytes += Math.round(event.getNum() / 1024 / 1024);
+				updateCounter();
 			} else if (event.getType() == Event.EXCEPTION) {
 				handleConfigError(event.getException());
 			} else if (event.getType() == Event.APPEND) {
@@ -213,7 +215,7 @@ public class LogView extends EditorPart {
 		status.setLayoutData(new RowData(20,20));
 
 		counter = new Label(filter, SWT.NONE);
-		readLines(0);
+		updateCounter();
 
 		working(false);
 	}
@@ -259,12 +261,12 @@ public class LogView extends EditorPart {
 
 	private void updateDetailView(GuiEntry guiEntry) {
 		detail.setText(guiEntry.getMessageComplete());
-		detail.setStyleRanges(guiEntry.getMessageCompleteStyleRanges(getMatcher()));
+		detail.setStyleRanges(guiEntry.getMessageCompleteStyleRanges(getMatcher(false)));
 	}
 
 	private void checkIfSearchDirty() {
 		IEntryMatcher before = control.getLog().getMatcher();
-		IEntryMatcher after = getMatcher();
+		IEntryMatcher after = getMatcher(true);
 		boolean isDirty = before == null && after.isRestrictive() || before != null && !after.equals(before);
 		setSearchButtonsDirty(isDirty);
 	}
@@ -287,8 +289,10 @@ public class LogView extends EditorPart {
 		if (status != null) status.setVisible(working);
 	}
 
-	private void readLines(int lines) {
-		counter.setText("(Read ~"+ (lines / 1e6) + "M lines)");
+	private void updateCounter() {
+		counter.setText("(~"+ (countLines / 1e6) + "M lines read / ~"+ countMBytes +" MB files opened)");
+		counter.pack();
+		counter.getParent().pack();
 	}
 
 	private void separator(Composite parent) {
@@ -296,7 +300,7 @@ public class LogView extends EditorPart {
 		separator.setLayoutData(new RowData(20, 30));
 	}
 
-	private IEntryMatcher getMatcher() {
+	private IEntryMatcher getMatcher(boolean silent) {
 		String regexFilter = regex.getText();
 		Level selected = Level.get(level.getSelectionIndex());
 		Class<? extends IEntry> type = IEntry.class;
@@ -307,7 +311,8 @@ public class LogView extends EditorPart {
 			matcher = new EntryMatcher(selected, regexFilter, type);
 		} catch (PatternSyntaxException e) {
 			matcher = new EntryMatcher(selected, "", type);
-			MessageDialog.openInformation(null, "Error", "There is an error in your search pattern: \n"+e.getMessage());
+			if (!silent)
+				MessageDialog.openInformation(null, "Error", "There is an error in your search pattern: \n"+e.getMessage());
 		}
 		return matcher;
 	}
@@ -320,13 +325,13 @@ public class LogView extends EditorPart {
 
 	private void applyFilter() {
 		setSearchButtonsDirty(false);
-		viewer.applyFilter(getMatcher());
+		viewer.applyFilter(getMatcher(false));
 	}
 
 	private void jumpToMatch(Direction dir) {
 		setSearchButtonsDirty(false);
 		working(true);
-		viewer.jumpToMatch(getMatcher(), dir);
+		viewer.jumpToMatch(getMatcher(false), dir);
 	}
 
 	public void scrollToBottom() {

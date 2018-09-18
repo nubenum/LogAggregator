@@ -8,6 +8,7 @@ public class UpdateEvent {
 		STOP,
 		ENTRY,
 		COUNT,
+		SIZE,
 		EXCEPTION,
 		REFRESH,
 		APPEND
@@ -15,7 +16,7 @@ public class UpdateEvent {
 	private Event type;
 	private Exception exception = null;
 	private IEntry entry = null;
-	private Integer count = null;
+	private Integer num = null;
 
 	public UpdateEvent(Event type) {
 		this.type = type;
@@ -31,9 +32,9 @@ public class UpdateEvent {
 		this.entry = entry;
 	}
 
-	public UpdateEvent(Integer count) {
-		this.type = Event.COUNT;
-		this.count = count;
+	public UpdateEvent(Event type, Integer num) {
+		this.type = type;
+		this.num = num;
 	}
 
 	public Exception getException() {
@@ -44,8 +45,8 @@ public class UpdateEvent {
 		return entry;
 	}
 
-	public Integer getCount() {
-		return count;
+	public Integer getNum() {
+		return num;
 	}
 
 	public Event getType() {
