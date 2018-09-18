@@ -3,10 +3,10 @@ package de.nubenum.app.plugin.logaggregator.test.layers;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.IntStream;
 
-import de.nubenum.app.plugin.logaggregator.core.RandomByteBuffer;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
-import de.nubenum.app.plugin.logaggregator.core.model.Entry;
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.RandomByteBuffer;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 
 public class TestHelper {
 	public static String str(RandomByteBuffer bytes) {

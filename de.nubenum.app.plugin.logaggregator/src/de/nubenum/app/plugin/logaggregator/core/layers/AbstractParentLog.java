@@ -7,8 +7,8 @@ import java.util.stream.Stream;
 import de.nubenum.app.plugin.logaggregator.core.AsyncEntryRetriever;
 import de.nubenum.app.plugin.logaggregator.core.ConfigProvider;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
-import de.nubenum.app.plugin.logaggregator.core.model.Entry;
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 
 /**
  * An entry-based log that will aggregate multiple ChildLogs, i.e. pull together

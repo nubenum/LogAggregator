@@ -1,6 +1,6 @@
 package de.nubenum.app.plugin.logaggregator.core;
 
-import de.nubenum.app.plugin.logaggregator.config.IConfig;
+import de.nubenum.app.plugin.logaggregator.core.config.IConfig;
 
 public class ConfigProvider {
 	private static IConfig config;

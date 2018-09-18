@@ -5,10 +5,12 @@ Bundle-SymbolicName: de.nubenum.app.plugin.logaggregator.test
 Bundle-Version: 1.0.0.qualifier
 Automatic-Module-Name: de.nubenum.app.plugin.logaggregator.test
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Import-Package: de.nubenum.app.plugin.logaggregator.config,
+Import-Package: de.nubenum.app.plugin.logaggregator,
  de.nubenum.app.plugin.logaggregator.core,
+ de.nubenum.app.plugin.logaggregator.core.config,
  de.nubenum.app.plugin.logaggregator.core.layers,
  de.nubenum.app.plugin.logaggregator.core.model,
+ de.nubenum.app.plugin.logaggregator.core.model.entry,
  org.hamcrest,
  org.junit;version="4.12.0",
  org.mockito,

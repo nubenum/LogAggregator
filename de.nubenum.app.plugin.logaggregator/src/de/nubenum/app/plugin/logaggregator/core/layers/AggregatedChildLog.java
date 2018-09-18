@@ -2,7 +2,7 @@ package de.nubenum.app.plugin.logaggregator.core.layers;
 
 import java.io.IOException;
 
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 
 /**
  * This represents the aggregated log of all hosts to layers above.

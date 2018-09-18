@@ -9,13 +9,13 @@ import java.nio.file.StandardOpenOption;
 
 import de.nubenum.app.plugin.logaggregator.core.ConfigProvider;
 import de.nubenum.app.plugin.logaggregator.core.EndOfLogReachedException;
-import de.nubenum.app.plugin.logaggregator.core.FilePosition;
-import de.nubenum.app.plugin.logaggregator.core.FileRange;
-import de.nubenum.app.plugin.logaggregator.core.IFilePosition;
-import de.nubenum.app.plugin.logaggregator.core.IFileRange;
-import de.nubenum.app.plugin.logaggregator.core.RandomByteBuffer;
 import de.nubenum.app.plugin.logaggregator.core.SystemLog;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
+import de.nubenum.app.plugin.logaggregator.core.model.FilePosition;
+import de.nubenum.app.plugin.logaggregator.core.model.FileRange;
+import de.nubenum.app.plugin.logaggregator.core.model.IFilePosition;
+import de.nubenum.app.plugin.logaggregator.core.model.IFileRange;
+import de.nubenum.app.plugin.logaggregator.core.model.RandomByteBuffer;
 
 /**
  * An implementation for a single file that can be accessed randomly by byte.

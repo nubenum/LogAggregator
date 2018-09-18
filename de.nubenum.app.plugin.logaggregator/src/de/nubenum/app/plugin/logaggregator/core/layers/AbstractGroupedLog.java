@@ -6,9 +6,9 @@ import java.util.List;
 
 import de.nubenum.app.plugin.logaggregator.core.CacheProvider;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
-import de.nubenum.app.plugin.logaggregator.core.model.Entry;
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
-import de.nubenum.app.plugin.logaggregator.core.model.LinedEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.LinedEntry;
 
 /**
  * An entry-based log that groups multiple consecutive entries together, based

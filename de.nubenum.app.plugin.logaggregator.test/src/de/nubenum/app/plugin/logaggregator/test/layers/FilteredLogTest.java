@@ -11,14 +11,14 @@ import org.junit.Test;
 import de.nubenum.app.plugin.logaggregator.core.layers.FilteredLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.IEntryLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.IFilteredLog;
-import de.nubenum.app.plugin.logaggregator.core.model.DeduplicatedEntry;
-import de.nubenum.app.plugin.logaggregator.core.model.Entry;
 import de.nubenum.app.plugin.logaggregator.core.model.EntryMatcher;
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.Level;
-import de.nubenum.app.plugin.logaggregator.core.model.LinedEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.ReferenceOffset;
-import de.nubenum.app.plugin.logaggregator.core.model.StackedEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.DeduplicatedEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.LinedEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.StackedEntry;
 
 public class FilteredLogTest {
 	private static IFilteredLog log;

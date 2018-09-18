@@ -21,10 +21,10 @@ import java.util.stream.Collectors;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.nubenum.app.plugin.logaggregator.config.ILogHost;
-import de.nubenum.app.plugin.logaggregator.config.ILogSource;
-import de.nubenum.app.plugin.logaggregator.core.Bench;
+import de.nubenum.app.plugin.logaggregator.Bench;
 import de.nubenum.app.plugin.logaggregator.core.LocalLogDirectory;
+import de.nubenum.app.plugin.logaggregator.core.config.ILogHost;
+import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
 import de.nubenum.app.plugin.logaggregator.core.layers.AggregatedChildLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.AggregatedGroupedLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.AggregatedParentLog;
@@ -39,10 +39,10 @@ import de.nubenum.app.plugin.logaggregator.core.layers.IRandomAccessLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.LinedLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.LocalRandomAccessLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.RotatedRandomAccessLog;
-import de.nubenum.app.plugin.logaggregator.core.model.Entry;
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
-import de.nubenum.app.plugin.logaggregator.core.model.LinedEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.LogTime;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.LinedEntry;
 
 public class HugeStackTraceTest {
 

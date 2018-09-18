@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 
 /**
  * Executes multiple long-running tasks for obtaining IEntries simultaneously

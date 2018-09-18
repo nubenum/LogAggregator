@@ -6,8 +6,8 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
-import de.nubenum.app.plugin.logaggregator.config.ILogHost;
-import de.nubenum.app.plugin.logaggregator.config.ILogSource;
+import de.nubenum.app.plugin.logaggregator.core.config.ILogHost;
+import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
 
 /**
  * Implementation of ILogDirectory for directories on the local disk

@@ -2,9 +2,9 @@ package de.nubenum.app.plugin.logaggregator.core.layers;
 
 import java.io.IOException;
 
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.IEntryMatcher;
 import de.nubenum.app.plugin.logaggregator.core.model.ReferenceOffset;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 
 /**
  * An entry-based log that can be filtered and whose source log can be set

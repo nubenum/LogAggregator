@@ -12,7 +12,8 @@ import de.nubenum.app.plugin.logaggregator.core.UpdateEvent.Event;
 /**
  * A stoppable queue that will execute the queued tasks sequentially in a single
  * separate thread. Race Conditions are impossible. Listeners will be notified
- * if all tasks in the queue are completed, i.e. the queue is empty.
+ * with Event.STOP when all tasks in the queue are completed, i.e. the queue is
+ * empty.
  *
  */
 public class AsyncCompletableQueue implements IUpdateInitiator {

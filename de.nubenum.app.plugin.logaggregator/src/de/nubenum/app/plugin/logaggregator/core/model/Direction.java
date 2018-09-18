@@ -1,5 +1,8 @@
 package de.nubenum.app.plugin.logaggregator.core.model;
 
+import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
+
 /**
  * A Direction within a log, i.e. up = older and down = newer.
  *

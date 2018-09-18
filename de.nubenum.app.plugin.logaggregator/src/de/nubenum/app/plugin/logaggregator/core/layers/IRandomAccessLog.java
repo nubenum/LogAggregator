@@ -3,9 +3,9 @@ package de.nubenum.app.plugin.logaggregator.core.layers;
 import java.io.IOException;
 
 import de.nubenum.app.plugin.logaggregator.core.EndOfLogReachedException;
-import de.nubenum.app.plugin.logaggregator.core.IFilePosition;
-import de.nubenum.app.plugin.logaggregator.core.RandomByteBuffer;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
+import de.nubenum.app.plugin.logaggregator.core.model.IFilePosition;
+import de.nubenum.app.plugin.logaggregator.core.model.RandomByteBuffer;
 
 /**
  * A byte-based log that can be randomly accessed on byte-level

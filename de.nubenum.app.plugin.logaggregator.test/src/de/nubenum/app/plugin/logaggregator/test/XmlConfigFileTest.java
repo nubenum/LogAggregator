@@ -10,11 +10,11 @@ import java.util.List;
 
 import org.junit.Test;
 
-import de.nubenum.app.plugin.logaggregator.config.IConfig;
-import de.nubenum.app.plugin.logaggregator.config.XmlConfig;
-import de.nubenum.app.plugin.logaggregator.config.XmlConfigFile;
-import de.nubenum.app.plugin.logaggregator.config.XmlLogHost;
-import de.nubenum.app.plugin.logaggregator.config.XmlLogSource;
+import de.nubenum.app.plugin.logaggregator.core.config.IConfig;
+import de.nubenum.app.plugin.logaggregator.core.config.XmlConfig;
+import de.nubenum.app.plugin.logaggregator.core.config.XmlConfigFile;
+import de.nubenum.app.plugin.logaggregator.core.config.XmlLogHost;
+import de.nubenum.app.plugin.logaggregator.core.config.XmlLogSource;
 
 public class XmlConfigFileTest {
 

@@ -6,11 +6,11 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import de.nubenum.app.plugin.logaggregator.core.FilePosition;
-import de.nubenum.app.plugin.logaggregator.core.FileRange;
-import de.nubenum.app.plugin.logaggregator.core.IFilePosition;
-import de.nubenum.app.plugin.logaggregator.core.IFileRange;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
+import de.nubenum.app.plugin.logaggregator.core.model.FilePosition;
+import de.nubenum.app.plugin.logaggregator.core.model.FileRange;
+import de.nubenum.app.plugin.logaggregator.core.model.IFilePosition;
+import de.nubenum.app.plugin.logaggregator.core.model.IFileRange;
 
 public class FileRangeTest {
 

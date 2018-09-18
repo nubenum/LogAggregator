@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.util.List;
 
 import de.nubenum.app.plugin.logaggregator.core.EndOfLogReachedException;
-import de.nubenum.app.plugin.logaggregator.core.FilePosition;
-import de.nubenum.app.plugin.logaggregator.core.FileRange;
-import de.nubenum.app.plugin.logaggregator.core.IFilePosition;
-import de.nubenum.app.plugin.logaggregator.core.IFileRange;
-import de.nubenum.app.plugin.logaggregator.core.RandomByteBuffer;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
+import de.nubenum.app.plugin.logaggregator.core.model.FilePosition;
+import de.nubenum.app.plugin.logaggregator.core.model.FileRange;
+import de.nubenum.app.plugin.logaggregator.core.model.IFilePosition;
+import de.nubenum.app.plugin.logaggregator.core.model.IFileRange;
+import de.nubenum.app.plugin.logaggregator.core.model.RandomByteBuffer;
 
 /**
  * An implementation for a file that is made up of multiple file parts that can be accessed continuously.

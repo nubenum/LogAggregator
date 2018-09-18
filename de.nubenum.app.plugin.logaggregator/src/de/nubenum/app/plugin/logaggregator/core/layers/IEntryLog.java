@@ -2,7 +2,7 @@ package de.nubenum.app.plugin.logaggregator.core.layers;
 
 import java.io.IOException;
 
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 
 /**
  * Representing an entry-based log with relative access to entries.

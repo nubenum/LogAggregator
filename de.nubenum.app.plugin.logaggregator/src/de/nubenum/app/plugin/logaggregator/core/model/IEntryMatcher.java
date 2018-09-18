@@ -2,6 +2,9 @@ package de.nubenum.app.plugin.logaggregator.core.model;
 
 import java.util.regex.Pattern;
 
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.StackedEntry;
+
 /**
  * Containing the properties against which entries can be matched. Implementing
  * classes should override equals() to return true when two matchers contain the

@@ -5,8 +5,8 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 import de.nubenum.app.plugin.logaggregator.core.layers.IEntryLog;
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.ReferenceOffset;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 
 /**
  * Provides a Cache for IEntries.

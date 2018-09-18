@@ -11,19 +11,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import de.nubenum.app.plugin.logaggregator.config.ILogHost;
-import de.nubenum.app.plugin.logaggregator.config.ILogSource;
+import de.nubenum.app.plugin.logaggregator.core.config.ILogHost;
+import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
 
 /**
  * Implementing the ILogDirectory with generic startsWith filtering and sorting.
  * This class should be concretized for different storage backends.
  *
  */
-public abstract class AbstractLogDirectory implements IUpdateInitiator, ILogDirectory {
+public abstract class AbstractLogDirectory implements ILogDirectory {
 	private static final Pattern naturalSortEligible = Pattern.compile("(.*?)(\\d+)");
 	protected Path path;
 	protected ILogHost host;
-	private List<IUpdateListener> listeners;
 
 	public AbstractLogDirectory(Path location, ILogHost host, ILogSource source) {
 		this.host = host;
@@ -63,7 +62,7 @@ public abstract class AbstractLogDirectory implements IUpdateInitiator, ILogDire
 			if (a.getName().length() != b.getName().length() && !lengthErrors.contains(a) && !lengthErrors.contains(b)) {
 				SystemLog.warn("ATTENTION! Irregularities in rotated log file naming were detected: " + a.getName()
 				+ " <-> " + b.getName()
-				+ " This might indicate that the order is wrong or that your filter is not sufficiently restrictive.");
+				+ " This might indicate that the order is wrong or that your filter is not sufficiently restrictive and might lead to endless loops.");
 				lengthErrors.add(a);
 				lengthErrors.add(b);
 			}
@@ -91,15 +90,5 @@ public abstract class AbstractLogDirectory implements IUpdateInitiator, ILogDire
 	@Override
 	public Path getPath() {
 		return path;
-	}
-
-	@Override
-	public void addListener(IUpdateListener listener) {
-		listeners.add(listener);
-	}
-
-	@Override
-	public void removeListener(IUpdateListener listener) {
-		listeners.remove(listener);
 	}
 }

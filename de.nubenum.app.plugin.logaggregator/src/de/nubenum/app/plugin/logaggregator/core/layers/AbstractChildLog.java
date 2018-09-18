@@ -5,8 +5,8 @@ import java.io.IOException;
 import de.nubenum.app.plugin.logaggregator.core.SystemLog;
 import de.nubenum.app.plugin.logaggregator.core.VirtualBinarySearch;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
-import de.nubenum.app.plugin.logaggregator.core.model.Entry;
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 
 /**
  * A log that will cooperate with a ParentLog in order to aggregate multiple

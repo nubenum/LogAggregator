@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-import de.nubenum.app.plugin.logaggregator.config.ILogSource;
+import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
 
 /**
  * Representing a directory that can contain multiple log sources. Can be implemented for different storage backends.

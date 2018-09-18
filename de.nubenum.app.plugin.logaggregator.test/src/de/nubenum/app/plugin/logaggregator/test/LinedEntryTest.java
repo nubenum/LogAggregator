@@ -8,18 +8,18 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 
-import de.nubenum.app.plugin.logaggregator.config.ILogHost;
-import de.nubenum.app.plugin.logaggregator.config.ILogSource;
-import de.nubenum.app.plugin.logaggregator.core.FileRange;
-import de.nubenum.app.plugin.logaggregator.core.model.Entry;
+import de.nubenum.app.plugin.logaggregator.core.config.ILogHost;
+import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
 import de.nubenum.app.plugin.logaggregator.core.model.EntryMatcher;
 import de.nubenum.app.plugin.logaggregator.core.model.EntryMessageLink;
 import de.nubenum.app.plugin.logaggregator.core.model.EntryMessageMatch;
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.FileRange;
 import de.nubenum.app.plugin.logaggregator.core.model.IEntryMatcher;
 import de.nubenum.app.plugin.logaggregator.core.model.Level;
-import de.nubenum.app.plugin.logaggregator.core.model.LinedEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.LogTime;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.LinedEntry;
 
 public class LinedEntryTest {
 

@@ -3,6 +3,8 @@ package de.nubenum.app.plugin.logaggregator.core.model;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
+
 /**
  * The default implementation of the IEntryMatcher.
  *

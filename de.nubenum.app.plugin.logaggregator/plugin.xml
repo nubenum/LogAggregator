@@ -7,8 +7,8 @@
             name="LogAggregator"
             extensions="logagg"
             icon="icons/list.png"
-            class="de.nubenum.app.plugin.logaggregator.parts.LogView"
-            id="de.nubenum.app.plugin.logaggregator.parts.LogView">
+            class="de.nubenum.app.plugin.logaggregator.gui.LogView"
+            id="de.nubenum.app.plugin.logaggregator.gui.LogView">
       </editor>
     </extension>
 
@@ -16,7 +16,7 @@
 	  <wizard
 	      id="de.nubenum.app.plugin.logaggregator.wizard"
 	      name="LogAggregator Configuration File"
-	      class="de.nubenum.app.plugin.logaggregator.parts.NewConfigWizard"
+	      class="de.nubenum.app.plugin.logaggregator.gui.NewConfigWizard"
 	      icon="icons/list.png">
 	    <description>Create a new LogAggregator Config File</description>
 	    <selection class="org.eclipse.core.resources.IResource" /> 

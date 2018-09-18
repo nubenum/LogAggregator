@@ -2,9 +2,9 @@ package de.nubenum.app.plugin.logaggregator.core.layers;
 
 import java.util.List;
 
-import de.nubenum.app.plugin.logaggregator.core.model.DeduplicatedEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.DeduplicatedEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 
 /**
  * A GroupedLog that groups duplicate entries occurring in different sources of one host.

@@ -12,9 +12,9 @@ import org.junit.Test;
 
 import de.nubenum.app.plugin.logaggregator.core.layers.AbstractParentLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.IChildLog;
-import de.nubenum.app.plugin.logaggregator.core.model.Entry;
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
-import de.nubenum.app.plugin.logaggregator.core.model.LinedEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.LinedEntry;
 
 public class ParentLogTest {
 	private static class TestChildLog implements IChildLog {

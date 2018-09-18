@@ -11,17 +11,17 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.nubenum.app.plugin.logaggregator.core.EndOfLogReachedException;
-import de.nubenum.app.plugin.logaggregator.core.FilePosition;
-import de.nubenum.app.plugin.logaggregator.core.FileRange;
-import de.nubenum.app.plugin.logaggregator.core.IFilePosition;
-import de.nubenum.app.plugin.logaggregator.core.IFileRange;
-import de.nubenum.app.plugin.logaggregator.core.RandomByteBuffer;
 import de.nubenum.app.plugin.logaggregator.core.layers.IRandomAccessLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.LinedLog;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
-import de.nubenum.app.plugin.logaggregator.core.model.Entry;
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
-import de.nubenum.app.plugin.logaggregator.core.model.LinedEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.FilePosition;
+import de.nubenum.app.plugin.logaggregator.core.model.FileRange;
+import de.nubenum.app.plugin.logaggregator.core.model.IFilePosition;
+import de.nubenum.app.plugin.logaggregator.core.model.IFileRange;
+import de.nubenum.app.plugin.logaggregator.core.model.RandomByteBuffer;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.LinedEntry;
 
 public class LinedLogTest {
 	private static IRandomAccessLog rand;

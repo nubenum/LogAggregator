@@ -2,8 +2,8 @@ package de.nubenum.app.plugin.logaggregator.core.layers;
 
 import java.io.IOException;
 
-import de.nubenum.app.plugin.logaggregator.config.ILogSource;
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 
 /**
  * A ChildLog representing a single log source on a single host.

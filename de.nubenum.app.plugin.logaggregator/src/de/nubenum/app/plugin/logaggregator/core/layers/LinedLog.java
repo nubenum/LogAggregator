@@ -5,22 +5,22 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.nubenum.app.plugin.logaggregator.config.ILogHost;
-import de.nubenum.app.plugin.logaggregator.config.ILogSource;
 import de.nubenum.app.plugin.logaggregator.core.EndOfLogReachedException;
-import de.nubenum.app.plugin.logaggregator.core.FilePosition;
-import de.nubenum.app.plugin.logaggregator.core.FileRange;
-import de.nubenum.app.plugin.logaggregator.core.IFilePosition;
-import de.nubenum.app.plugin.logaggregator.core.IFileRange;
 import de.nubenum.app.plugin.logaggregator.core.IUpdateInitiator;
 import de.nubenum.app.plugin.logaggregator.core.IUpdateListener;
-import de.nubenum.app.plugin.logaggregator.core.RandomByteBuffer;
 import de.nubenum.app.plugin.logaggregator.core.UpdateEvent;
+import de.nubenum.app.plugin.logaggregator.core.config.ILogHost;
+import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
-import de.nubenum.app.plugin.logaggregator.core.model.Entry;
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
-import de.nubenum.app.plugin.logaggregator.core.model.LinedEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.FilePosition;
+import de.nubenum.app.plugin.logaggregator.core.model.FileRange;
+import de.nubenum.app.plugin.logaggregator.core.model.IFilePosition;
+import de.nubenum.app.plugin.logaggregator.core.model.IFileRange;
 import de.nubenum.app.plugin.logaggregator.core.model.LogTime;
+import de.nubenum.app.plugin.logaggregator.core.model.RandomByteBuffer;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.LinedEntry;
 
 /**
  * An entry-based log backed by a byte-based log that will provide single lines

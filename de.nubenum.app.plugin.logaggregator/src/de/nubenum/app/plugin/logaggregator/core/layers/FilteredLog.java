@@ -3,10 +3,10 @@ package de.nubenum.app.plugin.logaggregator.core.layers;
 import java.io.IOException;
 
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
-import de.nubenum.app.plugin.logaggregator.core.model.Entry;
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.IEntryMatcher;
 import de.nubenum.app.plugin.logaggregator.core.model.ReferenceOffset;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 
 /**
  * The default implementation of IFilteredLog.

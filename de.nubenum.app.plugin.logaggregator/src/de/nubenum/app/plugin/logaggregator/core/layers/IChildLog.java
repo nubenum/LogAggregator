@@ -1,6 +1,6 @@
 package de.nubenum.app.plugin.logaggregator.core.layers;
 
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 /**
  * An entry-based log that acts as the child of a parent log, i.e. multiple child logs will be aggregated to one parent log.
  *

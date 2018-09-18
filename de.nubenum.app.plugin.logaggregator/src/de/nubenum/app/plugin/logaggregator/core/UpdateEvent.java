@@ -1,6 +1,6 @@
 package de.nubenum.app.plugin.logaggregator.core;
 
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 
 public class UpdateEvent {
 	public static enum Event {

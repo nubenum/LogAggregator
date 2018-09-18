@@ -2,9 +2,9 @@ package de.nubenum.app.plugin.logaggregator.core.layers;
 
 import java.util.List;
 
-import de.nubenum.app.plugin.logaggregator.core.model.CondensedEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.CondensedEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 
 /**
  *  GroupedLog that could in the future group similar entries across hosts. This currently does nothing (but caching).

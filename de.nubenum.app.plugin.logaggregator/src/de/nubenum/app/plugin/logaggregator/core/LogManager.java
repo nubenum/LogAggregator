@@ -12,10 +12,10 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
-import de.nubenum.app.plugin.logaggregator.config.IConfig;
-import de.nubenum.app.plugin.logaggregator.config.ILogHost;
-import de.nubenum.app.plugin.logaggregator.config.ILogSource;
 import de.nubenum.app.plugin.logaggregator.core.UpdateEvent.Event;
+import de.nubenum.app.plugin.logaggregator.core.config.IConfig;
+import de.nubenum.app.plugin.logaggregator.core.config.ILogHost;
+import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
 import de.nubenum.app.plugin.logaggregator.core.layers.AggregatedChildLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.AggregatedGroupedLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.AggregatedParentLog;

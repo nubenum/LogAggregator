@@ -14,7 +14,7 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.nubenum.app.plugin.logaggregator.config.ILogSource;
+import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
 import de.nubenum.app.plugin.logaggregator.core.layers.HostGroupedLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.HostParentLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.HostSourceChildLog;
@@ -25,8 +25,8 @@ import de.nubenum.app.plugin.logaggregator.core.layers.IRandomAccessLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.LinedLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.LocalRandomAccessLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.RotatedRandomAccessLog;
-import de.nubenum.app.plugin.logaggregator.core.model.Entry;
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 
 public class MergeIntegrationTest {
 

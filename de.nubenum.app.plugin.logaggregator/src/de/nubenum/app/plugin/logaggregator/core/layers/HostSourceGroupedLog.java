@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.util.List;
 
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
-import de.nubenum.app.plugin.logaggregator.core.model.Entry;
-import de.nubenum.app.plugin.logaggregator.core.model.IEntry;
-import de.nubenum.app.plugin.logaggregator.core.model.LinedEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.LogTime;
-import de.nubenum.app.plugin.logaggregator.core.model.StackedEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.LinedEntry;
+import de.nubenum.app.plugin.logaggregator.core.model.entry.StackedEntry;
 
 /**
  * Implementation of GroupedLog that groups stack traces, i.e. multiple log
