@@ -27,6 +27,15 @@ public class LogTimeTest {
 		LogTime set = new LogTime(2018, 1, 26, 13, 14, 4, 274);
 		assertEquals(set, parsed);
 	}
+
+	@Test
+	public void testInverseInverse() {
+		String line = "14-05-2018 05:06:13:055";
+		LogTime parsed = new LogTime(line);
+		LogTime set = new LogTime(2018, 5, 14, 5, 6, 13, 55);
+		assertEquals(set, parsed);
+	}
+
 	@Test
 	public void testInverse() {
 		String line = "2018-05-14 05:06:13:055";
