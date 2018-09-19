@@ -35,7 +35,7 @@ public class ChildLogTest {
 		};
 		log = new AbstractChildLog(entryLog) {
 			@Override
-			public IEntry getAt(IEntry reference, int offset) throws IOException {
+			public IEntry getAt(IEntry reference, int offset) throws IOException, InterruptedException {
 				return super.getAtBest(reference, offset);
 			}
 
@@ -47,7 +47,7 @@ public class ChildLogTest {
 	}
 
 	@Test
-	public void test() throws IOException {
+	public void test() throws IOException, InterruptedException {
 		IEntry entry = log.getAt(Entry.FIRST, 1);
 		assertEquals(entries[0], entry);
 

@@ -18,7 +18,7 @@ public class HostChildLog extends AbstractChildLog {
 	}
 
 	@Override
-	public IEntry getAt(IEntry reference, int offset) throws IOException {
+	public IEntry getAt(IEntry reference, int offset) throws IOException, InterruptedException {
 		return super.getAtBest(reference, offset);
 	}
 

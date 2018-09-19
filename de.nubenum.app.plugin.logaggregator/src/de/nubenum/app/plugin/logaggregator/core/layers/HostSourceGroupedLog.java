@@ -24,7 +24,7 @@ public class HostSourceGroupedLog extends AbstractGroupedLog {
 	}
 
 	@Override
-	public IEntry getAt(IEntry reference, int stackedOffset) throws IOException {
+	public IEntry getAt(IEntry reference, int stackedOffset) throws IOException, InterruptedException {
 		IEntry entry = super.getAt(reference, stackedOffset);
 		if (Entry.isFirstOrLast(entry))
 			return entry;

@@ -71,7 +71,7 @@ public class HugeStackTraceTest {
 	}
 
 	@Test
-	public void testBase() throws IOException {
+	public void testBase() throws IOException, InterruptedException {
 		Bench b = new Bench("unit");
 		IEntry e = processed.getAt(Entry.LAST, -1);
 		b.stop();
@@ -82,7 +82,7 @@ public class HugeStackTraceTest {
 	}
 
 	@Test
-	public void testAllLayers() throws IOException {
+	public void testAllLayers() throws IOException, InterruptedException {
 		Bench b = new Bench("unit");
 		IEntry e = allLayers.getAt(Entry.LAST, -1);
 		b.stop();

@@ -6,6 +6,7 @@ import org.eclipse.jface.viewers.ILazyContentProvider;
 
 import de.nubenum.app.plugin.logaggregator.core.AsyncCompletableQueue;
 import de.nubenum.app.plugin.logaggregator.core.SystemLog;
+import de.nubenum.app.plugin.logaggregator.core.ThreadInterruptor;
 import de.nubenum.app.plugin.logaggregator.core.UpdateEvent;
 import de.nubenum.app.plugin.logaggregator.core.UpdateEvent.Event;
 import de.nubenum.app.plugin.logaggregator.core.layers.IFilteredLog;
@@ -97,7 +98,7 @@ public class LogContentProvider implements ILazyContentProvider {
 				}
 				return;
 			}
-			if (Thread.interrupted())
+			if (ThreadInterruptor.isInterrupted())
 				return;
 
 			doUpdateGuiElement(entry, index);
@@ -108,9 +109,10 @@ public class LogContentProvider implements ILazyContentProvider {
 				guiRun(() -> switchPage(lastUpdated.getEntry(), lastUpdated.getOffset()));
 				return;
 			}
-		} catch (Throwable e) {
+		} catch (IOException e) {
 			SystemLog.log(e);
-			e.printStackTrace();
+		} catch (InterruptedException e) {
+			return;
 		}
 	}
 
@@ -140,7 +142,7 @@ public class LogContentProvider implements ILazyContentProvider {
 		return true;
 	}
 
-	private boolean isNotEndReachedAtViewportBounds(IEntry next, int index, ReferenceOffset viewportTop, ReferenceOffset viewportBottom) throws IOException {
+	private boolean isNotEndReachedAtViewportBounds(IEntry next, int index, ReferenceOffset viewportTop, ReferenceOffset viewportBottom) throws IOException, InterruptedException {
 		if (atViewportBounds(viewportTop, viewportBottom) != Direction.NONE) {
 			Direction dir = getRoughDirection(index);
 			IEntry entry = log.getAt(lastUpdated.getEntry(), getLastUpdatedIndexDiff(getBoundIndex(dir)+dir.getValue()));
@@ -205,7 +207,8 @@ public class LogContentProvider implements ILazyContentProvider {
 				}
 			} catch (IOException e) {
 				SystemLog.log(e);
-				e.printStackTrace();
+			} catch (InterruptedException e) {
+				return;
 			}
 		});
 	}

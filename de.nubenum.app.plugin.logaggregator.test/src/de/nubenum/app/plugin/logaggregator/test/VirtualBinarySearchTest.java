@@ -12,7 +12,7 @@ import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 public class VirtualBinarySearchTest {
 
 	@Test
-	public void test() {
+	public void test() throws InterruptedException {
 		Long size = 900000L;
 		VirtualBinarySearch<Long> search = new VirtualBinarySearch<>();
 		search.setComparator((a, b) -> Direction.get(a-b));
@@ -35,7 +35,7 @@ public class VirtualBinarySearchTest {
 	}
 
 	@Test
-	public void testInverse() {
+	public void testInverse() throws InterruptedException {
 		Long size = 900000000000000L;
 		VirtualBinarySearch<Long> search = new VirtualBinarySearch<>();
 		search.setComparator((a, b) -> Direction.get(a-b));

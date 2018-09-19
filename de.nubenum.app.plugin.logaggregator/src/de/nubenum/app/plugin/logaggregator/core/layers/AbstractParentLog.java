@@ -30,7 +30,7 @@ public abstract class AbstractParentLog implements IEntryLog {
 	}
 
 	@Override
-	public IEntry getAt(IEntry reference, int offset) throws IOException {
+	public IEntry getAt(IEntry reference, int offset) throws IOException, InterruptedException {
 		if (Math.abs(offset) > 1) {
 			return getRandomAt(reference, offset);
 		}
@@ -48,8 +48,9 @@ public abstract class AbstractParentLog implements IEntryLog {
 	 * @return The next entry
 	 * @throws IOException
 	 *             If the backing storage is unavailable
+	 * @throws InterruptedException
 	 */
-	protected IEntry getNextAt(IEntry reference, int direction) throws IOException {
+	protected IEntry getNextAt(IEntry reference, int direction) throws IOException, InterruptedException {
 		retriever.clear();
 		for (IChildLog log : logs) {
 			retriever.add(() -> log.getAt(reference, direction));
@@ -75,8 +76,9 @@ public abstract class AbstractParentLog implements IEntryLog {
 	 *         given reference
 	 * @throws IOException
 	 *             If the backing storage is unavailable
+	 * @throws InterruptedException
 	 */
-	protected IEntry getRandomAt(IEntry reference, int offset) throws IOException {
+	protected IEntry getRandomAt(IEntry reference, int offset) throws IOException, InterruptedException {
 		IChildLog anchorLog = getAnchorLog(reference);
 		IEntry entry = null;
 

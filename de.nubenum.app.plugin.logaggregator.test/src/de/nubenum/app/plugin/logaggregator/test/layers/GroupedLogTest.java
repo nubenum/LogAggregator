@@ -65,7 +65,7 @@ public class GroupedLogTest {
 	}
 
 	@Test
-	public void test() throws IOException {
+	public void test() throws IOException, InterruptedException {
 
 		IEntry entry = log.getAt(entries[1], -1);
 		assertTrue(entry instanceof LinedEntry);

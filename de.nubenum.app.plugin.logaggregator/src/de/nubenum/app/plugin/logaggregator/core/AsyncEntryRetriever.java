@@ -62,38 +62,33 @@ public class AsyncEntryRetriever {
 	 * @throws IOException
 	 *             If a Callable throws an IOException. All other exceptions will be
 	 *             caught, logged and otherwise ignored.
+	 * @throws InterruptedException
 	 */
-	public List<IEntry> get() throws IOException {
+	public List<IEntry> get() throws IOException, InterruptedException {
 		if (batch == null)
 			return getSynchroneously();
-		try {
-			List<Future<IEntry>> futures = batch.invokeAll(tasks);
-			List<IEntry> entries = new ArrayList<>();
-			for (Future<IEntry> future : futures) {
-				try {
-					entries.add(future.get());
-				} catch (ExecutionException e) {
-					handleException(e.getCause());
-				}
+		List<Future<IEntry>> futures = batch.invokeAll(tasks);
+		List<IEntry> entries = new ArrayList<>();
+		for (Future<IEntry> future : futures) {
+			try {
+				entries.add(future.get());
+			} catch (ExecutionException e) {
+				handleException(e.getCause());
 			}
-			return entries;
-		} catch (InterruptedException e) {
-			clear();
-			SystemLog.log("gulp interrupt");
-			return new ArrayList<IEntry>();
 		}
+		return entries;
 	}
 
 	/**
-	 * Run the added Callables in the same thread. This is for testing purposes
-	 * only.
+	 * Run the added Callables in the same thread.
 	 *
 	 * @return The collected IEntries.
 	 * @throws IOException
 	 *             If a Callable throws an IOException. All other exceptions will be
 	 *             caught, logged and otherwise ignored.
+	 * @throws InterruptedException
 	 */
-	public List<IEntry> getSynchroneously() throws IOException {
+	public List<IEntry> getSynchroneously() throws IOException, InterruptedException {
 		List<IEntry> results = new ArrayList<>();
 
 		for (Callable<IEntry> task : tasks) {
@@ -106,11 +101,12 @@ public class AsyncEntryRetriever {
 		return results;
 	}
 
-	private void handleException(Throwable e) throws IOException {
+	private void handleException(Throwable e) throws IOException, InterruptedException {
 		if (e instanceof IOException)
 			throw (IOException) e;
-		else {
+		if (e instanceof InterruptedException)
+			throw (InterruptedException) e;
+		else
 			SystemLog.log(e);
-		}
 	}
 }

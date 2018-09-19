@@ -66,7 +66,7 @@ public class PathWatcher implements IUpdateInitiator {
 				try {
 					key = watcher.take();
 				} catch (InterruptedException | ClosedWatchServiceException x) {
-					Thread.currentThread().interrupt();
+					ThreadInterruptor.interrupt();
 					return;
 				}
 				if (System.currentTimeMillis() - lastUpdateTs > MIN_UPDATE_INTERVAL) {

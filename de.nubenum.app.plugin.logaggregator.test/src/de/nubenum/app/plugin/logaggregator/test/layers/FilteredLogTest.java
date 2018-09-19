@@ -48,7 +48,7 @@ public class FilteredLogTest {
 	}
 
 	@Test
-	public void testLevels() throws IOException {
+	public void testLevels() throws IOException, InterruptedException {
 		log.setMatcher(new EntryMatcher(Level.INFO, "", IEntry.class));
 		log.toggleFilter(true);
 
@@ -63,7 +63,7 @@ public class FilteredLogTest {
 	}
 
 	@Test
-	public void testStacks() throws IOException {
+	public void testStacks() throws IOException, InterruptedException {
 		log.setMatcher(new EntryMatcher(Level.ALL, "", StackedEntry.class));
 		log.toggleFilter(true);
 
@@ -77,7 +77,7 @@ public class FilteredLogTest {
 	}
 
 	@Test
-	public void testRegex() throws IOException {
+	public void testRegex() throws IOException, InterruptedException {
 		log.setMatcher(new EntryMatcher(Level.ALL, "^Lor[ei]m", IEntry.class));
 		log.toggleFilter(true);
 
@@ -91,7 +91,7 @@ public class FilteredLogTest {
 	}
 
 	@Test
-	public void testCombined() throws IOException {
+	public void testCombined() throws IOException, InterruptedException {
 		log.setMatcher(new EntryMatcher(Level.OTHER, "Lor", IEntry.class));
 		log.toggleFilter(true);
 
@@ -103,7 +103,7 @@ public class FilteredLogTest {
 	}
 
 	@Test
-	public void testMatching() throws IOException {
+	public void testMatching() throws IOException, InterruptedException {
 		log.setMatcher(new EntryMatcher(Level.OTHER, "bc$", IEntry.class));
 		log.toggleFilter(false);
 

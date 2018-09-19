@@ -59,9 +59,6 @@ public class LinedLog implements IEntryLog, IUpdateInitiator {
 
 	@Override
 	public IEntry getAt(IEntry reference, int offset) throws IOException {
-		if (Thread.interrupted()) {
-			return null;
-		}
 		if (offset == 0)
 			return reference;
 		RandomByteBuffer buffer = new RandomByteBuffer();

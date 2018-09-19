@@ -28,7 +28,10 @@ public class AsyncCompletableQueue implements IUpdateInitiator {
 	 *            The Runnable to be executed
 	 */
 	public void addToQueue(Runnable command) {
-		CompletableFuture<Void> task = CompletableFuture.runAsync(command, singleQueue);
+		CompletableFuture<Void> task = CompletableFuture.runAsync(() -> {
+			ThreadInterruptor.reset();
+			command.run();
+		}, singleQueue);
 		task.thenAccept(v -> onFinish());
 		queueTasks.add(task);
 	}
@@ -51,8 +54,9 @@ public class AsyncCompletableQueue implements IUpdateInitiator {
 		SystemLog.log("interrupt try");
 		for (Future<Void> t : queueTasks) {
 			if (!t.isDone())
-				t.cancel(true);
+				t.cancel(false);
 		}
+		ThreadInterruptor.interrupt();
 		queueTasks.clear();
 	}
 

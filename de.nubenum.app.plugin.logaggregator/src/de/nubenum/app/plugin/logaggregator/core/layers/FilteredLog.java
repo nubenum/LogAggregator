@@ -2,6 +2,7 @@ package de.nubenum.app.plugin.logaggregator.core.layers;
 
 import java.io.IOException;
 
+import de.nubenum.app.plugin.logaggregator.core.ThreadInterruptor;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 import de.nubenum.app.plugin.logaggregator.core.model.IEntryMatcher;
 import de.nubenum.app.plugin.logaggregator.core.model.ReferenceOffset;
@@ -19,7 +20,7 @@ public class FilteredLog implements IFilteredLog {
 	private boolean filtered = false;
 
 	@Override
-	public IEntry getAt(IEntry reference, int offset) throws IOException {
+	public IEntry getAt(IEntry reference, int offset) throws IOException, InterruptedException {
 		if (file == null)
 			return null;
 
@@ -34,7 +35,7 @@ public class FilteredLog implements IFilteredLog {
 		return reference;
 	}
 
-	private ReferenceOffset getMatchingAt(IEntry reference, int offset, boolean filtered) throws IOException {
+	private ReferenceOffset getMatchingAt(IEntry reference, int offset, boolean filtered) throws IOException, InterruptedException {
 		int i = 0;
 		do {
 			reference = file.getAt(reference, offset);
@@ -42,14 +43,14 @@ public class FilteredLog implements IFilteredLog {
 			i += offset;
 			if (Entry.isFirstOrLast(reference))
 				break;
-			if (i % 100 == 0 && Thread.interrupted())
-				return null;
+			if (ThreadInterruptor.isInterrupted())
+				throw new InterruptedException();
 		} while (matcher != null && filtered && !reference.matches(matcher));
 		return new ReferenceOffset(reference, i);
 	}
 
 	@Override
-	public ReferenceOffset getMatchingAt(IEntry reference, int offset) throws IOException {
+	public ReferenceOffset getMatchingAt(IEntry reference, int offset) throws IOException, InterruptedException {
 		return getMatchingAt(reference, offset, true);
 	}
 

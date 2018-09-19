@@ -25,7 +25,7 @@ public class VirtualBinarySearch<Element> {
 		this.searchDir = Direction.get(jump);
 	}
 
-	public Element search(Element target, Element pivot) {
+	public Element search(Element target, Element pivot) throws InterruptedException {
 		Long offset = jump;
 		Direction oldDir = searchDir;
 		Direction newDir;
@@ -54,9 +54,8 @@ public class VirtualBinarySearch<Element> {
 				pivot = newPivot;
 				oldDir = newDir;
 			}
-			if (Thread.interrupted()) {
-				SystemLog.log("interrupt"+Math.random());
-				return null;
+			if (ThreadInterruptor.isInterrupted()) {
+				throw new InterruptedException();
 			}
 		}
 

@@ -22,8 +22,9 @@ public interface IFilteredLog extends IEntryLog {
 	 * @return The next matching entry and its distance
 	 * @throws IOException
 	 *             When the backend storage is unavailable
+	 * @throws InterruptedException
 	 */
-	public ReferenceOffset getMatchingAt(IEntry reference, int offset) throws IOException;
+	public ReferenceOffset getMatchingAt(IEntry reference, int offset) throws IOException, InterruptedException;
 
 	/**
 	 * Set the matcher on which to base the filtering

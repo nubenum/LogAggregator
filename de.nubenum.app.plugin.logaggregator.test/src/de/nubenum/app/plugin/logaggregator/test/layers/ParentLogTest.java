@@ -56,7 +56,7 @@ public class ParentLogTest {
 	}
 
 	@Test
-	public void test() throws IOException {
+	public void test() throws IOException, InterruptedException {
 		IEntry entry = log.getAt(l1[1], -1);
 		assertEquals(l1[0], entry);
 

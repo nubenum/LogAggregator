@@ -17,7 +17,7 @@ public class AggregatedChildLog extends AbstractChildLog {
 	}
 
 	@Override
-	public IEntry getAt(IEntry reference, int offset) throws IOException {
+	public IEntry getAt(IEntry reference, int offset) throws IOException, InterruptedException {
 		return super.getAtEntry(reference, offset);
 	}
 

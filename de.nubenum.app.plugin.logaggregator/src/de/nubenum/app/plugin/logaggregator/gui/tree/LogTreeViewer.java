@@ -79,6 +79,8 @@ public class LogTreeViewer implements IUpdateInitiator, IUpdateListener {
 			}
 			@Override
 			public String getToolTipText(Object o) {
+				if (o == null)
+					return "";
 				return ((GuiEntry) o).getParsedPart();
 			}
 			@Override
@@ -119,6 +121,8 @@ public class LogTreeViewer implements IUpdateInitiator, IUpdateListener {
 			}
 			@Override
 			public String getToolTipText(Object o) {
+				if (o == null)
+					return "";
 				return ((GuiEntry) o).getParsedPart();
 			}
 			@Override

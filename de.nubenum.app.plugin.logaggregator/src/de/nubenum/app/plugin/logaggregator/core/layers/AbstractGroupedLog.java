@@ -41,7 +41,7 @@ public abstract class AbstractGroupedLog implements IEntryLog {
 	}
 
 	@Override
-	public IEntry getAt(IEntry groupedReference, int groupedOffset) throws IOException {
+	public IEntry getAt(IEntry groupedReference, int groupedOffset) throws IOException, InterruptedException {
 
 		int degroupedOffset = groupedOffset;
 		int direction = groupedOffset;
@@ -79,7 +79,7 @@ public abstract class AbstractGroupedLog implements IEntryLog {
 		return entry;
 	}
 
-	private IEntry getGroupedAt(IEntry reference, int direction) throws IOException {
+	private IEntry getGroupedAt(IEntry reference, int direction) throws IOException, InterruptedException {
 		List<IEntry> newGroup;
 		if (direction == 0) {
 			newGroup = getGroupableEntriesAt(reference, 1);
@@ -93,7 +93,7 @@ public abstract class AbstractGroupedLog implements IEntryLog {
 		return newGroup.get(0);
 	}
 
-	private List<IEntry> getGroupableEntriesAt(IEntry reference, int direction) throws IOException {
+	private List<IEntry> getGroupableEntriesAt(IEntry reference, int direction) throws IOException, InterruptedException {
 		LinkedList<IEntry> newGroup = new LinkedList<>();
 		newGroup.add(reference);
 

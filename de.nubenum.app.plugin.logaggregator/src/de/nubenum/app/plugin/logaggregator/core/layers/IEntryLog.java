@@ -32,6 +32,8 @@ public interface IEntryLog {
 	 * @return The new IEntry
 	 * @throws IOException
 	 *             If the backend storage is unavailable
+	 * @throws InterruptedException
+	 *             If the thread was interrupted
 	 */
-	IEntry getAt(IEntry reference, int offset) throws IOException;
+	IEntry getAt(IEntry reference, int offset) throws IOException, InterruptedException;
 }

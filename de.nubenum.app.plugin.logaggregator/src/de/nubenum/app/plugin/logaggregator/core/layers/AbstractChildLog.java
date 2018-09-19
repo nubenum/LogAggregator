@@ -3,6 +3,7 @@ package de.nubenum.app.plugin.logaggregator.core.layers;
 import java.io.IOException;
 
 import de.nubenum.app.plugin.logaggregator.core.SystemLog;
+import de.nubenum.app.plugin.logaggregator.core.ThreadInterruptor;
 import de.nubenum.app.plugin.logaggregator.core.VirtualBinarySearch;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
@@ -32,6 +33,9 @@ public abstract class AbstractChildLog implements IChildLog {
 			} catch (IOException e) {
 				SystemLog.log(e);
 				return null;
+			} catch (InterruptedException e) {
+				ThreadInterruptor.interrupt();
+				return null;
 			}
 		});
 		this.search.setComparator((a, b) -> {
@@ -48,8 +52,9 @@ public abstract class AbstractChildLog implements IChildLog {
 	 * @param offset The offset
 	 * @return The found entry
 	 * @throws IOException If the backing storage is unavailable
+	 * @throws InterruptedException
 	 */
-	protected IEntry getAtBest(IEntry reference, int offset) throws IOException {
+	protected IEntry getAtBest(IEntry reference, int offset) throws IOException, InterruptedException {
 		IEntry entry = null;
 		if (reference == Entry.FIRST || reference == Entry.LAST) {
 			entry = getAtEntry(reference, offset);
@@ -72,8 +77,9 @@ public abstract class AbstractChildLog implements IChildLog {
 	 * @param offset The offset
 	 * @return The obtained IEntry
 	 * @throws IOException If the backing storage is unavailable
+	 * @throws InterruptedException
 	 */
-	protected IEntry getAtEntry(IEntry reference, int offset) throws IOException {
+	protected IEntry getAtEntry(IEntry reference, int offset) throws IOException, InterruptedException {
 
 		if (Math.abs(offset) > LOOKAROUND_BOUNDS) {
 			return file.getAt(reference, offset);
@@ -94,8 +100,9 @@ public abstract class AbstractChildLog implements IChildLog {
 	 * @param offset The offset
 	 * @return The obtained IEntry
 	 * @throws IOException If the backing storage is unavailable
+	 * @throws InterruptedException
 	 */
-	protected IEntry getAtForeignEntry(IEntry reference, int offset) throws IOException {
+	protected IEntry getAtForeignEntry(IEntry reference, int offset) throws IOException, InterruptedException {
 		Direction dir = Direction.get(offset);
 		Direction dirFromLastShown = Direction.get(reference.compareTo(lastShown));
 

@@ -59,7 +59,7 @@ public class MergeIntegrationTest {
 	}
 
 	@Test
-	public void testContinuousDown() throws IOException {
+	public void testContinuousDown() throws IOException, InterruptedException {
 		IEntry entry1 = Entry.FIRST;
 		IEntry entry2 = Entry.FIRST;
 		while(true) {
@@ -79,7 +79,7 @@ public class MergeIntegrationTest {
 	}
 
 	@Test
-	public void testContinuousUp() throws IOException {
+	public void testContinuousUp() throws IOException, InterruptedException {
 		IEntry entry1 = Entry.LAST;
 		IEntry entry2 = Entry.LAST;
 
@@ -97,7 +97,7 @@ public class MergeIntegrationTest {
 	}
 
 	@Test
-	public void testRandomDown() throws IOException {
+	public void testRandomDown() throws IOException, InterruptedException {
 		IEntry entry1 = Entry.FIRST;
 		IEntry entry2 = Entry.FIRST;
 		int i = 1;
@@ -118,7 +118,7 @@ public class MergeIntegrationTest {
 	}
 
 	@Test
-	public void testRandomUp() throws IOException {
+	public void testRandomUp() throws IOException, InterruptedException {
 		IEntry entry1 = Entry.LAST;
 		IEntry entry2 = Entry.LAST;
 		int i = 1;

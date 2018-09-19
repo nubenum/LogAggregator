@@ -57,7 +57,7 @@ public class HostSourceGroupedLogTest {
 	}
 
 	@Test
-	public void testUpDown() throws IOException {
+	public void testUpDown() throws IOException, InterruptedException {
 		HostSourceGroupedLog log = new HostSourceGroupedLog(file);
 		IEntry entry = log.getAt(entries[4], -1);
 		assertTrue(entry instanceof StackedEntry);
@@ -69,7 +69,7 @@ public class HostSourceGroupedLogTest {
 	}
 
 	@Test
-	public void testDownUp() throws IOException {
+	public void testDownUp() throws IOException, InterruptedException {
 		HostSourceGroupedLog log = new HostSourceGroupedLog(file);
 		IEntry entry = log.getAt(entries[4], 1);
 		assertTrue(entry instanceof StackedEntry);
@@ -81,7 +81,7 @@ public class HostSourceGroupedLogTest {
 	}
 
 	@Test
-	public void testDownUpRand() throws IOException {
+	public void testDownUpRand() throws IOException, InterruptedException {
 		HostSourceGroupedLog log = new HostSourceGroupedLog(file);
 		IEntry entry = log.getAt(entries[12], 1);
 		assertTrue(entry instanceof StackedEntry);
@@ -100,7 +100,7 @@ public class HostSourceGroupedLogTest {
 	}
 
 	@Test
-	public void testUpDownRandAndSelf() throws IOException {
+	public void testUpDownRandAndSelf() throws IOException, InterruptedException {
 		HostSourceGroupedLog log = new HostSourceGroupedLog(file);
 		IEntry entry = log.getAt(entries[12], -2);
 		assertTrue(entry instanceof StackedEntry);
