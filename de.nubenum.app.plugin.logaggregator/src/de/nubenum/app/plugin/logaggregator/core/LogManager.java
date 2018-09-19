@@ -32,6 +32,7 @@ import de.nubenum.app.plugin.logaggregator.core.layers.IRandomAccessLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.LinedLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.LocalRandomAccessLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.RotatedRandomAccessLog;
+import de.nubenum.app.plugin.logaggregator.core.model.LogTime;
 
 public class LogManager implements IUpdateInitiator, IUpdateListener {
 	private IConfig config;
@@ -79,10 +80,15 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 	private void setConfigOptions() {
 		enableMultithreading = true;
 		enableEntireFileCache = false;
-		if (config != null && config.getOptions() != null && config.getOptions().getEnableMultithreading() != null)
-			enableMultithreading = config.getOptions().getEnableMultithreading();
-		if (config != null && config.getOptions() != null && config.getOptions().getEnableEntireFileCache() != null)
-			enableEntireFileCache = config.getOptions().getEnableEntireFileCache();
+		if (config != null && config.getOptions() != null) {
+			if (config.getOptions().getEnableMultithreading() != null)
+				enableMultithreading = config.getOptions().getEnableMultithreading();
+			if (config.getOptions().getEnableEntireFileCache() != null)
+				enableEntireFileCache = config.getOptions().getEnableEntireFileCache();
+			if (config.getOptions().getCustomLogTimeFormats() != null)
+				LogTime.setCustomLogTimeFormats(config.getOptions().getCustomLogTimeFormats());
+		}
+
 	}
 
 	private List<IRandomAccessLog> getSourceFiles(ILogHost host, ILogSource source) throws IOException {

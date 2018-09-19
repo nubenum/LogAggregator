@@ -24,7 +24,7 @@ public class HostGroupedLog extends AbstractGroupedLog {
 	@Override
 	protected boolean isGroupable(List<IEntry> group, IEntry next, Direction dir) {
 		IEntry first = group.get(0);
-		if (first.getLogTime().equals(next.getLogTime()) && first.getMessage().equals(next.getMessage()))
+		if (first.getLogTime().equals(next.getLogTime()) && first.getMessageComplete().equals(next.getMessageComplete()))
 			return true;
 		return false;
 	}

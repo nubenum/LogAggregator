@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 
 import org.junit.Test;
 
@@ -61,13 +62,13 @@ public class LogTimeTest {
 	}
 
 
-	/*@Test
+	@Test
 	public void testInverseWithoutLeading() {
 		String line = "2018-4-07 15:06:09";
 		LogTime parsed = new LogTime(line);
 		LogTime set = new LogTime(2018, 4, 7, 15, 6, 9, 0);
 		assertEquals(set, parsed);
-	}*/
+	}
 
 	@Test
 	public void testInverseWithDot() {
@@ -85,16 +86,19 @@ public class LogTimeTest {
 		assertEquals(set, parsed);
 	}
 
-
-
 	@Test
-	public void testFail() {
+	public void testCustom() {
+		String line = "2018-05-14 05:06:13/055";
+		LogTime parsed;
 		try {
-			String line = "2018-05-14 05:06:13/055";
-			LogTime parsed = new LogTime(line);
+			parsed = new LogTime(line);
 			fail("should throw exception");
 		} catch (DateTimeParseException e) {
 			assertNotNull(e.getMessage());
+			LogTime.setCustomLogTimeFormats(Arrays.asList("yyyy-MM-dd HH:mm:ss/SSS"));
+			parsed = new LogTime(line);
+			LogTime set = new LogTime(2018, 5, 14, 5, 6, 13, 55);
+			assertEquals(set, parsed);
 		}
 	}
 

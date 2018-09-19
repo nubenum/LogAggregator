@@ -23,7 +23,8 @@ public interface ILogHost {
 	void setName(String name);
 
 	/**
-	 * Get the alias for the long directory name.
+	 * Get the alias for the long directory name. If no short name was set, the full
+	 * name should be returned.
 	 *
 	 * @return The alias.
 	 */

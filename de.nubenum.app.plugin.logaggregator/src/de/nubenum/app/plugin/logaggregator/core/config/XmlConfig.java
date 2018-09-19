@@ -10,8 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "aggregatorConfig")
 public class XmlConfig implements IConfig {
 
-	private List<? extends ILogHost> hosts = new ArrayList<XmlLogHost>();
-	private List<? extends ILogSource> sources = new ArrayList<XmlLogSource>();
+	private List<? extends ILogHost> hosts = new ArrayList<>();
+	private List<? extends ILogSource> sources = new ArrayList<>();
 	private IOptions options;
 	private String location;
 

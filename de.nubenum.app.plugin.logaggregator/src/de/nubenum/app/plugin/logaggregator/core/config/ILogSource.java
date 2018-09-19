@@ -25,7 +25,8 @@ public interface ILogSource {
 	/**
 	 * Whether an error should be thrown if the defined source file is not found.
 	 * Sometimes certain sources will not be available on all hosts, in that case,
-	 * this flag can be used.
+	 * this flag can be used. The default is false, i.e. implementing classes should
+	 * return false if nothing was set.
 	 *
 	 * @return True if no error is to be thrown.
 	 */

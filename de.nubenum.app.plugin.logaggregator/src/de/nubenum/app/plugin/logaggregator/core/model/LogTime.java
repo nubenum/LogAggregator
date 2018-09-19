@@ -6,6 +6,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -36,17 +37,22 @@ public class LogTime implements Comparable<LogTime> {
 	public static final DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
 	private static final String[] timeFormats = {
+			"M/d/yy H:m:s.SSS zzz",
+			"M/d/yy H:m:s:SSS zzz",
+			"M/d/yy H:m:s.SSS",
+			"M/d/yy H:m:s:SSS",
 			"M/d/yy H:m:s",
+			"yyyy-MM-dd HH:mm:ss.SSS zzz",
+			"yyyy-MM-dd HH:mm:ss:SSS zzz",
+			"yyyy-MM-dd HH:mm:ss.SSS",
+			"yyyy-MM-dd HH:mm:ss:SSS",
 			"yyyy-MM-dd HH:mm:ss",
-			"dd-MM-yyyy HH:mm:ss",
-	};
-
-	private static final String[] timeExtensions = {
-			".SSS zzz",
-			":SSS zzz",
-			".SSS",
-			":SSS",
-			""
+			"yyyy-M-d H:m:s",
+			"dd-MM-yyyy HH:mm:ss.SSS zzz",
+			"dd-MM-yyyy HH:mm:ss:SSS zzz",
+			"dd-MM-yyyy HH:mm:ss.SSS",
+			"dd-MM-yyyy HH:mm:ss:SSS",
+			"dd-MM-yyyy HH:mm:ss"
 	};
 
 	private static DateTimeFormatter[] timeFormatters;
@@ -65,21 +71,21 @@ public class LogTime implements Comparable<LogTime> {
 				.replaceAll(getControlCharMatcher(2), "[0-9]{2}")
 				.replaceAll(getControlCharMatcher(1), "[0-9]{1,2}")
 				.replace("zzz", "[A-Z]+");
-
 	}
 
 	private static void createTimeFormattersPatternsExtractor() {
 		if (timeFormatters != null && timePatterns != null && timeExtractor != null)
 			return;
+		createTimeFormattersPatternsExtractor(timeFormats);
+	}
+
+	private static void createTimeFormattersPatternsExtractor(String[] timeFormats) {
 		List<DateTimeFormatter> formatters = new ArrayList<>();
 		List<Pattern> patterns = new ArrayList<>();
 		for (String format : timeFormats) {
 			String formatRegex = replaceControlChars(format);
-			for (String extension : timeExtensions) {
-				String extRegex = replaceControlChars(extension);
-				formatters.add(DateTimeFormatter.ofPattern(format+extension, Locale.US));
-				patterns.add(Pattern.compile(formatRegex+extRegex));
-			}
+			formatters.add(DateTimeFormatter.ofPattern(format, Locale.US));
+			patterns.add(Pattern.compile(formatRegex));
 		}
 		formatters.add(null); //Unix ts
 		patterns.add(Pattern.compile("[0-9]{13}"));
@@ -90,6 +96,17 @@ public class LogTime implements Comparable<LogTime> {
 		timeFormatters = formatters.toArray(new DateTimeFormatter[formatters.size()]);
 		timePatterns = patterns.toArray(new Pattern[patterns.size()]);
 		timeExtractor = extractor;
+	}
+
+	/**
+	 * Set additional log timestamp formats in case the predefined ones are not exhaustive.
+	 * @param customLogTimeFormats The List of pattern strings according to {@link DateTimeFormatter}
+	 */
+	public static void setCustomLogTimeFormats(List<String> customLogTimeFormats) {
+		List<String> all = new ArrayList<>();
+		all.addAll(Arrays.asList(timeFormats));
+		all.addAll(customLogTimeFormats);
+		createTimeFormattersPatternsExtractor(all.toArray(new String[all.size()]));
 	}
 
 	/**
@@ -136,7 +153,7 @@ public class LogTime implements Comparable<LogTime> {
 		createTimeFormattersPatternsExtractor();
 		String line = input.replaceAll("[^A-Z0-9-/:. ]", "").trim();
 		for (int i = 0; i < timePatterns.length; i++) {
-			time = tryFormatter(input, timeFormatters[i]);
+			time = tryFormatter(line, timeFormatters[i]);
 			if (time != null)
 				return;
 		}
