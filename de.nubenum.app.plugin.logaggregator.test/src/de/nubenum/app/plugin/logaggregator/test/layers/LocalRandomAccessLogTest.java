@@ -7,6 +7,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -28,6 +29,8 @@ public class LocalRandomAccessLogTest {
 
 	@BeforeClass
 	public static void setup() throws IOException {
+		File d = new File("tmp");
+		d.mkdir();
 		Writer out = new BufferedWriter(new OutputStreamWriter(
 				new FileOutputStream(file.toFile()), StandardCharsets.UTF_8));
 		out.write("Lorem ipsum dolor sit amet\n");

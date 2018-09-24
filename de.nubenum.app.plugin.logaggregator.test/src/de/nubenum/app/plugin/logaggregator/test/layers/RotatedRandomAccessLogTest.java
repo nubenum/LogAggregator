@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -34,6 +35,9 @@ public class RotatedRandomAccessLogTest {
 
 	@BeforeClass
 	public static void setup() throws FileNotFoundException {
+		File d = new File("tmp");
+		d.mkdir();
+		
 		PrintWriter out;
 		out = new PrintWriter(files[0].toFile());
 		out.print("Lorem0 ipsum dolor sit amet\n");
