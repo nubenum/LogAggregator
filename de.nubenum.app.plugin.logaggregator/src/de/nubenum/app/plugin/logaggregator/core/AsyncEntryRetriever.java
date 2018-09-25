@@ -54,6 +54,14 @@ public class AsyncEntryRetriever {
 	}
 
 	/**
+	 * Stop all threads
+	 */
+	public void stop() {
+		if (batch != null)
+			batch.shutdownNow();
+	}
+
+	/**
 	 * Run the Callables that were added before with all available threads and
 	 * collect the returned {@link IEntry}s .
 	 *

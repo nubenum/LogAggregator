@@ -44,6 +44,12 @@ public class FilteredLogTest {
 			public IEntry getAt(IEntry reference, int offset) throws IOException {
 				return TestHelper.getAt(reference, offset, entries);
 			}
+
+			@Override
+			public void close() throws IOException {
+				// TODO Auto-generated method stub
+
+			}
 		});
 	}
 

@@ -42,7 +42,6 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 	private IConfig config;
 	private IFilteredLog log;
 	private List<IUpdateListener> listeners = new ArrayList<>();
-	private List<IRandomAccessLog> observableFiles = new ArrayList<>();
 	private List<ILogDirectory> directories = new ArrayList<>();
 	private PathWatcher watcher;
 
@@ -64,13 +63,12 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 				}
 			} else {
 				SystemLog.log("Trying to update due to append on backend storage");
-				observableFiles.forEach(f -> {
-					try {
-						f.getLength(true);
-					} catch (IOException e1) {
-					}
-				});
-				listeners.forEach(l -> l.onUpdate(e));
+				try {
+					close();
+					listeners.forEach(l -> l.onUpdate(e));
+				} catch (IOException exc) {
+					listeners.forEach(l -> l.onUpdate(new UpdateEvent(exc)));
+				}
 			}
 		});
 	}
@@ -155,7 +153,6 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 			List<IRandomAccessLog> files = getSourceFiles(host, source);
 			if (!files.isEmpty()) {
 				IRandomAccessLog sourceFile = new RotatedRandomAccessLog(files);
-				observableFiles.add(sourceFile);
 				LinedLog lined = new LinedLog(sourceFile, host, source);
 				lined.addListener(this);
 				IChildLog log = new HostSourceChildLog(new HostSourceGroupedLog(lined), source);
@@ -192,16 +189,11 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 
 	/**
 	 * Close all open files, stop watching them and cleanup.
+	 * @throws IOException
 	 */
-	public void close() {
-		watcher.reset();
-		observableFiles.forEach(f -> {
-			try {
-				f.close();
-			} catch (IOException e) {
-			}
-		});
-		observableFiles.clear();
+	public void close() throws IOException {
+		watcher.stop();
+		log.close();
 		directories.clear();
 	}
 

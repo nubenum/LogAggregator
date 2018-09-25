@@ -76,4 +76,10 @@ public class FilteredLog implements IFilteredLog {
 		return matcher;
 	}
 
+	@Override
+	public void close() throws IOException {
+		if (file != null)
+			file.close();
+	}
+
 }

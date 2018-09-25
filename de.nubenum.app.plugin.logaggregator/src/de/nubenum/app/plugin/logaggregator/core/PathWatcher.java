@@ -45,7 +45,10 @@ public class PathWatcher implements IUpdateInitiator {
 		}
 	}
 
-	public void reset() {
+	/**
+	 * Stop the observation and reset the watcher.
+	 */
+	public void stop() {
 		try {
 			if (watcher != null) {
 				watcher.close();

@@ -61,6 +61,10 @@ public class LogController implements IUpdateInitiator {
 	}
 
 	public void close() {
-		manager.close();
+		try {
+			manager.close();
+		} catch (IOException e) {
+			return;
+		}
 	}
 }

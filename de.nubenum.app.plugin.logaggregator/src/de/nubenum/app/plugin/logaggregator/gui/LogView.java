@@ -290,6 +290,8 @@ public class LogView extends EditorPart {
 	}
 
 	private void updateCounter() {
+		if (counter == null)
+			return;
 		counter.setText("(~"+ (countLines / 1e6) + "M lines read / ~"+ countMBytes +" MB files opened)");
 		counter.pack();
 		counter.getParent().pack();
@@ -341,6 +343,9 @@ public class LogView extends EditorPart {
 	public void refresh() {
 		if (detail != null)
 			detail.setText("");
+		countLines = 0;
+		countMBytes = 0;
+		updateCounter();
 		working(true);
 		//TODO endless repeat after refresh on multi same ts?
 		control.setConfigFile(configFile);

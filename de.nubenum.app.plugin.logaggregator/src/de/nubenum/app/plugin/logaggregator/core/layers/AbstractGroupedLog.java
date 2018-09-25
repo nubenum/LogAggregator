@@ -70,11 +70,11 @@ public abstract class AbstractGroupedLog implements IEntryLog {
 
 		entry = getGroupedAt(entry, direction);
 
-		if (!Entry.isFirstOrLast(reference)) {
-			groupedCache.put(reference, degroupedOffset, entry);
-			if (reference.getSource() != null)
-				groupedCache.put(degroupedReference(entry, Direction.get(-degroupedOffset)), -degroupedOffset, groupedReference);
-		}
+		//if (!Entry.isFirstOrLast(reference)) {
+		groupedCache.put(reference, degroupedOffset, entry);
+		if (reference.getSource() != null)
+			groupedCache.put(degroupedReference(entry, Direction.get(-degroupedOffset)), -degroupedOffset, groupedReference);
+		//}
 
 		return entry;
 	}
@@ -173,4 +173,11 @@ public abstract class AbstractGroupedLog implements IEntryLog {
 	 * @return The first or last child depending on the Direction if reference is a grouped entry that was created in this class, the unaltered reference otherwise
 	 */
 	protected abstract IEntry degroupedReference(IEntry reference, Direction dir);
+
+	@Override
+	public void close() throws IOException {
+		groupedCache.close();
+		adjacentCache.close();
+		file.close();
+	}
 }

@@ -30,6 +30,11 @@ public class ParentLogTest {
 		public boolean isOwnEntry(IEntry reference) {
 			return Arrays.asList(entries).indexOf(reference) != -1;
 		}
+		@Override
+		public void close() throws IOException {
+			// TODO Auto-generated method stub
+
+		}
 	};
 	private static List<TestChildLog> list;
 	private static AbstractParentLog log;

@@ -116,6 +116,8 @@ public class LocalRandomAccessLog implements IRandomAccessLog, IUpdateInitiator 
 	public void close() throws IOException {
 		if (file != null)
 			file.close();
+		file = null;
+		length = -1;
 	}
 
 	@Override

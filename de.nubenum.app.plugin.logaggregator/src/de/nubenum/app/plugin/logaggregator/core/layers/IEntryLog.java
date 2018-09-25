@@ -36,4 +36,6 @@ public interface IEntryLog {
 	 *             If the thread was interrupted
 	 */
 	IEntry getAt(IEntry reference, int offset) throws IOException, InterruptedException;
+
+	void close() throws IOException;
 }

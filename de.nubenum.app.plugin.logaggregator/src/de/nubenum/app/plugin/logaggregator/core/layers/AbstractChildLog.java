@@ -118,4 +118,9 @@ public abstract class AbstractChildLog implements IChildLog {
 			entry = file.getAt(entry, dir.getValue());
 		return entry;
 	}
+
+	@Override
+	public void close() throws IOException {
+		file.close();
+	}
 }

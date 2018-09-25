@@ -187,4 +187,9 @@ public class LinedLog implements IEntryLog, IUpdateInitiator {
 		listeners.remove(listener);
 	}
 
+	@Override
+	public void close() throws IOException {
+		file.close();
+	}
+
 }

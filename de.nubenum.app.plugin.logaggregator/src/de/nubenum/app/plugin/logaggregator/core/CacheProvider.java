@@ -1,5 +1,6 @@
 package de.nubenum.app.plugin.logaggregator.core;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -62,5 +63,10 @@ public class CacheProvider implements IEntryLog {
 		};
 		IEntry cached = cache.values().stream().filter(contains).findFirst().orElse(null);
 		return cached;
+	}
+
+	@Override
+	public void close() throws IOException {
+		cache.clear();
 	}
 }
