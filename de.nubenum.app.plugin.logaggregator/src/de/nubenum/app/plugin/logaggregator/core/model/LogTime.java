@@ -12,6 +12,8 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import de.nubenum.app.plugin.logaggregator.core.EqualsHelper;
+
 /**
  * Representing the comparable timestamp of a log entry. More supported
  * timestamp formats can be added. In this case, the timeExtractor pattern must
@@ -191,13 +193,7 @@ public class LogTime implements Comparable<LogTime> {
 
 	@Override
 	public boolean equals(Object other) {
-		if (!(other instanceof LogTime))
-			return false;
-		if (this == other)
-			return true;
-		if (time == null)
-			return false;
-		return time.equals(((LogTime) other).time);
+		return EqualsHelper.objectsEqual(LogTime.class, this, other, l -> l.time);
 	}
 
 	@Override

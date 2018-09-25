@@ -31,6 +31,16 @@ public interface IOptions {
 	Boolean getEnableEntireFileCache();
 
 	/**
+	 * Whether the log files should be watched for changes and new entries (after a
+	 * delay) should be loaded into the view. This might lead to problems with file
+	 * locks and might not work with network stored files. The default is true, i.e.
+	 * implementing classes should return true if nothing was explicitly set.
+	 *
+	 * @return True if files should be watched.
+	 */
+	Boolean getEnableFileWatcher();
+
+	/**
 	 * Additionally defined log timestamp formats, in case the predefined ones do
 	 * not cover all formats found in the log files. Use patterns as in
 	 * {@link DateTimeFormatter}
@@ -55,6 +65,11 @@ public interface IOptions {
 	@Deprecated
 	void setEnableEntireFileCache(Boolean enableEntireFileCache);
 
+	/**
+	 * 
+	 * @param enableFileWatcher Whether files should be watched for updates.
+	 */
+	void setEnableFileWatcher(Boolean enableFileWatcher);
 	/**
 	 *
 	 * @param customLogTimeFormats

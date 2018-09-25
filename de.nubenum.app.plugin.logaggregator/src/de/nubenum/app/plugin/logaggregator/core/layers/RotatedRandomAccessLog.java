@@ -109,7 +109,7 @@ public class RotatedRandomAccessLog implements IRandomAccessLog {
 	private void updateLength() {
 		this.cachedLength = fileParts.stream().mapToLong(f -> {
 			try {
-				return f.getLength();
+				return f.getLength(true);
 			} catch (IOException e) {
 				return 0;
 			}

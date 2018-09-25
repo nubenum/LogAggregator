@@ -3,7 +3,8 @@ package de.nubenum.app.plugin.logaggregator.core.config;
 /**
  * A host is a directory that in turn may contain multiple sources. Usually,
  * roughly the same sources are contained in each host directory. Implementing
- * classes should override the equals method.
+ * classes should override the equals method so that entities with the same name
+ * are equal.
  *
  */
 public interface ILogHost {

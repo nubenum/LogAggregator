@@ -10,6 +10,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 public class XmlOptions implements IOptions {
 	private Boolean enableMultithreading;
 	private Boolean enableEntireFileCache;
+	private Boolean enableFileWatcher;
 	private List<String> customLogTimeFormats = new ArrayList<>();
 
 	@XmlAttribute
@@ -36,6 +37,19 @@ public class XmlOptions implements IOptions {
 	@Override
 	public void setEnableEntireFileCache(Boolean enableEntireFileCache) {
 		this.enableEntireFileCache = enableEntireFileCache;
+	}
+
+	@XmlAttribute
+	@Override
+	public void setEnableFileWatcher(Boolean enableFileWatcher) {
+		this.enableFileWatcher = enableFileWatcher;
+	}
+
+	@Override
+	public Boolean getEnableFileWatcher() {
+		if (enableFileWatcher == null)
+			return true;
+		return enableFileWatcher;
 	}
 
 	@XmlElementWrapper(name = "customLogTimeFormats")

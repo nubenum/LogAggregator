@@ -3,7 +3,8 @@ package de.nubenum.app.plugin.logaggregator.core.config;
 /**
  * A source is a single type of log file (e.g. error, access, SystemOut). A
  * single source may actually consist of multiple files if log rotation is used.
- * Implementing classes should override the equals method.
+ * Implementing classes should override the equals method so that entities with
+ * the same name are equal.
  *
  */
 public interface ILogSource {

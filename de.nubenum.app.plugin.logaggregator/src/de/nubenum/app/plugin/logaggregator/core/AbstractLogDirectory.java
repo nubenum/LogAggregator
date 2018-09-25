@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -90,5 +91,15 @@ public abstract class AbstractLogDirectory implements ILogDirectory {
 	@Override
 	public Path getPath() {
 		return path;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		return EqualsHelper.objectsEqual(AbstractLogDirectory.class, this, other, d -> d.getPath());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(path);
 	}
 }

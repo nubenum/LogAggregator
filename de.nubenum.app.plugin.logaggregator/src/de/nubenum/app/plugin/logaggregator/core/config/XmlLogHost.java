@@ -5,6 +5,8 @@ import java.util.Objects;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlValue;
 
+import de.nubenum.app.plugin.logaggregator.core.EqualsHelper;
+
 public class XmlLogHost implements ILogHost {
 
 	private String name;
@@ -36,14 +38,7 @@ public class XmlLogHost implements ILogHost {
 
 	@Override
 	public boolean equals(Object other) {
-		if (this == other)
-			return true;
-		if (other instanceof XmlLogHost) {
-			XmlLogHost host = (XmlLogHost) other;
-			if (host.getName().equals(name))
-				return true;
-		}
-		return false;
+		return EqualsHelper.objectsEqual(XmlLogHost.class, this, other, h -> h.getName());
 	}
 
 	@Override
