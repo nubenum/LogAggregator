@@ -11,9 +11,9 @@ public class XmlOptions implements IOptions {
 	private Boolean enableMultithreading;
 	private Boolean enableEntireFileCache;
 	private Boolean enableFileWatcher;
+	private Boolean enableAutoClose;
 	private List<String> customLogTimeFormats = new ArrayList<>();
 
-	@XmlAttribute
 	@Override
 	public Boolean getEnableMultithreading() {
 		if (enableMultithreading == null)
@@ -21,12 +21,13 @@ public class XmlOptions implements IOptions {
 		return enableMultithreading;
 	}
 
+	@XmlAttribute
 	@Override
 	public void setEnableMultithreading(Boolean enableMultithreading) {
 		this.enableMultithreading = enableMultithreading;
 	}
 
-	@XmlAttribute
+
 	@Override
 	public Boolean getEnableEntireFileCache() {
 		if (enableEntireFileCache == null)
@@ -34,9 +35,17 @@ public class XmlOptions implements IOptions {
 		return enableEntireFileCache;
 	}
 
+	@XmlAttribute
 	@Override
 	public void setEnableEntireFileCache(Boolean enableEntireFileCache) {
 		this.enableEntireFileCache = enableEntireFileCache;
+	}
+
+	@Override
+	public Boolean getEnableFileWatcher() {
+		if (enableFileWatcher == null)
+			return true;
+		return enableFileWatcher;
 	}
 
 	@XmlAttribute
@@ -46,10 +55,16 @@ public class XmlOptions implements IOptions {
 	}
 
 	@Override
-	public Boolean getEnableFileWatcher() {
-		if (enableFileWatcher == null)
+	public Boolean getEnableAutoClose() {
+		if (enableAutoClose == null)
 			return true;
-		return enableFileWatcher;
+		return enableAutoClose;
+	}
+
+	@XmlAttribute
+	@Override
+	public void setEnableAutoClose(Boolean enableAutoClose) {
+		this.enableAutoClose = enableAutoClose;
 	}
 
 	@XmlElementWrapper(name = "customLogTimeFormats")

@@ -17,7 +17,7 @@ import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.entry.LinedEntry;
 
 public class ParentLogTest {
-	private static class TestChildLog implements IChildLog {
+	private static class TestChildLog extends TestHelper.AbstractEntryLog implements IChildLog {
 		public IEntry[] entries;
 		public TestChildLog(IEntry[] entries) {
 			this.entries = entries;
@@ -29,11 +29,6 @@ public class ParentLogTest {
 		@Override
 		public boolean isOwnEntry(IEntry reference) {
 			return Arrays.asList(entries).indexOf(reference) != -1;
-		}
-		@Override
-		public void close() throws IOException {
-			// TODO Auto-generated method stub
-
 		}
 	};
 	private static List<TestChildLog> list;

@@ -38,7 +38,7 @@ import de.nubenum.app.plugin.logaggregator.core.model.LogTime;
  * false). This will also pass on UpdateEvents of the instantiated log files.
  *
  */
-public class LogManager implements IUpdateInitiator, IUpdateListener {
+public class LogManager implements IUpdateInitiator, IUpdateListener, InitializedCloseable {
 	private IConfig config;
 	private IFilteredLog log;
 	private List<IUpdateListener> listeners = new ArrayList<>();
@@ -48,6 +48,7 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 	private boolean enableMultithreading;
 	private boolean enableEntireFileCache;
 	private boolean enableFileWatcher;
+	private boolean enableAutoClose;
 
 	public LogManager() {
 		this.log = new FilteredLog();
@@ -63,12 +64,8 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 				}
 			} else {
 				SystemLog.log("Trying to update due to append on backend storage");
-				try {
-					close();
-					listeners.forEach(l -> l.onUpdate(e));
-				} catch (IOException exc) {
-					listeners.forEach(l -> l.onUpdate(new UpdateEvent(exc)));
-				}
+				close();
+				listeners.forEach(l -> l.onUpdate(e));
 			}
 		});
 	}
@@ -94,12 +91,14 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 		enableMultithreading = true;
 		enableEntireFileCache = false;
 		enableFileWatcher = true;
+		enableAutoClose = true;
 		if (config != null && config.getOptions() != null) {
 			enableMultithreading = unboxBooleanDefault(config.getOptions().getEnableMultithreading(),
 					enableMultithreading);
 			enableEntireFileCache = unboxBooleanDefault(config.getOptions().getEnableEntireFileCache(),
 					enableEntireFileCache);
 			enableFileWatcher = unboxBooleanDefault(config.getOptions().getEnableFileWatcher(), enableFileWatcher);
+			enableAutoClose = unboxBooleanDefault(config.getOptions().getEnableAutoClose(), enableAutoClose);
 			if (config.getOptions().getCustomLogTimeFormats() != null)
 				LogTime.setCustomLogTimeFormats(config.getOptions().getCustomLogTimeFormats());
 		}
@@ -187,14 +186,20 @@ public class LogManager implements IUpdateInitiator, IUpdateListener {
 		log.setLog(agg);
 	}
 
-	/**
-	 * Close all open files, stop watching them and cleanup.
-	 * @throws IOException
-	 */
-	public void close() throws IOException {
-		watcher.stop();
-		log.close();
-		directories.clear();
+	@Override
+	public void close() {
+		close(false);
+	}
+
+	@Override
+	public void close(boolean keepInit) {
+		if (!keepInit) {
+			log.close(false);
+			watcher.stop();
+			directories.clear();
+		} else if (keepInit && enableAutoClose) {
+			log.close(true);
+		}
 	}
 
 	/**

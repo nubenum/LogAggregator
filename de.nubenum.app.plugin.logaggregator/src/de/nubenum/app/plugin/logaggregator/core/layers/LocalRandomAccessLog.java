@@ -13,6 +13,7 @@ import java.util.List;
 import de.nubenum.app.plugin.logaggregator.core.EndOfLogReachedException;
 import de.nubenum.app.plugin.logaggregator.core.IUpdateInitiator;
 import de.nubenum.app.plugin.logaggregator.core.IUpdateListener;
+import de.nubenum.app.plugin.logaggregator.core.SystemLog;
 import de.nubenum.app.plugin.logaggregator.core.UpdateEvent;
 import de.nubenum.app.plugin.logaggregator.core.UpdateEvent.Event;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
@@ -54,12 +55,16 @@ public class LocalRandomAccessLog implements IRandomAccessLog, IUpdateInitiator 
 	private void openFile() throws IOException {
 		if (file == null) {
 			this.file = FileChannel.open(path, StandardOpenOption.READ);
-			int length = (int) getLength();
-			listeners.forEach(l -> l.onUpdate(new UpdateEvent(Event.SIZE, length)));
-			//SystemLog.log("Opening " + path.getFileName());
-			if (enableEntireFileCache) {
-				//TODO
-				entireFileCache = new RandomByteBuffer(Files.readAllBytes(path));
+			if (length == -1) {
+				int newLength = (int) getLength(true);
+				listeners.forEach(l -> l.onUpdate(new UpdateEvent(Event.SIZE, newLength)));
+				//SystemLog.log("Opening " + path.getFileName());
+				if (enableEntireFileCache) {
+					//TODO
+					entireFileCache = new RandomByteBuffer(Files.readAllBytes(path));
+				}
+			} else {
+				getLength(true);
 			}
 		}
 	}
@@ -113,11 +118,15 @@ public class LocalRandomAccessLog implements IRandomAccessLog, IUpdateInitiator 
 	}
 
 	@Override
-	public void close() throws IOException {
-		if (file != null)
-			file.close();
+	public void close() {
+		if (file != null) {
+			try {
+				file.close();
+			} catch (IOException e) {
+				SystemLog.log(e);
+			}
+		}
 		file = null;
-		length = -1;
 	}
 
 	@Override

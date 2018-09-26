@@ -7,6 +7,7 @@ import java.util.List;
 
 import de.nubenum.app.plugin.logaggregator.core.IUpdateInitiator;
 import de.nubenum.app.plugin.logaggregator.core.IUpdateListener;
+import de.nubenum.app.plugin.logaggregator.core.InitializedCloseable;
 import de.nubenum.app.plugin.logaggregator.core.LogManager;
 import de.nubenum.app.plugin.logaggregator.core.SystemLog;
 import de.nubenum.app.plugin.logaggregator.core.UpdateEvent;
@@ -15,7 +16,7 @@ import de.nubenum.app.plugin.logaggregator.core.config.IConfigFile;
 import de.nubenum.app.plugin.logaggregator.core.config.XmlConfigFile;
 import de.nubenum.app.plugin.logaggregator.core.layers.IFilteredLog;
 
-public class LogController implements IUpdateInitiator {
+public class LogController implements IUpdateInitiator, InitializedCloseable {
 	IConfigFile configFile;
 	LogManager manager;
 	List<IUpdateListener> listeners = new ArrayList<>();
@@ -60,11 +61,13 @@ public class LogController implements IUpdateInitiator {
 		listeners.remove(listener);
 	}
 
+	@Override
 	public void close() {
-		try {
-			manager.close();
-		} catch (IOException e) {
-			return;
-		}
+		close(false);
+	}
+
+	@Override
+	public void close(boolean keepInit) {
+		manager.close(keepInit);
 	}
 }

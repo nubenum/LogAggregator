@@ -120,7 +120,12 @@ public abstract class AbstractChildLog implements IChildLog {
 	}
 
 	@Override
-	public void close() throws IOException {
-		file.close();
+	public void close() {
+		close(false);
+	}
+
+	@Override
+	public void close(boolean keepInit) {
+		file.close(keepInit);
 	}
 }

@@ -77,9 +77,14 @@ public class FilteredLog implements IFilteredLog {
 	}
 
 	@Override
-	public void close() throws IOException {
+	public void close() {
+		close(false);
+	}
+
+	@Override
+	public void close(boolean keepInit) {
 		if (file != null)
-			file.close();
+			file.close(keepInit);
 	}
 
 }

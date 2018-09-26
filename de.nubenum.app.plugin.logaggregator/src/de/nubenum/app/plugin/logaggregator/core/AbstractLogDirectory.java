@@ -73,6 +73,7 @@ public abstract class AbstractLogDirectory implements ILogDirectory {
 	}
 
 	private boolean isCurrentFile(File file, ILogSource source) {
+		//TODO more robust detection
 		return file.getName().split("\\.").length <= 2;
 	}
 

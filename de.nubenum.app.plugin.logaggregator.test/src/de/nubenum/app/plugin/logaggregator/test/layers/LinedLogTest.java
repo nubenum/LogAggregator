@@ -66,7 +66,7 @@ public class LinedLogTest {
 			}
 
 			@Override
-			public void close() throws IOException {
+			public void close() {
 				return;
 			}
 

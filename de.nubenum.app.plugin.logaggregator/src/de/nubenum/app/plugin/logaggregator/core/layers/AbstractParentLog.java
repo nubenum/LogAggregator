@@ -112,10 +112,16 @@ public abstract class AbstractParentLog implements IEntryLog {
 	}
 
 	@Override
-	public void close() throws IOException {
-		retriever.stop();
+	public void close() {
+		close(false);
+	}
+
+	@Override
+	public void close(boolean keepInit) {
+		if (!keepInit)
+			retriever.stop();
 		for (IChildLog log : logs) {
-			log.close();
+			log.close(keepInit);
 		}
 	}
 }

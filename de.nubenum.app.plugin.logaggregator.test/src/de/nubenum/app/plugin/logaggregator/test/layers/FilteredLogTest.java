@@ -46,7 +46,13 @@ public class FilteredLogTest {
 			}
 
 			@Override
-			public void close() throws IOException {
+			public void close() {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void close(boolean keepInit) {
 				// TODO Auto-generated method stub
 
 			}

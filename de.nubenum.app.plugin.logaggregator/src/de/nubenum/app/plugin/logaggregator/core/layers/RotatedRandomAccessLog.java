@@ -88,7 +88,7 @@ public class RotatedRandomAccessLog implements IRandomAccessLog {
 	}
 
 	@Override
-	public void close() throws IOException {
+	public void close() {
 		for (IRandomAccessLog file : fileParts) {
 			file.close();
 		}

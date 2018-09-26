@@ -111,8 +111,9 @@ public class LogView extends EditorPart {
 			counter.setFocus();
 	}
 
+	@Override
 	@PreDestroy
-	public void destroy() {
+	public void dispose() {
 		if (bold != null)
 			bold.dispose();
 		control.close();
@@ -225,6 +226,7 @@ public class LogView extends EditorPart {
 		this.viewer.addListener(event -> {
 			Display.getDefault().asyncExec(() -> {
 				if (event.getType() == Event.STOP) {
+					control.close(true);
 					working(false);
 				} else if (event.getType() == Event.START) {
 					working(true);

@@ -2,13 +2,14 @@ package de.nubenum.app.plugin.logaggregator.core.layers;
 
 import java.io.IOException;
 
+import de.nubenum.app.plugin.logaggregator.core.InitializedCloseable;
 import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 
 /**
  * Representing an entry-based log with relative access to entries.
  *
  */
-public interface IEntryLog {
+public interface IEntryLog extends InitializedCloseable {
 	/**
 	 * The distance between relative entries up to which all intermediate entries
 	 * should be calculated. For greater distances, a heuristic approach should be
@@ -36,6 +37,4 @@ public interface IEntryLog {
 	 *             If the thread was interrupted
 	 */
 	IEntry getAt(IEntry reference, int offset) throws IOException, InterruptedException;
-
-	void close() throws IOException;
 }

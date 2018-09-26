@@ -13,12 +13,10 @@ import de.nubenum.app.plugin.logaggregator.core.model.RandomByteBuffer;
  */
 public interface IRandomAccessLog {
 	/**
-	 * Close this file
-	 *
-	 * @throws IOException
-	 *             If the file is unavailable
+	 * Close this file. Please note that unlike traditional close operations, the
+	 * file should be reopened internally if another read is executed.
 	 */
-	void close() throws IOException;
+	void close();
 
 	/**
 	 * Read bytes from the start in direction.

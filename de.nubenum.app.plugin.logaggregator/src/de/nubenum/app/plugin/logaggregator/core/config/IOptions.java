@@ -40,6 +40,8 @@ public interface IOptions {
 	 */
 	Boolean getEnableFileWatcher();
 
+	Boolean getEnableAutoClose();
+
 	/**
 	 * Additionally defined log timestamp formats, in case the predefined ones do
 	 * not cover all formats found in the log files. Use patterns as in
@@ -66,14 +68,18 @@ public interface IOptions {
 	void setEnableEntireFileCache(Boolean enableEntireFileCache);
 
 	/**
-	 * 
+	 *
 	 * @param enableFileWatcher Whether files should be watched for updates.
 	 */
 	void setEnableFileWatcher(Boolean enableFileWatcher);
+
+	void setEnableAutoClose(Boolean enableAutoClose);
+
 	/**
 	 *
 	 * @param customLogTimeFormats
 	 *            Set the List of pattern strings.
 	 */
 	void setCustomLogTimeFormats(List<String> customLogTimeFormats);
+
 }
