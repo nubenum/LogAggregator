@@ -11,8 +11,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.nubenum.app.plugin.logaggregator.core.EndOfLogReachedException;
-import de.nubenum.app.plugin.logaggregator.core.layers.IRandomAccessLog;
-import de.nubenum.app.plugin.logaggregator.core.layers.LinedLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.bytes.IRandomAccessLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.LinedLog;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 import de.nubenum.app.plugin.logaggregator.core.model.FilePosition;
 import de.nubenum.app.plugin.logaggregator.core.model.FileRange;

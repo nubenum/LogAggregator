@@ -1,4 +1,4 @@
-package de.nubenum.app.plugin.logaggregator.core.layers;
+package de.nubenum.app.plugin.logaggregator.core.layers.entries;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -12,6 +12,7 @@ import de.nubenum.app.plugin.logaggregator.core.UpdateEvent;
 import de.nubenum.app.plugin.logaggregator.core.UpdateEvent.Event;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogHost;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
+import de.nubenum.app.plugin.logaggregator.core.layers.bytes.IRandomAccessLog;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 import de.nubenum.app.plugin.logaggregator.core.model.FilePosition;
 import de.nubenum.app.plugin.logaggregator.core.model.FileRange;

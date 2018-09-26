@@ -8,9 +8,9 @@ import java.util.Arrays;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.nubenum.app.plugin.logaggregator.core.layers.FilteredLog;
-import de.nubenum.app.plugin.logaggregator.core.layers.IEntryLog;
-import de.nubenum.app.plugin.logaggregator.core.layers.IFilteredLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.FilteredLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.IEntryLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.IFilteredLog;
 import de.nubenum.app.plugin.logaggregator.core.model.EntryMatcher;
 import de.nubenum.app.plugin.logaggregator.core.model.Level;
 import de.nubenum.app.plugin.logaggregator.core.model.ReferenceOffset;

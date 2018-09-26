@@ -10,8 +10,8 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.nubenum.app.plugin.logaggregator.core.layers.AbstractParentLog;
-import de.nubenum.app.plugin.logaggregator.core.layers.IChildLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.AbstractParentLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.IChildLog;
 import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
 import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.entry.LinedEntry;

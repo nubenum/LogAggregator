@@ -14,7 +14,7 @@ import de.nubenum.app.plugin.logaggregator.core.UpdateEvent;
 import de.nubenum.app.plugin.logaggregator.core.UpdateEvent.Event;
 import de.nubenum.app.plugin.logaggregator.core.config.IConfigFile;
 import de.nubenum.app.plugin.logaggregator.core.config.XmlConfigFile;
-import de.nubenum.app.plugin.logaggregator.core.layers.IFilteredLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.IFilteredLog;
 
 public class LogController implements IUpdateInitiator, InitializedCloseable {
 	IConfigFile configFile;

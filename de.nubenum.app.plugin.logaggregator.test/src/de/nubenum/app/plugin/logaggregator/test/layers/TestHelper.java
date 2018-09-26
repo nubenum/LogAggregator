@@ -3,7 +3,7 @@ package de.nubenum.app.plugin.logaggregator.test.layers;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.IntStream;
 
-import de.nubenum.app.plugin.logaggregator.core.layers.IEntryLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.IEntryLog;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 import de.nubenum.app.plugin.logaggregator.core.model.RandomByteBuffer;
 import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;

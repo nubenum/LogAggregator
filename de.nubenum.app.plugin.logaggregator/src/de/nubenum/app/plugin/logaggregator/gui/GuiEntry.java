@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Display;
 
 import de.nubenum.app.plugin.logaggregator.core.config.ILogHost;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
-import de.nubenum.app.plugin.logaggregator.core.layers.IEntryLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.IEntryLog;
 import de.nubenum.app.plugin.logaggregator.core.model.EntryMatcher;
 import de.nubenum.app.plugin.logaggregator.core.model.EntryMessageLink;
 import de.nubenum.app.plugin.logaggregator.core.model.EntryMessageMatch;

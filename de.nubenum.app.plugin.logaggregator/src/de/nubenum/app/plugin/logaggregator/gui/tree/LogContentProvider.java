@@ -9,7 +9,7 @@ import de.nubenum.app.plugin.logaggregator.core.SystemLog;
 import de.nubenum.app.plugin.logaggregator.core.ThreadInterruptor;
 import de.nubenum.app.plugin.logaggregator.core.UpdateEvent;
 import de.nubenum.app.plugin.logaggregator.core.UpdateEvent.Event;
-import de.nubenum.app.plugin.logaggregator.core.layers.IFilteredLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.IFilteredLog;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 import de.nubenum.app.plugin.logaggregator.core.model.LogTime;
 import de.nubenum.app.plugin.logaggregator.core.model.ReferenceOffset;

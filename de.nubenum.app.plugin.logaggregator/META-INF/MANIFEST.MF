@@ -4,7 +4,8 @@ Bundle-SymbolicName: de.nubenum.app.plugin.logaggregator;singleton:=true
 Export-Package: de.nubenum.app.plugin.logaggregator,
  de.nubenum.app.plugin.logaggregator.core,
  de.nubenum.app.plugin.logaggregator.core.config,
- de.nubenum.app.plugin.logaggregator.core.layers,
+ de.nubenum.app.plugin.logaggregator.core.layers.bytes,
+ de.nubenum.app.plugin.logaggregator.core.layers.entries,
  de.nubenum.app.plugin.logaggregator.core.model,
  de.nubenum.app.plugin.logaggregator.core.model.entry
 Bundle-Name: LogAggregator

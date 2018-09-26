@@ -15,16 +15,16 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
-import de.nubenum.app.plugin.logaggregator.core.layers.HostGroupedLog;
-import de.nubenum.app.plugin.logaggregator.core.layers.HostParentLog;
-import de.nubenum.app.plugin.logaggregator.core.layers.HostSourceChildLog;
-import de.nubenum.app.plugin.logaggregator.core.layers.HostSourceGroupedLog;
-import de.nubenum.app.plugin.logaggregator.core.layers.IChildLog;
-import de.nubenum.app.plugin.logaggregator.core.layers.IEntryLog;
-import de.nubenum.app.plugin.logaggregator.core.layers.IRandomAccessLog;
-import de.nubenum.app.plugin.logaggregator.core.layers.LinedLog;
-import de.nubenum.app.plugin.logaggregator.core.layers.LocalRandomAccessLog;
-import de.nubenum.app.plugin.logaggregator.core.layers.RotatedRandomAccessLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.bytes.IRandomAccessLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.bytes.LocalRandomAccessLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.bytes.RotatedRandomAccessLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.HostGroupedLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.HostParentLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.HostSourceChildLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.HostSourceGroupedLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.IChildLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.IEntryLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.LinedLog;
 import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
 import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 

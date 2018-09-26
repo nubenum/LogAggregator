@@ -8,8 +8,8 @@ import java.io.IOException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.nubenum.app.plugin.logaggregator.core.layers.HostSourceGroupedLog;
-import de.nubenum.app.plugin.logaggregator.core.layers.IEntryLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.HostSourceGroupedLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.entries.IEntryLog;
 import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
 import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
 import de.nubenum.app.plugin.logaggregator.core.model.entry.LinedEntry;
