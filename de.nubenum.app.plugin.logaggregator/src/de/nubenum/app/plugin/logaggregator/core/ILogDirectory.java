@@ -1,6 +1,5 @@
 package de.nubenum.app.plugin.logaggregator.core;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
@@ -24,7 +23,7 @@ public interface ILogDirectory {
 	 * @throws IOException
 	 *             when the directory is unavailable or no files were found
 	 */
-	List<File> getSourceFiles(ILogSource source) throws IOException;
+	List<Path> getSourceFiles(ILogSource source) throws IOException;
 
 	/**
 	 * Get the Path of this directory

@@ -58,7 +58,7 @@ public class HugeStackTraceTest {
 		when(src1.getName()).thenReturn("SystemOut");
 		LocalLogDirectory dir = new LocalLogDirectory(Paths.get("./"), host1, src1);
 		List<IRandomAccessLog> list1 = dir.getSourceFiles(src1).stream().map(f -> {
-			return new LocalRandomAccessLog(f.toPath());
+			return new LocalRandomAccessLog(f);
 		}).collect(Collectors.toList());
 		LinedLog lined = new LinedLog(new RotatedRandomAccessLog(list1), null, src1);
 		processed = new HostSourceChildLog(new HostSourceGroupedLog(lined), src1);

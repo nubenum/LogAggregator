@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -86,19 +87,19 @@ public class LocalLogDirectoryTest {
 	public void testRoot() throws IOException {
 		source.setName("source.");
 		LocalLogDirectory dir = new LocalLogDirectory(Paths.get("tmp/"), host, source);
-		List<File> list = dir.getSourceFiles(source);
+		List<Path> list = dir.getSourceFiles(source);
 		assertEquals(4, list.size());
-		assertEquals("source.log.2", list.get(0).getName());
-		assertEquals("source.log.10", list.get(1).getName());
-		assertEquals("source.log.bak", list.get(2).getName());
-		assertEquals("source.log", list.get(3).getName());
+		assertEquals("source.log.2", list.get(0).getFileName().toString());
+		assertEquals("source.log.10", list.get(1).getFileName().toString());
+		assertEquals("source.log.bak", list.get(2).getFileName().toString());
+		assertEquals("source.log", list.get(3).getFileName().toString());
 	}
 
 	@Test
 	public void testSub() throws IOException {
 		source.setName("sub/subsource");
 		LocalLogDirectory dir = new LocalLogDirectory(Paths.get("tmp/"), host, source);
-		List<File> list = dir.getSourceFiles(source);
+		List<Path> list = dir.getSourceFiles(source);
 		assertEquals(1, list.size());
 	}
 

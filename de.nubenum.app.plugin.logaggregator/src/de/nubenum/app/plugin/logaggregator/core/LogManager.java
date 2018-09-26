@@ -1,7 +1,7 @@
 package de.nubenum.app.plugin.logaggregator.core;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -13,9 +13,11 @@ import de.nubenum.app.plugin.logaggregator.core.UpdateEvent.Event;
 import de.nubenum.app.plugin.logaggregator.core.config.IConfig;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogHost;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
+import de.nubenum.app.plugin.logaggregator.core.layers.bytes.AbstractSingleRandomAccessLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.bytes.IRandomAccessLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.bytes.LocalRandomAccessLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.bytes.RotatedRandomAccessLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.bytes.SmbRandomAccessLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.entries.AggregatedChildLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.entries.AggregatedGroupedLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.entries.AggregatedParentLog;
@@ -39,6 +41,7 @@ import de.nubenum.app.plugin.logaggregator.core.model.LogTime;
  *
  */
 public class LogManager implements IUpdateInitiator, IUpdateListener, InitializedCloseable {
+	private static final String SMB_SCHEME = "smb";
 	private IConfig config;
 	private IFilteredLog log;
 	private List<IUpdateListener> listeners = new ArrayList<>();
@@ -109,18 +112,37 @@ public class LogManager implements IUpdateInitiator, IUpdateListener, Initialize
 	}
 
 	private List<IRandomAccessLog> getSourceFiles(ILogHost host, ILogSource source) throws IOException {
-		Path path = Paths.get(config.getLocation());
+		Path root;
+		String scheme = null;
+		try {
+			if (config.getLocation().startsWith(SMB_SCHEME)) {
+				root = Paths.get(new URI(config.getLocation()));
+				scheme = SMB_SCHEME;
+			} else {
+				root = Paths.get(config.getLocation());
+			}
+		} catch (Exception e) {
+			throw new IOException(e);
+		}
 
-		ILogDirectory dir = new LocalLogDirectory(path, host, source);
+		ILogDirectory dir;
+		if (scheme == SMB_SCHEME)
+			dir = new SmbLogDirectory(root, host, source);
+		else
+			dir = new LocalLogDirectory(root, host, source);
 		addDirectory(dir);
 
 		List<IRandomAccessLog> list = new ArrayList<>();
 		try {
-			List<File> files = dir.getSourceFiles(source);
-			Iterator<File> it = files.iterator();
+			List<Path> files = dir.getSourceFiles(source);
+			Iterator<Path> it = files.iterator();
 			while (it.hasNext()) {
-				File file = it.next();
-				LocalRandomAccessLog log = new LocalRandomAccessLog(file.toPath(), enableEntireFileCache);
+				Path file = it.next();
+				AbstractSingleRandomAccessLog log;
+				if (scheme == SMB_SCHEME)
+					log = new SmbRandomAccessLog(file, enableEntireFileCache);
+				else
+					log = new LocalRandomAccessLog(file, enableEntireFileCache);
 				log.addListener(this);
 				list.add(log);
 			}

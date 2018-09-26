@@ -1,6 +1,5 @@
 package de.nubenum.app.plugin.logaggregator.core;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,41 +39,41 @@ public abstract class AbstractLogDirectory implements ILogDirectory {
 	 * @throws IOException
 	 *             If the directory is unavailable or no files were found
 	 */
-	protected abstract List<File> getAllFiles() throws IOException;
+	protected abstract List<Path> getAllFiles() throws IOException;
 
 	@Override
-	public List<File> getSourceFiles(ILogSource source) throws IOException {
-		List<File> files = getAllFiles();
+	public List<Path> getSourceFiles(ILogSource source) throws IOException {
+		List<Path> files = getAllFiles();
 
 		String match = Paths.get(source.getName()).getFileName().toString();
-		files = files.stream().filter(f -> f.getName().startsWith(match)).collect(Collectors.toList());
+		files = files.stream().filter(f -> f.getFileName().startsWith(match)).collect(Collectors.toList());
 
-		Collection<File> lengthErrors = new ArrayList<>();
+		Collection<Path> lengthErrors = new ArrayList<>();
 		files.sort((a, b) -> {
 			if (isCurrentFile(a, source))
 				return 1;
 			if (isCurrentFile(b, source))
 				return -1;
 
-			int natural = naturalSortIfEligible(a.getName(), b.getName());
+			int natural = naturalSortIfEligible(a.getFileName().toString(), b.getFileName().toString());
 			if (natural != 0)
 				return natural;
 
-			if (a.getName().length() != b.getName().length() && !lengthErrors.contains(a) && !lengthErrors.contains(b)) {
-				SystemLog.warn("ATTENTION! Irregularities in rotated log file naming were detected: " + a.getName()
-				+ " <-> " + b.getName()
+			if (a.getFileName().toString().length() != b.getFileName().toString().length() && !lengthErrors.contains(a) && !lengthErrors.contains(b)) {
+				SystemLog.warn("ATTENTION! Irregularities in rotated log file naming were detected: " + a.getFileName()
+				+ " <-> " + b.getFileName()
 				+ " This might indicate that the order is wrong or that your filter is not sufficiently restrictive and might lead to endless loops.");
 				lengthErrors.add(a);
 				lengthErrors.add(b);
 			}
-			return a.getName().compareTo(b.getName());
+			return a.getFileName().compareTo(b.getFileName());
 		});
 		return files;
 	}
 
-	private boolean isCurrentFile(File file, ILogSource source) {
+	private boolean isCurrentFile(Path file, ILogSource source) {
 		//TODO more robust detection
-		return file.getName().split("\\.").length <= 2;
+		return file.getFileName().toString().split("\\.").length <= 2;
 	}
 
 	private int naturalSortIfEligible(String a, String b) {
