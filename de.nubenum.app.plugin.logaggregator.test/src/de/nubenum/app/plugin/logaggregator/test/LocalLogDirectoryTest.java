@@ -10,10 +10,10 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.nubenum.app.plugin.logaggregator.core.LocalLogDirectory;
 import de.nubenum.app.plugin.logaggregator.core.Utils;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogHost;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
+import de.nubenum.app.plugin.logaggregator.core.layers.dirs.LocalLogDirectory;
 
 public class LocalLogDirectoryTest {
 	private static ILogHost host;

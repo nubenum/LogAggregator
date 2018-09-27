@@ -1,4 +1,4 @@
-package de.nubenum.app.plugin.logaggregator.core;
+package de.nubenum.app.plugin.logaggregator.core.layers.dirs;
 
 import java.io.IOException;
 import java.net.URI;

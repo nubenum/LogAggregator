@@ -21,12 +21,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.nubenum.app.plugin.logaggregator.Bench;
-import de.nubenum.app.plugin.logaggregator.core.LocalLogDirectory;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogHost;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
 import de.nubenum.app.plugin.logaggregator.core.layers.bytes.IRandomAccessLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.bytes.LocalRandomAccessLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.bytes.RotatedRandomAccessLog;
+import de.nubenum.app.plugin.logaggregator.core.layers.dirs.LocalLogDirectory;
 import de.nubenum.app.plugin.logaggregator.core.layers.entries.AggregatedChildLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.entries.AggregatedGroupedLog;
 import de.nubenum.app.plugin.logaggregator.core.layers.entries.AggregatedParentLog;

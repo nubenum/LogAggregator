@@ -1,4 +1,4 @@
-package de.nubenum.app.plugin.logaggregator.core;
+package de.nubenum.app.plugin.logaggregator.core.layers.dirs;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import de.nubenum.app.plugin.logaggregator.core.Utils;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogHost;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
 

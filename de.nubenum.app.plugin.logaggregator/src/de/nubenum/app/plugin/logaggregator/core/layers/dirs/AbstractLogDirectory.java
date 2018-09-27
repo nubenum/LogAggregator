@@ -1,4 +1,4 @@
-package de.nubenum.app.plugin.logaggregator.core;
+package de.nubenum.app.plugin.logaggregator.core.layers.dirs;
 
 import java.io.IOException;
 import java.net.URI;
@@ -10,6 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import de.nubenum.app.plugin.logaggregator.core.SystemLog;
+import de.nubenum.app.plugin.logaggregator.core.Utils;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
 
 /**
