@@ -12,12 +12,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 public class AutoConfigCreator {
 	private Path location;
+	private Pattern fileMatcher;
 
-	public AutoConfigCreator(Path location) {
+	public AutoConfigCreator(Path location, Pattern fileMatcher) {
 		this.location = location;
+		this.fileMatcher = fileMatcher;
 	}
 
 	public IConfig create() {
@@ -60,22 +63,10 @@ public class AutoConfigCreator {
 			String nameWoExtension = getNameWithoutExtension(entry.getKey());
 			String parent = entry.getKey().getParent();
 			String path = parent == null ? nameWoExtension : Paths.get(parent, nameWoExtension).toString();
-			/*
-			int nameLen = nameWoExtension.length();
-			int i = 0;
-			String extensionFragment;
-			do {
-				extensionFragment = entry.getKey().getName().substring(nameLen, nameLen+i);
-				i++;
-			} while (anyOtherLogSourceStartsWith(path+extensionFragment, logSources) && nameLen+i <= entry.getKey().getName().length());*/
 			logSource.setName(path);
 			logSources.add(logSource);
 		}
 		logSources.sort((a,b) -> a.getName().compareTo(a.getName()));
-	}
-
-	private boolean anyOtherLogSourceStartsWith(String path, final List<ILogSource> logSources) {
-		return logSources.stream().anyMatch(s -> s.getName().startsWith(path));
 	}
 
 	private void extractRelativeSources(final Set<File> hosts, final List<File> absoluteSources, final HashMap<File, Integer> relativeSources) {
@@ -106,7 +97,8 @@ public class AutoConfigCreator {
 			if (file.isDirectory()) {
 				out.addAll(traverse(file));
 			} else {
-				files.add(file);
+				if (fileMatcher.matcher(file.getName()).matches())
+					files.add(file);
 			}
 		}
 		out.addAll(filterRotated(files));

@@ -39,14 +39,12 @@ public class HostSourceGroupedLog extends AbstractGroupedLog {
 			if (reference.getLogTime() != null) {
 				Direction actual = Direction.get(entry.getLogTime().compareTo(reference.getLogTime()));
 				if (actual != Direction.NONE && actual != Direction.get(offset)) {
-					System.out.println("Timestamp spoofed: " + entry);
 					LinedEntry first = (LinedEntry) degroupedReference(entry, Direction.UP);
 					first.setLogTime(reference.getLogTime());
 				}
 			}
 		}
 		if (entry.getLogTime() == null && reference.getLogTime() != null) {
-			System.out.println("Grouped timestamp spoofed: " + entry);
 			LinedEntry first = (LinedEntry) degroupedReference(entry, Direction.UP);
 			first.setLogTime(LogTime.NONE);
 			first.setLogTime(reference.getLogTime());

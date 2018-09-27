@@ -36,6 +36,8 @@ public class SmbLogDirectory extends AbstractLogDirectory {
 	}
 
 	private static String ensureTrailingSlash(String path) {
+		if (path.length() == 0)
+			return "./";
 		return path + (path.endsWith("/") ? "" : "/");
 	}
 

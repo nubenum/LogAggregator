@@ -51,7 +51,6 @@ public class AsyncCompletableQueue implements IUpdateInitiator {
 	 * Remove all pending tasks and try to stop the execution of the running task
 	 */
 	public void stop() {
-		SystemLog.log("interrupt try");
 		for (Future<Void> t : queueTasks) {
 			if (!t.isDone())
 				t.cancel(false);

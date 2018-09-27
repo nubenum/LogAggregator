@@ -78,7 +78,7 @@ public class LinedLogTest {
 	}
 
 	@Test
-	public void testInBounds() throws IOException {
+	public void testInBounds() throws IOException, InterruptedException {
 		LinedLog lined = new LinedLog(rand, null, null);
 		LinedEntry ref = new LinedEntry("a", new FileRange(56L, 27), null, null);
 		IEntry entry = lined.getAt(ref, -1);
@@ -90,7 +90,7 @@ public class LinedLogTest {
 	}
 
 	@Test
-	public void testFirstLast() throws IOException {
+	public void testFirstLast() throws IOException, InterruptedException {
 		LinedLog lined = new LinedLog(rand, null, null);
 		LinedEntry ref = new LinedEntry("a", new FileRange(56L, 27), null, null);
 
@@ -109,7 +109,7 @@ public class LinedLogTest {
 	}
 
 	@Test
-	public void testOutBounds() throws IOException {
+	public void testOutBounds() throws IOException, InterruptedException {
 		LinedLog lined = new LinedLog(rand, null, null);
 		LinedEntry ref = new LinedEntry("a", new FileRange(56L, 27), null, null);
 
@@ -128,7 +128,7 @@ public class LinedLogTest {
 	}
 
 	@Test
-	public void testSelf() throws IOException {
+	public void testSelf() throws IOException, InterruptedException {
 		LinedLog lined = new LinedLog(rand, null, null);
 		LinedEntry ref = new LinedEntry("a", new FileRange(56L, 27), null, null);
 

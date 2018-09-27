@@ -322,6 +322,8 @@ public class LogView extends EditorPart {
 	}
 
 	private void jumpToDate() {
+		if (detail != null)
+			detail.setText("");
 		LogTime ts = new LogTime(date.getYear(), date.getMonth()+1, date.getDay(),
 				time.getHours(), time.getMinutes(), time.getSeconds(), 0);
 		viewer.jumpToDate(ts);
@@ -333,6 +335,8 @@ public class LogView extends EditorPart {
 	}
 
 	private void jumpToMatch(Direction dir) {
+		if (detail != null)
+			detail.setText("");
 		setSearchButtonsDirty(false);
 		working(true);
 		viewer.jumpToMatch(getMatcher(false), dir);

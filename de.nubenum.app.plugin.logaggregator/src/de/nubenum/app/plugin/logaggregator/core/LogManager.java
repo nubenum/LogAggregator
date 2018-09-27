@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import de.nubenum.app.plugin.logaggregator.core.UpdateEvent.Event;
 import de.nubenum.app.plugin.logaggregator.core.config.IConfig;
@@ -62,14 +61,14 @@ public class LogManager implements IUpdateInitiator, IUpdateListener, Initialize
 		this.watcher.addListener(e -> {
 			if (e.getType() == Event.REFRESH) {
 				try {
-					SystemLog.log("Reloading due to file change on backend storage");
+					SystemLog.log("Might reload due to file change on backend storage");
 					setupLogs();
 					listeners.forEach(l -> l.onUpdate(e));
 				} catch (IOException exc) {
 					listeners.forEach(l -> l.onUpdate(new UpdateEvent(exc)));
 				}
 			} else {
-				SystemLog.log("Trying to update due to append on backend storage");
+				SystemLog.log("Might update due to append on backend storage");
 				close();
 				listeners.forEach(l -> l.onUpdate(e));
 			}
@@ -88,8 +87,6 @@ public class LogManager implements IUpdateInitiator, IUpdateListener, Initialize
 	public synchronized void setConfig(IConfig config) throws IOException {
 		this.config = config;
 		setConfigOptions();
-		SystemLog.log("Read config sources:"
-				+ config.getSources().stream().map(l -> l.getName()).collect(Collectors.joining(",")));
 		setupLogs();
 	}
 
@@ -120,7 +117,6 @@ public class LogManager implements IUpdateInitiator, IUpdateListener, Initialize
 			dir = new SmbLogDirectory(config.getLocation(), host, source);
 		else
 			dir = new LocalLogDirectory(config.getLocation(), host, source);
-		addDirectory(dir);
 
 		List<IRandomAccessLog> list = new ArrayList<>();
 		try {
@@ -136,6 +132,7 @@ public class LogManager implements IUpdateInitiator, IUpdateListener, Initialize
 				log.addListener(this);
 				list.add(log);
 			}
+			addDirectory(dir);
 		} catch (IOException e) {
 			if (e instanceof FileNotFoundException) {
 				if (!source.getIgnoreNotFound())
@@ -146,8 +143,6 @@ public class LogManager implements IUpdateInitiator, IUpdateListener, Initialize
 				throw e;
 			}
 		}
-		SystemLog.log(host.getName() + source.getName() + ": "
-				+ list.stream().map(l -> l.toString()).collect(Collectors.joining(", ")));
 		return list;
 	}
 

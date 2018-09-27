@@ -59,7 +59,7 @@ public class LinedLog implements IEntryLog, IUpdateInitiator {
 	}
 
 	@Override
-	public IEntry getAt(IEntry reference, int offset) throws IOException {
+	public IEntry getAt(IEntry reference, int offset) throws IOException, InterruptedException {
 		if (offset == 0)
 			return reference;
 		RandomByteBuffer buffer = new RandomByteBuffer();
@@ -141,7 +141,6 @@ public class LinedLog implements IEntryLog, IUpdateInitiator {
 	private LinedEntry fixMessedUpTimestamps(IEntry reference, Direction dir, LinedEntry entry) {
 		if (entry.getRange().getTop().isTopmost() && entry.getLogTime() == null) {
 			entry.setLogTime(LogTime.MIN);
-			System.out.println("Header Timestamp spoofed: " + entry);
 		}
 		return entry;
 	}

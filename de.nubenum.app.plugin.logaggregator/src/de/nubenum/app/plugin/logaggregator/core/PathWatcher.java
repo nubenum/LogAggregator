@@ -78,7 +78,6 @@ public class PathWatcher implements IUpdateInitiator {
 						WatchEvent.Kind<?> priorityKind = null;
 						for (WatchEvent<?> event : key.pollEvents()) {
 							WatchEvent.Kind<?> kind = event.kind();
-							SystemLog.log(event.context().toString());
 							if (kind == StandardWatchEventKinds.ENTRY_CREATE
 									|| priorityKind == null && kind == StandardWatchEventKinds.ENTRY_MODIFY) {
 								priorityKind = kind;
