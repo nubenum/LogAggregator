@@ -137,8 +137,6 @@ public class LogManager implements IUpdateInitiator, IUpdateListener, Initialize
 				list.add(log);
 			}
 		} catch (IOException e) {
-			// TODO lazy loading not found ignored?
-
 			if (e instanceof FileNotFoundException) {
 				if (!source.getIgnoreNotFound())
 					throw new IOException(Paths.get(host.getName(), source.getName())
@@ -201,11 +199,6 @@ public class LogManager implements IUpdateInitiator, IUpdateListener, Initialize
 		IEntryLog agg = new AggregatedChildLog(
 				new AggregatedGroupedLog(new AggregatedParentLog(files, enableMultithreading)));
 		log.setLog(agg);
-	}
-
-	@Override
-	public void close() {
-		close(false);
 	}
 
 	@Override

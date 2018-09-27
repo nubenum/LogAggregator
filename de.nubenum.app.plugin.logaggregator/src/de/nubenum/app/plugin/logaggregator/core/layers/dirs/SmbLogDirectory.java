@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import de.nubenum.app.plugin.logaggregator.core.Utils;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogHost;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
+import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
 
 /**
@@ -40,9 +41,14 @@ public class SmbLogDirectory extends AbstractLogDirectory {
 
 	@Override
 	protected List<URI> getAllFiles() throws IOException {
-		SmbFile baseDir = new SmbFile(path.toString());
-		SmbFile[] files = baseDir.listFiles();
-		if (files == null || files.length == 0) throw new FileNotFoundException(baseDir.getPath() + " was not found.");
+		SmbFile dir = new SmbFile(path.toString());
+		SmbFile[] files = null;
+		try {
+			files = dir.listFiles();
+		} catch (SmbException e) {
+			throw new FileNotFoundException(e.getMessage());
+		}
+		if (files == null || files.length == 0) throw new FileNotFoundException(dir.getPath() + " was not found.");
 
 		return Arrays.stream(files).map(f -> {
 			try {

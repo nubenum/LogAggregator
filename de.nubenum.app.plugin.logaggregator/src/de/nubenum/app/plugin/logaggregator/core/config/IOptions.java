@@ -32,14 +32,26 @@ public interface IOptions {
 
 	/**
 	 * Whether the log files should be watched for changes and new entries (after a
-	 * delay) should be loaded into the view. This might lead to problems with file
-	 * locks and might not work with network stored files. The default is true, i.e.
-	 * implementing classes should return true if nothing was explicitly set.
+	 * delay) should be loaded into the view. This might not always work with
+	 * network stored files. This is not implemented for the smb:// file handler.
+	 * The default is true, i.e. implementing classes should return true if nothing
+	 * was explicitly set.
 	 *
 	 * @return True if files should be watched.
 	 */
 	Boolean getEnableFileWatcher();
 
+	/**
+	 * Whether all log files should be closed immediately upon finished processing
+	 * (e.g. completed search, scrolling finished...) instead of being kept open
+	 * while LogAggregator is running. This might slow down access times but can
+	 * help with file systems exercising read locks (cf. oplocks for SMB: with
+	 * autoclosing disabled, other users won't be able to edit the log files that
+	 * you have opened from the network drive). The default is true, i.e.
+	 * implementing classes should return true if nothing was explicitly set.
+	 *
+	 * @return True if files should be closed as soon as possible.
+	 */
 	Boolean getEnableAutoClose();
 
 	/**
@@ -69,10 +81,16 @@ public interface IOptions {
 
 	/**
 	 *
-	 * @param enableFileWatcher Whether files should be watched for updates.
+	 * @param enableFileWatcher
+	 *            Whether files should be watched for updates.
 	 */
 	void setEnableFileWatcher(Boolean enableFileWatcher);
 
+	/**
+	 *
+	 * @param enableAutoClose
+	 *            Whether immediate closing of files should be enabled.
+	 */
 	void setEnableAutoClose(Boolean enableAutoClose);
 
 	/**

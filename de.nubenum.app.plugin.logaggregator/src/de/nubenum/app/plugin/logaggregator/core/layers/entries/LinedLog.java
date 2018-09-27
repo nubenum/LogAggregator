@@ -189,11 +189,6 @@ public class LinedLog implements IEntryLog, IUpdateInitiator {
 	}
 
 	@Override
-	public void close() {
-		close(false);
-	}
-
-	@Override
 	public void close(boolean keepInit) {
 		file.close();
 	}

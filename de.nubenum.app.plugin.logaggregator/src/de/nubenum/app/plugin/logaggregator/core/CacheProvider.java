@@ -65,11 +65,6 @@ public class CacheProvider implements IEntryLog {
 	}
 
 	@Override
-	public void close() {
-		close(false);
-	}
-
-	@Override
 	public void close(boolean keepInit) {
 		if (!keepInit)
 			cache.clear();

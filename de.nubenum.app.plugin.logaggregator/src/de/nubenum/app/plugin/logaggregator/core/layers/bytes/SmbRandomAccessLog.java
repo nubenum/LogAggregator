@@ -15,7 +15,7 @@ import jcifs.smb.SmbFile;
 import jcifs.smb.SmbRandomAccessFile;
 
 /**
- * An implementation for a single file that can be accessed randomly by byte.
+ * An implementation for a single smb file that can be accessed randomly by byte.
  *
  */
 public class SmbRandomAccessLog extends AbstractSingleRandomAccessLog {
@@ -23,10 +23,8 @@ public class SmbRandomAccessLog extends AbstractSingleRandomAccessLog {
 	private SmbRandomAccessFile file;
 	private long length = -1;
 
-	private RandomByteBuffer entireFileCache = null;
 	public SmbRandomAccessLog(URI path, boolean enableEntireFileCache) {
 		this.path = path;
-		this.enableEntireFileCache = enableEntireFileCache;
 	}
 
 	public SmbRandomAccessLog(URI path) {
@@ -40,11 +38,6 @@ public class SmbRandomAccessLog extends AbstractSingleRandomAccessLog {
 			if (length == -1) {
 				int newLength = (int) getLength(true);
 				listeners.forEach(l -> l.onUpdate(new UpdateEvent(Event.SIZE, newLength)));
-				//SystemLog.log("Opening " + path.getFileName());
-				if (enableEntireFileCache) {
-					//TODO
-					//entireFileCache = new RandomByteBuffer(Files.readAllBytes(path));
-				}
 			} else {
 				getLength(true);
 			}
@@ -56,11 +49,6 @@ public class SmbRandomAccessLog extends AbstractSingleRandomAccessLog {
 		lastRange = calculateRequestedRange(start, dir);
 		long top = lastRange.getTop().getByteOffset();
 		int len = lastRange.getLength();
-
-		if (entireFileCache != null) {
-			//TODO without copy
-			//return new RandomByteBuffer(Arrays.copyOfRange(entireFileCache.getBytes(), (int) top, (int)top+len));
-		}
 
 		openFile();
 		byte[] buf = new byte[len];

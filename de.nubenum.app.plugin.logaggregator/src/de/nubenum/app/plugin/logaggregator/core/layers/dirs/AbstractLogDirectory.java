@@ -1,5 +1,6 @@
 package de.nubenum.app.plugin.logaggregator.core.layers.dirs;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Paths;
@@ -21,13 +22,6 @@ import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
  */
 public abstract class AbstractLogDirectory implements ILogDirectory {
 	private static final Pattern naturalSortEligible = Pattern.compile("(.*?)(\\d+)");
-
-
-	public AbstractLogDirectory() {
-		return;
-	}
-
-
 
 	/**
 	 * Get all files from this directory
@@ -65,6 +59,7 @@ public abstract class AbstractLogDirectory implements ILogDirectory {
 			}
 			return Utils.getFileName(a).compareTo(Utils.getFileName(b));
 		});
+		if (files.size() == 0) throw new FileNotFoundException(source.getName() + " was not found.");
 		return files;
 	}
 
