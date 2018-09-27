@@ -1,17 +1,15 @@
 package de.nubenum.app.plugin.logaggregator.core;
 
 import java.io.IOException;
-import java.nio.file.Path;
+import java.net.URI;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import de.nubenum.app.plugin.logaggregator.core.config.ILogHost;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
 
 /**
@@ -21,16 +19,13 @@ import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
  */
 public abstract class AbstractLogDirectory implements ILogDirectory {
 	private static final Pattern naturalSortEligible = Pattern.compile("(.*?)(\\d+)");
-	protected Path path;
-	protected ILogHost host;
 
-	public AbstractLogDirectory(Path location, ILogHost host, ILogSource source) {
-		this.host = host;
-		this.path = location.resolve(host.getName());
-		Path sourceParent = Paths.get(source.getName()).getParent();
-		if (sourceParent != null)
-			this.path = this.path.resolve(sourceParent);
+
+	public AbstractLogDirectory() {
+		return;
 	}
+
+
 
 	/**
 	 * Get all files from this directory
@@ -39,41 +34,41 @@ public abstract class AbstractLogDirectory implements ILogDirectory {
 	 * @throws IOException
 	 *             If the directory is unavailable or no files were found
 	 */
-	protected abstract List<Path> getAllFiles() throws IOException;
+	protected abstract List<URI> getAllFiles() throws IOException;
 
 	@Override
-	public List<Path> getSourceFiles(ILogSource source) throws IOException {
-		List<Path> files = getAllFiles();
+	public List<URI> getSourceFiles(ILogSource source) throws IOException {
+		List<URI> files = getAllFiles();
 
 		String match = Paths.get(source.getName()).getFileName().toString();
-		files = files.stream().filter(f -> f.getFileName().startsWith(match)).collect(Collectors.toList());
+		files = files.stream().filter(f -> Utils.getFileName(f).startsWith(match)).collect(Collectors.toList());
 
-		Collection<Path> lengthErrors = new ArrayList<>();
+		Collection<URI> lengthErrors = new ArrayList<>();
 		files.sort((a, b) -> {
 			if (isCurrentFile(a, source))
 				return 1;
 			if (isCurrentFile(b, source))
 				return -1;
 
-			int natural = naturalSortIfEligible(a.getFileName().toString(), b.getFileName().toString());
+			int natural = naturalSortIfEligible(Utils.getFileName(a), Utils.getFileName(b));
 			if (natural != 0)
 				return natural;
 
-			if (a.getFileName().toString().length() != b.getFileName().toString().length() && !lengthErrors.contains(a) && !lengthErrors.contains(b)) {
-				SystemLog.warn("ATTENTION! Irregularities in rotated log file naming were detected: " + a.getFileName()
-				+ " <-> " + b.getFileName()
+			if (Utils.getFileName(a).length() != Utils.getFileName(b).length() && !lengthErrors.contains(a) && !lengthErrors.contains(b)) {
+				SystemLog.warn("ATTENTION! Irregularities in rotated log file naming were detected: " + Utils.getFileName(a)
+				+ " <-> " + Utils.getFileName(b)
 				+ " This might indicate that the order is wrong or that your filter is not sufficiently restrictive and might lead to endless loops.");
 				lengthErrors.add(a);
 				lengthErrors.add(b);
 			}
-			return a.getFileName().compareTo(b.getFileName());
+			return Utils.getFileName(a).compareTo(Utils.getFileName(b));
 		});
 		return files;
 	}
 
-	private boolean isCurrentFile(Path file, ILogSource source) {
+	private boolean isCurrentFile(URI file, ILogSource source) {
 		//TODO more robust detection
-		return file.getFileName().toString().split("\\.").length <= 2;
+		return Utils.getFileName(file).toString().split("\\.").length <= 2;
 	}
 
 	private int naturalSortIfEligible(String a, String b) {
@@ -86,20 +81,5 @@ public abstract class AbstractLogDirectory implements ILogDirectory {
 			}
 		}
 		return 0;
-	}
-
-	@Override
-	public Path getPath() {
-		return path;
-	}
-
-	@Override
-	public boolean equals(Object other) {
-		return EqualsHelper.objectsEqual(AbstractLogDirectory.class, this, other, d -> d.getPath());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(path);
 	}
 }

@@ -1,12 +1,13 @@
 package de.nubenum.app.plugin.logaggregator.core.layers.bytes;
 
 import java.io.IOException;
-import java.nio.file.Path;
+import java.net.URI;
 
 import de.nubenum.app.plugin.logaggregator.core.EndOfLogReachedException;
 import de.nubenum.app.plugin.logaggregator.core.SystemLog;
 import de.nubenum.app.plugin.logaggregator.core.UpdateEvent;
 import de.nubenum.app.plugin.logaggregator.core.UpdateEvent.Event;
+import de.nubenum.app.plugin.logaggregator.core.Utils;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 import de.nubenum.app.plugin.logaggregator.core.model.IFilePosition;
 import de.nubenum.app.plugin.logaggregator.core.model.RandomByteBuffer;
@@ -18,17 +19,17 @@ import jcifs.smb.SmbRandomAccessFile;
  *
  */
 public class SmbRandomAccessLog extends AbstractSingleRandomAccessLog {
-	private Path path;
+	private URI path;
 	private SmbRandomAccessFile file;
 	private long length = -1;
 
 	private RandomByteBuffer entireFileCache = null;
-	public SmbRandomAccessLog(Path path, boolean enableEntireFileCache) {
+	public SmbRandomAccessLog(URI path, boolean enableEntireFileCache) {
 		this.path = path;
 		this.enableEntireFileCache = enableEntireFileCache;
 	}
 
-	public SmbRandomAccessLog(Path path) {
+	public SmbRandomAccessLog(URI path) {
 		this(path, false);
 	}
 
@@ -91,6 +92,6 @@ public class SmbRandomAccessLog extends AbstractSingleRandomAccessLog {
 
 	@Override
 	public String toString() {
-		return path.getFileName().toString();
+		return Utils.getFileName(path);
 	}
 }

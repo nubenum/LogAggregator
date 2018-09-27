@@ -6,7 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.nio.file.Path;
+import java.net.URI;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -33,8 +33,8 @@ public class MergeIntegrationTest {
 	private static IEntryLog premerged;
 	private static IEntryLog processed;
 
-	private static Path getPath(String name) {
-		return Paths.get("testdata/", name+".log");
+	private static URI getPath(String name) {
+		return Paths.get("testdata/", name+".log").toUri();
 	}
 
 	@BeforeClass

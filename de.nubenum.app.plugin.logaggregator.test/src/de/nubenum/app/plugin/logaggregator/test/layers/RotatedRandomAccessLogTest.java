@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.Path;
+import java.net.URI;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -26,10 +26,10 @@ import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 import de.nubenum.app.plugin.logaggregator.core.model.FilePosition;
 
 public class RotatedRandomAccessLogTest {
-	private static final Path[] files = {
-			Paths.get("tmp/rotaterandom1.log"),
-			Paths.get("tmp/rotaterandom2.log"),
-			Paths.get("tmp/rotaterandom3.log")
+	private static final URI[] files = {
+			Paths.get("tmp/rotaterandom1.log").toUri(),
+			Paths.get("tmp/rotaterandom2.log").toUri(),
+			Paths.get("tmp/rotaterandom3.log").toUri()
 	};
 	private static List<IRandomAccessLog> logs;
 
@@ -37,16 +37,16 @@ public class RotatedRandomAccessLogTest {
 	public static void setup() throws FileNotFoundException {
 		File d = new File("tmp");
 		d.mkdir();
-		
+
 		PrintWriter out;
-		out = new PrintWriter(files[0].toFile());
+		out = new PrintWriter(new File(files[0]));
 		out.print("Lorem0 ipsum dolor sit amet\n");
 		out.print("amet sit dolor ipsum0 Lorem\n");
 		out.close();
-		out = new PrintWriter(files[1].toFile());
+		out = new PrintWriter(new File(files[1]));
 		out.print("Lorem1 ipsum dolor sit amet\n");
 		out.close();
-		out = new PrintWriter(files[2].toFile());
+		out = new PrintWriter(new File(files[2]));
 		out.print("Lorem2 ipsum dolor sit amet\n");
 		out.print("amet sit dolor ipsum2 Lorem\n");
 		out.close();

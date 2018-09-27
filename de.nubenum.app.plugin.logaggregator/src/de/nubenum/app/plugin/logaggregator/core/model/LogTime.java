@@ -12,7 +12,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import de.nubenum.app.plugin.logaggregator.core.EqualsHelper;
+import de.nubenum.app.plugin.logaggregator.core.Utils;
 
 /**
  * Representing the comparable timestamp of a log entry. More supported
@@ -193,7 +193,7 @@ public class LogTime implements Comparable<LogTime> {
 
 	@Override
 	public boolean equals(Object other) {
-		return EqualsHelper.objectsEqual(LogTime.class, this, other, l -> l.time);
+		return Utils.objectsEqual(LogTime.class, this, other, l -> l.time);
 	}
 
 	@Override

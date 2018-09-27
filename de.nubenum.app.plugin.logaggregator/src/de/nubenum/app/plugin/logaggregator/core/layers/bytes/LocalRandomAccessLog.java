@@ -1,10 +1,12 @@
 package de.nubenum.app.plugin.logaggregator.core.layers.bytes;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 
@@ -26,12 +28,12 @@ public class LocalRandomAccessLog extends AbstractSingleRandomAccessLog {
 	private long length = -1;
 
 	private RandomByteBuffer entireFileCache = null;
-	public LocalRandomAccessLog(Path path, boolean enableEntireFileCache) {
-		this.path = path;
+	public LocalRandomAccessLog(URI path, boolean enableEntireFileCache) {
+		this.path = Paths.get(path);
 		this.enableEntireFileCache = enableEntireFileCache;
 	}
 
-	public LocalRandomAccessLog(Path path) {
+	public LocalRandomAccessLog(URI path) {
 		this(path, false);
 	}
 

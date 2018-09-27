@@ -4,14 +4,14 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URI;
 import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.nubenum.app.plugin.logaggregator.core.LocalLogDirectory;
+import de.nubenum.app.plugin.logaggregator.core.Utils;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogHost;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
 
@@ -86,20 +86,20 @@ public class LocalLogDirectoryTest {
 	@Test
 	public void testRoot() throws IOException {
 		source.setName("source.");
-		LocalLogDirectory dir = new LocalLogDirectory(Paths.get("tmp/"), host, source);
-		List<Path> list = dir.getSourceFiles(source);
+		LocalLogDirectory dir = new LocalLogDirectory("tmp/", host, source);
+		List<URI> list = dir.getSourceFiles(source);
 		assertEquals(4, list.size());
-		assertEquals("source.log.2", list.get(0).getFileName().toString());
-		assertEquals("source.log.10", list.get(1).getFileName().toString());
-		assertEquals("source.log.bak", list.get(2).getFileName().toString());
-		assertEquals("source.log", list.get(3).getFileName().toString());
+		assertEquals("source.log.2", Utils.getFileName(list.get(0)));
+		assertEquals("source.log.10", Utils.getFileName(list.get(1)));
+		assertEquals("source.log.bak", Utils.getFileName(list.get(2)));
+		assertEquals("source.log", Utils.getFileName(list.get(3)));
 	}
 
 	@Test
 	public void testSub() throws IOException {
 		source.setName("sub/subsource");
-		LocalLogDirectory dir = new LocalLogDirectory(Paths.get("tmp/"), host, source);
-		List<Path> list = dir.getSourceFiles(source);
+		LocalLogDirectory dir = new LocalLogDirectory("tmp/", host, source);
+		List<URI> list = dir.getSourceFiles(source);
 		assertEquals(1, list.size());
 	}
 

@@ -61,6 +61,15 @@ The above config could be suitable for the following directory structure:
 
 Log files being matched using startsWith, there is one caveat: Different types of log files starting with the same name, in this case access_extended.log together with access.log, might be pulled in as one rotated log. The order of the files and thus the entire aggregation can be messed up by that. Look out for respective warnings in the Eclipse error log. Here, a dot (.) was appended for the access log in the config file to avoid this.
 
+You can configure the behaviour of LogAggregator by adding the `options` Tag to you config file. Please see the javadoc for further info about the options.
+```
+<options enableMultithreading="true" enableFileWatcher="true" enableAutoClose="true">
+    	<customLogTimeFormats>
+    		<format>M/d/yy H:m:s.SSS zzz</format>
+    	</customLogTimeFormats>
+    </options>
+```
+
 ## Usage
 ### List & Detail View
 There are four columns in the list view:

@@ -5,7 +5,7 @@ import java.util.Objects;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlValue;
 
-import de.nubenum.app.plugin.logaggregator.core.EqualsHelper;
+import de.nubenum.app.plugin.logaggregator.core.Utils;
 
 public class XmlLogSource implements ILogSource {
 
@@ -38,7 +38,7 @@ public class XmlLogSource implements ILogSource {
 
 	@Override
 	public boolean equals(Object other) {
-		return EqualsHelper.objectsEqual(XmlLogSource.class, this, other, h -> h.getName());
+		return Utils.objectsEqual(XmlLogSource.class, this, other, h -> h.getName());
 	}
 
 	@Override

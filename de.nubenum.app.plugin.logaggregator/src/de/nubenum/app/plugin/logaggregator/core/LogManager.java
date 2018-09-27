@@ -1,8 +1,8 @@
 package de.nubenum.app.plugin.logaggregator.core;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -112,34 +112,21 @@ public class LogManager implements IUpdateInitiator, IUpdateListener, Initialize
 	}
 
 	private List<IRandomAccessLog> getSourceFiles(ILogHost host, ILogSource source) throws IOException {
-		Path root;
-		String scheme = null;
-		try {
-			if (config.getLocation().startsWith(SMB_SCHEME)) {
-				root = Paths.get(new URI(config.getLocation()));
-				scheme = SMB_SCHEME;
-			} else {
-				root = Paths.get(config.getLocation());
-			}
-		} catch (Exception e) {
-			throw new IOException(e);
-		}
-
 		ILogDirectory dir;
-		if (scheme == SMB_SCHEME)
-			dir = new SmbLogDirectory(root, host, source);
+		if (config.getLocation().startsWith(SMB_SCHEME))
+			dir = new SmbLogDirectory(config.getLocation(), host, source);
 		else
-			dir = new LocalLogDirectory(root, host, source);
+			dir = new LocalLogDirectory(config.getLocation(), host, source);
 		addDirectory(dir);
 
 		List<IRandomAccessLog> list = new ArrayList<>();
 		try {
-			List<Path> files = dir.getSourceFiles(source);
-			Iterator<Path> it = files.iterator();
+			List<URI> files = dir.getSourceFiles(source);
+			Iterator<URI> it = files.iterator();
 			while (it.hasNext()) {
-				Path file = it.next();
+				URI file = it.next();
 				AbstractSingleRandomAccessLog log;
-				if (scheme == SMB_SCHEME)
+				if (dir instanceof SmbLogDirectory)
 					log = new SmbRandomAccessLog(file, enableEntireFileCache);
 				else
 					log = new LocalRandomAccessLog(file, enableEntireFileCache);
@@ -148,10 +135,15 @@ public class LogManager implements IUpdateInitiator, IUpdateListener, Initialize
 			}
 		} catch (IOException e) {
 			// TODO lazy loading not found ignored?
-			if (!source.getIgnoreNotFound())
-				throw new IOException(Paths.get(host.getName(), source.getName())
-						+ " was not found. You can add the tag ignoreNotFound=\"true\" to the respective source in the config file to ignore this error.",
-						e);
+
+			if (e instanceof FileNotFoundException) {
+				if (!source.getIgnoreNotFound())
+					throw new IOException(Paths.get(host.getName(), source.getName())
+							+ " was not found. You can add the tag ignoreNotFound=\"true\" to the respective source in the config file to ignore this error.",
+							e);
+			} else {
+				throw e;
+			}
 		}
 		SystemLog.log(host.getName() + source.getName() + ": "
 				+ list.stream().map(l -> l.toString()).collect(Collectors.joining(", ")));
@@ -161,7 +153,7 @@ public class LogManager implements IUpdateInitiator, IUpdateListener, Initialize
 	private void addDirectory(ILogDirectory dir) {
 		if (!directories.contains(dir)) {
 			directories.add(dir);
-			if (enableFileWatcher)
+			if (enableFileWatcher && dir instanceof LocalLogDirectory)
 				watcher.addPath(dir.getPath());
 		}
 	}

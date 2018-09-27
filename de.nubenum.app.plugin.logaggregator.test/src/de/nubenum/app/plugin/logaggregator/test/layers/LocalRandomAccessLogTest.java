@@ -12,8 +12,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.junit.BeforeClass;
@@ -25,14 +25,14 @@ import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 import de.nubenum.app.plugin.logaggregator.core.model.FilePosition;
 
 public class LocalRandomAccessLogTest {
-	public static final Path file = Paths.get("tmp/localrandom.log");
+	public static final URI file = Paths.get("tmp/localrandom.log").toUri();
 
 	@BeforeClass
 	public static void setup() throws IOException {
 		File d = new File("tmp");
 		d.mkdir();
 		Writer out = new BufferedWriter(new OutputStreamWriter(
-				new FileOutputStream(file.toFile()), StandardCharsets.UTF_8));
+				new FileOutputStream(new File(file)), StandardCharsets.UTF_8));
 		out.write("Lorem ipsum dolor sit amet\n");
 		out.write("amet sit dolor ipsum Lorem\n");
 		out.close();

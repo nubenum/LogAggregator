@@ -1,8 +1,9 @@
 package de.nubenum.app.plugin.logaggregator.core;
 
+import java.net.URI;
 import java.util.function.Function;
 
-public class EqualsHelper {
+public class Utils {
 
 	public static <Type> boolean objectsEqual(Class<Type> cls, Type thisObject, Object otherObject, Function<Type, Object>... members) {
 		if (thisObject == otherObject)
@@ -17,5 +18,10 @@ public class EqualsHelper {
 			return true;
 		}
 		return false;
+	}
+
+	public static String getFileName(URI path) {
+		String[] parts = path.getPath().split("[/\\\\]");
+		return parts[parts.length-1];
 	}
 }
