@@ -89,7 +89,8 @@ public class LocalRandomAccessLog extends AbstractSingleRandomAccessLog {
 	public long getLength(boolean forceRefresh) throws IOException {
 		if (length == -1 || forceRefresh) {
 			openFile();
-			length = file.size();
+			if (file != null)
+				length = file.size();
 		}
 		return length;
 	}

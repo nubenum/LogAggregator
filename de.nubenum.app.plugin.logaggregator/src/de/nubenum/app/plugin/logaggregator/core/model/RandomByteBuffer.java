@@ -50,19 +50,26 @@ public class RandomByteBuffer {
 	public RandomByteBuffer(RandomByteBuffer buffer, IFileRange range, int offset, Direction dir) {
 		this.bytes = buffer.bytes;
 		this.range = range;
-		this.offset = offset;
+		setOffset(offset);
 		this.dir = dir;
 	}
 
 	public RandomByteBuffer(RandomByteBuffer buffer, int offset, Direction dir) {
 		deepCopyOf(buffer);
-		this.offset = offset;
+		setOffset(offset);
 		this.dir = dir;
 	}
 
 	public RandomByteBuffer(RandomByteBuffer buffer, IFileRange range) {
 		deepCopyOf(buffer);
 		this.range = range;
+	}
+
+	private void setOffset(int offset) {
+		if (offset < bytes.length)
+			this.offset = offset;
+		else
+			throw new IndexOutOfBoundsException("offset outside of byte array");
 	}
 
 	/**
@@ -129,9 +136,11 @@ public class RandomByteBuffer {
 	}
 
 	/**
-	 * Concat another buffer with this one in the set Direction of this buffer. The
+	 * Concat another buffer with this one in the set Direction of these buffers. The
 	 * buffers should be adjacent and have the appropriate range and dir information
-	 * set, other cases will lead to undefined behavior.
+	 * set, other cases will lead to undefined behavior. If the other buffer has an
+	 * offset != 0, the bytes will be truncated ({#link {@link #getOffsetBytes()}
+	 * will be used)
 	 *
 	 * @param other
 	 *            The other buffer to be appended
@@ -142,12 +151,15 @@ public class RandomByteBuffer {
 		} else if (other.bytes != null) {
 			if (this.range == null || other.range == null || dir == null)
 				throw new IllegalArgumentException("buffer has no range information and can not be concatenated");
+			if (this.dir != other.dir)
+				throw new IllegalArgumentException("buffers of different direction can not be concatenated");
 			if (dir == Direction.UP) {
-				this.bytes = concatBytes(other.bytes, this.bytes);
+				byte[] otherOffsetBytes = other.getOffsetBytes();
+				this.bytes = concatBytes(otherOffsetBytes, this.bytes);
 				this.range = new FileRange(other.range.getTop(), bytes.length);
-				this.offset += other.bytes.length;
+				this.offset += otherOffsetBytes.length;
 			} else {
-				this.bytes = concatBytes(this.bytes, other.bytes);
+				this.bytes = concatBytes(this.bytes, other.getOffsetBytes());
 				this.range = new FileRange(this.range.getTop(), bytes.length);
 			}
 		}

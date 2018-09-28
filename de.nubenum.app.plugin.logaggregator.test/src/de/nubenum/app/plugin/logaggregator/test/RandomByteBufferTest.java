@@ -35,12 +35,15 @@ public class RandomByteBufferTest {
 	}
 
 	@Test
-	public void testOffset() {
+	public void testOffsetDownConcat() {
 		RandomByteBuffer b1 = new RandomByteBuffer("abc".getBytes());
 		RandomByteBuffer b2 = new RandomByteBuffer("def".getBytes());
-		RandomByteBuffer buf2 = new RandomByteBuffer(b2, new FileRange(new FilePosition(0, 23), 3));
 
-		RandomByteBuffer buf1 = new RandomByteBuffer(b1, new FileRange(new FilePosition(0, 20), 3), 2, Direction.DOWN);
+		RandomByteBuffer buf1;
+		RandomByteBuffer buf2;
+		buf1 = new RandomByteBuffer(b1, new FileRange(new FilePosition(0, 20), 3), 2, Direction.DOWN);
+		buf2 = new RandomByteBuffer(b2, new FileRange(new FilePosition(0, 23), 3));
+
 		assertEquals(buf1.getOffsetLength(), 1);
 		buf1.concatOrdered(buf2);
 		assertEquals(buf1.getRange(), new FileRange(new FilePosition(0, 20), 6));
@@ -49,13 +52,44 @@ public class RandomByteBufferTest {
 		assertEquals("abcdef", new String(buf1.getBytes()));
 		assertEquals("cdef", new String(buf1.getOffsetBytes()));
 
+		buf1 = new RandomByteBuffer(b1, new FileRange(new FilePosition(0, 20), 3), 1, Direction.DOWN);
+		buf2 = new RandomByteBuffer(b2, new FileRange(new FilePosition(0, 23), 3), 2, Direction.DOWN);
+
+		assertEquals(buf1.getOffsetLength(), 2);
+		buf1.concatOrdered(buf2);
+		assertEquals(buf1.getRange(), new FileRange(new FilePosition(0, 20), 4));
+		assertEquals(buf1.getOffset(), 1);
+		assertEquals(buf1.getOffsetLength(), 3);
+		assertEquals("abcf", new String(buf1.getBytes()));
+		assertEquals("bcf", new String(buf1.getOffsetBytes()));
+	}
+
+	@Test
+	public void testOffsetUpConcat() {
+		RandomByteBuffer b1 = new RandomByteBuffer("abc".getBytes());
+		RandomByteBuffer b2 = new RandomByteBuffer("def".getBytes());
+
+		RandomByteBuffer buf1;
+		RandomByteBuffer buf2;
+
 		buf1 = new RandomByteBuffer(b1, new FileRange(new FilePosition(1, 0), 3), 1, Direction.UP);
+		buf2 = new RandomByteBuffer(b2, new FileRange(new FilePosition(0, 23), 3), 2, Direction.UP);
 		buf1.concatOrdered(buf2);
 		assertEquals(buf1.getRange(), new FileRange(new FilePosition(0, 23), 6));
 		assertEquals(buf1.getOffset(), 4);
 		assertEquals(buf1.getOffsetLength(), 5);
 		assertEquals("defabc", new String(buf1.getBytes()));
 		assertEquals("defab", new String(buf1.getOffsetBytes()));
+
+		buf1 = new RandomByteBuffer(b1, new FileRange(new FilePosition(0, 26), 3), 1, Direction.UP);
+		buf2 = new RandomByteBuffer(b2, new FileRange(new FilePosition(0, 23), 3), 0, Direction.UP);
+
+		buf1.concatOrdered(buf2);
+		assertEquals(buf1.getRange(), new FileRange(new FilePosition(0, 23), 4));
+		assertEquals(buf1.getOffset(), 2);
+		assertEquals(buf1.getOffsetLength(), 3);
+		assertEquals("dabc", new String(buf1.getBytes()));
+		assertEquals("dab", new String(buf1.getOffsetBytes()));
 	}
 
 	@Test
@@ -68,6 +102,37 @@ public class RandomByteBufferTest {
 			buf1.concatOrdered(buf2);
 			fail("Should throw exception");
 		} catch (IllegalArgumentException e) {
+
+		}
+	}
+
+	@Test
+	public void testOtherDirection() {
+		RandomByteBuffer b1 = new RandomByteBuffer("abc".getBytes());
+		RandomByteBuffer b2 = new RandomByteBuffer("def".getBytes());
+
+		RandomByteBuffer buf1;
+		RandomByteBuffer buf2;
+
+		buf1 = new RandomByteBuffer(b1, new FileRange(new FilePosition(1, 0), 3), 1, Direction.UP);
+		buf2 = new RandomByteBuffer(b2, new FileRange(new FilePosition(0, 23), 3), 2, Direction.DOWN);
+		try {
+			buf1.concatOrdered(buf2);
+			fail("Should throw exception");
+		} catch (IllegalArgumentException e) {
+
+		}
+	}
+
+	@Test
+	public void testOffsetOutOfBounds() {
+		RandomByteBuffer b1 = new RandomByteBuffer("abc".getBytes());
+		RandomByteBuffer buf1;
+
+		try {
+			buf1 = new RandomByteBuffer(b1, new FileRange(new FilePosition(1, 0), 3), 3, Direction.UP);
+			fail("Should throw exception");
+		} catch (IndexOutOfBoundsException e) {
 
 		}
 	}
