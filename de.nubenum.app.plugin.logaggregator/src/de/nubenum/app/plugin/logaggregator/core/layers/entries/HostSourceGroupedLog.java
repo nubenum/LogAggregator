@@ -28,6 +28,7 @@ public class HostSourceGroupedLog extends AbstractGroupedLog {
 		IEntry entry = super.getAt(reference, stackedOffset);
 		if (Entry.isFirstOrLast(entry))
 			return entry;
+
 		entry = fixMessedUpTimestamps(reference, stackedOffset, entry);
 		assert (entry.getLogTime() != null) : "StackEntry without LogTime: " + entry.getRange().getTop().getByteOffset()
 		+ " | " + entry.toString();

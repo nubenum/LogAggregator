@@ -157,6 +157,11 @@ public class LinedEntry extends Entry {
 
 	@Override
 	public String getPath() {
-		return Paths.get(getHost().getName(), getSource().getName()).toString();
+		return Paths.get(getHost() != null ? getHost().getName() : "", getSource() != null ? getSource().getName() : "").toString();
+	}
+
+	@Override
+	public boolean contains(IEntry other) {
+		return false;
 	}
 }

@@ -109,4 +109,10 @@ public interface IEntry extends Comparable<IEntry> {
 	 * @return The raw part of the log line that was parsed (i.e. timestamp, level, etc.)
 	 */
 	public String getParsedPart();
+
+	/**
+	 * @param other Another entry
+	 * @return Whether this entry contains the given entry
+	 */
+	public boolean contains(IEntry other);
 }

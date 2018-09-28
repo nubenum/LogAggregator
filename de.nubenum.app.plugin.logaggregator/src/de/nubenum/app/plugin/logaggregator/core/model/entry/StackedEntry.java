@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import de.nubenum.app.plugin.logaggregator.core.config.ILogHost;
 import de.nubenum.app.plugin.logaggregator.core.config.ILogSource;
+import de.nubenum.app.plugin.logaggregator.core.model.FileRange;
 import de.nubenum.app.plugin.logaggregator.core.model.IFileRange;
 
 /**
@@ -21,8 +22,12 @@ public class StackedEntry extends GroupedEntry {
 
 	@Override
 	public IFileRange getRange() {
-		//TODO range?
-		return getChildren().get(0).getRange();
+		IFileRange first = getChildren().get(0).getRange();
+		IFileRange last = getChildren().get(getChildren().size()-1).getRange();
+		if (first != null && last != null) {
+			return new FileRange(first.getTop(), last.getBottom());
+		}
+		return null;
 	}
 
 	@Override
@@ -49,5 +54,16 @@ public class StackedEntry extends GroupedEntry {
 			messageComplete = lines;
 		}
 		return messageComplete;
+	}
+
+	@Override
+	public boolean contains(IEntry other) {
+		if (getHost() != null && getHost().equals(other.getHost()) && 
+				getSource() != null && getSource().equals(other.getSource())) {
+			IFileRange thisRange = getRange();
+			IFileRange otherRange = other.getRange();
+			return thisRange != null && otherRange != null && thisRange.inRange(otherRange.getTop());
+		}
+		return false;
 	}
 }

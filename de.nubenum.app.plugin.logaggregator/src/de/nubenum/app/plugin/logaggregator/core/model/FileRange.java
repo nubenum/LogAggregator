@@ -26,9 +26,9 @@ public class FileRange implements IFileRange {
 	}
 
 	public FileRange(IFilePosition top, IFilePosition bottom) {
-		if (top.getPartOffset() != bottom.getPartOffset())
-			throw new IllegalArgumentException("impossible to define ranges over multiple parts");
-		this.length = (int) (bottom.getByteOffset()-top.getByteOffset());
+		this.length = 0;
+		if (top.getPartOffset() == bottom.getPartOffset())
+			this.length = (int) (bottom.getByteOffset()-top.getByteOffset());
 		this.top = top;
 		this.bottom = bottom;
 	}

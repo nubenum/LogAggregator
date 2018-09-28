@@ -58,7 +58,7 @@ public class CacheProvider implements IEntryLog {
 	 */
 	public IEntry getByChildAt(IEntry entry) {
 		Predicate<IEntry> contains = e -> {
-			return e.getChildren().contains(entry);
+			return e.contains(entry);
 		};
 		IEntry cached = cache.values().stream().filter(contains).findFirst().orElse(null);
 		return cached;

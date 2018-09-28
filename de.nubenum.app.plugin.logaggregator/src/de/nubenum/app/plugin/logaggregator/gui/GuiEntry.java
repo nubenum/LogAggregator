@@ -256,4 +256,9 @@ public class GuiEntry implements IEntry {
 	public List<EntryMessageLink> getLinks() {
 		return entry.getLinks();
 	}
+
+	@Override
+	public boolean contains(IEntry other) {
+		return false;
+	}
 }

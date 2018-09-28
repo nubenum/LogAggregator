@@ -75,4 +75,9 @@ public abstract class GroupedEntry extends Entry {
 			return getChildren().get(getChildren().size()-1);
 		return getChildren().get(0);
 	}
+
+	@Override
+	public boolean contains(IEntry other) {
+		return getChildren().contains(other);
+	}
 }
