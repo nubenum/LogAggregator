@@ -226,7 +226,8 @@ public class LogView extends EditorPart {
 		this.viewer.addListener(event -> {
 			Display.getDefault().asyncExec(() -> {
 				if (event.getType() == Event.STOP) {
-					control.close(true);
+					if (isWorking())
+						control.close(true);
 					working(false);
 				} else if (event.getType() == Event.START) {
 					working(true);
@@ -288,7 +289,14 @@ public class LogView extends EditorPart {
 	}
 
 	private void working(boolean working) {
-		if (status != null) status.setVisible(working);
+		if (status != null)
+			status.setVisible(working);
+	}
+
+	private boolean isWorking() {
+		if (status != null)
+			return status.getVisible();
+		return false;
 	}
 
 	private void updateCounter() {
