@@ -65,11 +65,9 @@ public class LogContentProvider implements ILazyContentProvider {
 
 	@Override
 	public void updateElement(int index) {
-		System.out.println(index);
 		ReferenceOffset viewportTop = viewer.getViewportTop();
 		ReferenceOffset viewportBottom = viewer.getViewportBottom();
 		if (!isInRoughViewportRange(index, viewportTop, viewportBottom)) {
-			System.out.println("eager index request filtered: "+index);
 			return;
 		}
 		viewer.onUpdate(new UpdateEvent(Event.START));
@@ -87,7 +85,6 @@ public class LogContentProvider implements ILazyContentProvider {
 				viewer.onUpdate(new UpdateEvent(Event.STOP));
 				return;
 			} else if (Entry.isFirstOrLast(entry)) {
-				System.out.println("GUIEND:"+index +"|"+entry);
 				Direction atBounds = atViewportBounds(viewportTop, viewportBottom);
 				if (atBounds == Direction.NONE || atBounds == Direction.get(entry)) {
 					guiRun(() -> {
@@ -118,7 +115,6 @@ public class LogContentProvider implements ILazyContentProvider {
 
 	private synchronized void doUpdateGuiElement(IEntry entry, int index) {
 		guiRun(() -> {
-			System.out.println(index+"|"+entry.getLogTime());
 			viewer.replace(new GuiEntry(entry), index);
 		});
 	}
@@ -217,7 +213,6 @@ public class LogContentProvider implements ILazyContentProvider {
 		IEntry entry = next;
 		if (entry == null)
 			entry = lastUpdated.getEntry();
-		System.out.println("switch page pivot "+ entry);
 		setPosition(entry, VIRTUAL_SIZE/2);
 		viewer.setTopItem(VIRTUAL_SIZE/2);
 	}
@@ -249,7 +244,6 @@ public class LogContentProvider implements ILazyContentProvider {
 
 	@Override
 	public void dispose() {
-		System.out.println("dispose cprov");
 		queue.stop();
 	}
 }

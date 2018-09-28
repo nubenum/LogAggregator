@@ -139,7 +139,6 @@ public class LogTreeViewer implements IUpdateInitiator, IUpdateListener {
 	}
 
 	public void stopAndRefresh() {
-		System.out.println("refersh");
 		provider.resetRetriever();
 		table.refresh();
 	}

@@ -67,7 +67,6 @@ public class MergeIntegrationTest {
 			entry2 = processed.getAt(entry2, 1);
 
 			//can't use equals since in different sources
-			//System.out.println(entry1+"|"+entry2);
 			assertTrue(entry1+"|"+entry2, entry1.getLogTime().equals(entry2.getLogTime()));
 			assertEquals(entry1.getMessage(), entry2.getMessage());
 			assertEquals(entry1.getChildren().size(), entry2.getChildren().size());

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.nubenum.app.plugin.logaggregator.core.CacheProvider;
+import de.nubenum.app.plugin.logaggregator.core.SystemLog;
 import de.nubenum.app.plugin.logaggregator.core.model.Direction;
 import de.nubenum.app.plugin.logaggregator.core.model.entry.Entry;
 import de.nubenum.app.plugin.logaggregator.core.model.entry.IEntry;
@@ -33,6 +34,7 @@ public abstract class AbstractGroupedLog implements IEntryLog {
 	protected IEntryLog file;
 	private CacheProvider groupedCache;
 	private CacheProvider adjacentCache;
+	private boolean hugeWarningIssued = false;
 
 	protected AbstractGroupedLog(IEntryLog file) {
 		this.file = file;
@@ -139,6 +141,10 @@ public abstract class AbstractGroupedLog implements IEntryLog {
 		if (overflowEntry != null) {
 			newGroup.add(new LinedEntry("[TRUNCATED ~" + (entryCount - TRUNCATE_GROUP_SIZE) + " LINES]"));
 			newGroup.add(overflowEntry);
+			if (entryCount > MAX_GROUP_SIZE / 100 && !hugeWarningIssued) {
+				hugeWarningIssued = true;
+				SystemLog.warn("This log file apparently contains huge stacktraces: " + overflowEntry.getPath() + " Please make sure that it actually is a log file.");
+			}
 		}
 	}
 

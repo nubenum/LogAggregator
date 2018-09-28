@@ -51,7 +51,7 @@ public abstract class AbstractLogDirectory implements ILogDirectory {
 				return natural;
 
 			if (Utils.getFileName(a).length() != Utils.getFileName(b).length() && !lengthErrors.contains(a) && !lengthErrors.contains(b)) {
-				SystemLog.warn("ATTENTION! Irregularities in rotated log file naming were detected: " + Utils.getFileName(a)
+				SystemLog.warn("WARNING! Irregularities in rotated log file naming were detected: " + Utils.getFileName(a)
 				+ " <-> " + Utils.getFileName(b)
 				+ " This might indicate that the order is wrong or that your filter is not sufficiently restrictive and might lead to endless loops.");
 				lengthErrors.add(a);
