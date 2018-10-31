@@ -6,6 +6,4 @@
       <tags>categoryTag:LogAggregator</tags>
     </elements>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_jK49kGjHEeiSj9BEsZFFYw" featurename="handlers" parentElementId="xpath:/"/>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_k3x9MGjHEeiSj9BEsZFFYw" featurename="commands" parentElementId="xpath:/"/>
 </fragment:ModelFragments>

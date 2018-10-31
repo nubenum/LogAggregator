@@ -55,6 +55,8 @@ public class LogManager implements IUpdateInitiator, IUpdateListener, Initialize
 	private boolean enableFileWatcher;
 	private boolean enableAutoClose;
 
+	private boolean destroyed = false;
+
 	public LogManager() {
 		this.log = new FilteredLog();
 		this.watcher = new PathWatcher();
@@ -69,7 +71,7 @@ public class LogManager implements IUpdateInitiator, IUpdateListener, Initialize
 				}
 			} else {
 				SystemLog.log("Might update due to append on backend storage");
-				close();
+				log.close(true);
 				listeners.forEach(l -> l.onUpdate(e));
 			}
 		});
@@ -187,7 +189,9 @@ public class LogManager implements IUpdateInitiator, IUpdateListener, Initialize
 	}
 
 	private void setupLogs() throws IOException {
-		close();
+		reset();
+		if (destroyed)
+			return;
 		List<IChildLog> files = getHostLogs();
 		if (files.isEmpty())
 			throw new IOException("No logs were found at all. Please check whether the log location is available.");
@@ -196,12 +200,18 @@ public class LogManager implements IUpdateInitiator, IUpdateListener, Initialize
 		log.setLog(agg);
 	}
 
+	private void reset() {
+		watcher.stop();
+		log.close(false);
+		directories.clear();
+	}
+
 	@Override
 	public void close(boolean keepInit) {
 		if (!keepInit) {
-			log.close(false);
-			watcher.stop();
-			directories.clear();
+			destroyed = true;
+			reset();
+			listeners.clear();
 		} else if (keepInit && enableAutoClose) {
 			log.close(true);
 		}
